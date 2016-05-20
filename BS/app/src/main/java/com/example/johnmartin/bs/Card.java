@@ -1,5 +1,7 @@
 package com.example.johnmartin.bs;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by johnmartin on 5/19/16.
  */
@@ -68,6 +70,11 @@ public class Card {
             default:
                 return "Hearts";
         }
+    }
+
+    public Bitmap toImageAsset() {
+        //TODO: update with correct image assets
+        return null;
     }
 
 }

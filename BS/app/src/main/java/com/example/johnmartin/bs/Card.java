@@ -17,6 +17,7 @@ public class Card {
         return this.suit + " " + this.rank;
     }
 
+    //for comparing cards
     public int valueOf() {
         switch (this.rank) {
             case "A":
@@ -32,6 +33,7 @@ public class Card {
         }
     }
 
+    //helper functions for building deck
     public static String toRank(int r) {
         if (2 <= r && r <= 10) {
             return ""+r;
@@ -47,7 +49,7 @@ public class Card {
                 case 13:
                     return "K";
                 default:
-                    return "A"
+                    return "A";
             }
         }
 
@@ -63,6 +65,8 @@ public class Card {
                 return "Clubs";
             case 3:
                 return "Spades";
+            default:
+                return "Hearts";
         }
     }
 

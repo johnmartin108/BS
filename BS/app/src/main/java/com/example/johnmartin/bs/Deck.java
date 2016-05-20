@@ -9,7 +9,7 @@ import java.util.Collections;
 public class Deck {
     private ArrayList<Card> cards;
 
-    private final String[] suits = new String[]{"Spades", "Clubs", "Hearts", "Diamonds"}
+//    private final String[] suits = new String[]{"Spades", "Clubs", "Hearts", "Diamonds"};
 
     public Deck() {
         this.cards = new ArrayList<Card>();

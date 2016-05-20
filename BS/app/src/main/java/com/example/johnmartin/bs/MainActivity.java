@@ -1,5 +1,6 @@
 package com.example.johnmartin.bs;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSettingsClicked(View v) {
         getFragmentManager().beginTransaction().replace(R.id.content, s_frag).commit();
+    }
+
+
+    public void startNewGame(View v) {
+        Intent i = new Intent(this, GameSetupActivity.class);
+        startActivity(i);
+
     }
 
     public void onBackClicked(View v) {

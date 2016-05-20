@@ -27,10 +27,5 @@ public class WelcomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_welcome, container, false);
     }
 
-    public void startNewGame(View v) {
-        Intent i = new Intent(getActivity(), GameSetupActivity.class);
-        startActivity(i);
-
-    }
 
 }

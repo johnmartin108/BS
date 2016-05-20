@@ -21,4 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public void onSettingsClicked(View v) {
         getFragmentManager().beginTransaction().replace(R.id.content, s_frag).commit();
     }
+
+    public void onBackClicked(View v) {
+        getFragmentManager().beginTransaction().replace(R.id.content, w_frag).commit();
+    }
 }

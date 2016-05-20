@@ -25,5 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <CheckBoxPreference
+            android:key="pass_and_play"
+            android:title="Pass and Play Mode"
+            android:summary="Run multiplayer games on one screen?"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

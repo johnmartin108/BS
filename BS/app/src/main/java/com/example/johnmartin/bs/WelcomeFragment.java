@@ -1,6 +1,7 @@
 package com.example.johnmartin.bs;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +25,12 @@ public class WelcomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome, container, false);
+    }
+
+    public void startNewGame(View v) {
+        Intent i = new Intent(getActivity(), GameSetupActivity.class);
+        startActivity(i);
+
     }
 
 }

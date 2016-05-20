@@ -5,6 +5,12 @@ import java.util.ArrayList;
 /**
  * Created by johnmartin on 5/20/16.
  */
+
+//Difficulty modifiers:
+    //lying strategically
+    //keeping track of known cards
+
+
 public class Bot extends Player {
     private ArrayList<Card> hand;
     private ArrayList<Card> turnPlays; //cards this bot has played this turn
@@ -34,7 +40,15 @@ public class Bot extends Player {
 
 
         //play cards:
-        
+        //do we have a legal play?
+        //Yes:
+            //should we lie anyway?
+                //how often does the next guy call us out?
+                //would a lie be feasible? (i.e. are we already playing three cards?)
+        //No:
+            //how do we lie? this should probably be mostly random and somewhat
+            //proportional to the number of cards in your hand.
+
 
 
 

@@ -24,7 +24,7 @@ import sun.rmi.runtime.Log;
 
 public class BSGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	HashMap<Texture, CardInfo> cards;
+	HashMap<Card, CardInfo> cards;
 	private int numberSelected;
 	private String currRank;
 	private BitmapFont count;
@@ -37,10 +37,11 @@ public class BSGame extends ApplicationAdapter {
 		cards = new HashMap();
 		numberSelected = 0;
 		currRank = "aces";
-		cards.put(new Texture("large/card_a_c2_large.png"), new CardInfo(0, 0));
-		cards.put(new Texture("large/card_a_c3_large.png"), new CardInfo(400, 0));
-		cards.put(new Texture("large/card_a_c4_large.png"), new CardInfo(800, 0));
-		cards.put(new Texture("large/card_a_c5_large.png"), new CardInfo(1200, 0));
+		int width = Gdx.graphics.getWidth()/4;
+		cards.put(new Card("h", "a"), new CardInfo(0, 0));
+		cards.put(new Card("c", "a"), new CardInfo(1*width, 0));
+		cards.put(new Card("d", "a"), new CardInfo(2*width, 0));
+		cards.put(new Card("s", "a"), new CardInfo(3*width, 0));
 	}
 
 	@Override
@@ -55,11 +56,11 @@ public class BSGame extends ApplicationAdapter {
 		batch.begin();
 		Iterator iter = cards.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry card = (Map.Entry) iter.next();
-			Texture text = (Texture) card.getKey();
-			float x = cards.get(text).getX();
-			float y = cards.get(text).getY();
-			batch.draw(text, x, y);
+			Map.Entry mapPair = (Map.Entry) iter.next();
+			Card card = (Card) mapPair.getKey();
+			float x = cards.get(card).getX();
+			float y = cards.get(card).getY();
+			batch.draw(card.getTexture(), x, y);
 		}
 		batch.end();
 
@@ -76,12 +77,12 @@ public class BSGame extends ApplicationAdapter {
 	private int clickInCard(Vector3 touchPos) {
 		Iterator iter = cards.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry card = (Map.Entry) iter.next();
-			Texture text = (Texture) card.getKey();
-			CardInfo info = (CardInfo) card.getValue();
+			Map.Entry mapPair = (Map.Entry) iter.next();
+			Card card = (Card) mapPair.getKey();
+			CardInfo info = (CardInfo) mapPair.getValue();
 			float x = info.getX();
 			float y = info.getY();
-			if (touchPos.x > info.getX() && touchPos.x < (info.getX() + text.getWidth())) {
+			if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())) {
 				if (info.getY() != 30) {
 					info.setXY(info.getX(), 30);
 					numberSelected++;

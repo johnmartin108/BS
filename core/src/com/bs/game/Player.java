@@ -1,5 +1,6 @@
 package com.example.johnmartin.bs;
 
+import com.bs.game.Card;
 import java.util.ArrayList;
 
 /**

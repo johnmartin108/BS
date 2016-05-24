@@ -42,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/PlayScreen.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+              <caret line="99" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="99" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#688#689#0" expanded="true" />
@@ -59,12 +59,12 @@
       <file leaf-file-name="MainMenu.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/MainMenu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21791768">
-              <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.69007266">
+              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#262#263#0" expanded="true" />
-                <element signature="e#294#295#0" expanded="true" />
+                <element signature="e#405#406#0" expanded="true" />
+                <element signature="e#437#438#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2174,8 +2174,8 @@
         <option value="$PROJECT_DIR$/core/src/com/bs/game/Card.java" />
         <option value="$PROJECT_DIR$/core/src/com/bs/game/GameScreen.java" />
         <option value="$PROJECT_DIR$/core/src/com/bs/game/BSGame.java" />
-        <option value="$PROJECT_DIR$/core/src/com/bs/game/MainMenu.java" />
         <option value="$PROJECT_DIR$/core/src/com/bs/game/PlayScreen.java" />
+        <option value="$PROJECT_DIR$/core/src/com/bs/game/MainMenu.java" />
       </list>
     </option>
   </component>
@@ -2237,6 +2237,20 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="game" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="final_project" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2568,22 +2582,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/BSGame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.851852">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#909#910#0" expanded="true" />
-            <element signature="e#930#931#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/PlayScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <caret line="99" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="99" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#688#689#0" expanded="true" />
@@ -2596,14 +2598,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/MainMenu.java">
+    <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/BSGame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21791768">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+        <state vertical-scroll-proportion="-4.851852">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#262#263#0" expanded="true" />
-            <element signature="e#294#295#0" expanded="true" />
+            <element signature="e#909#910#0" expanded="true" />
+            <element signature="e#930#931#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bs/game/MainMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69007266">
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#405#406#0" expanded="true" />
+            <element signature="e#437#438#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.GL20;
  */
 public class MainMenu implements Screen {
 
-    public MainMenu(BSGame game) {
+    final BSGame game;
 
+    public MainMenu(BSGame game) {
+        this.game = game;
     }
 
     @Override
@@ -23,7 +25,10 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        
+        if (Gdx.input.isTouched()) {
+            game.setScreen(new PlayScreen(game));
+            dispose();
+        }
 
     }
 

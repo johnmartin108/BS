@@ -23,55 +23,10 @@ public class PlayScreen implements Screen {
     private int numberSelected;
     private String currRank;
     private BitmapFont count;
+    final BSGame game;
 
-    public void create () {
-        batch = new SpriteBatch();
-        count = new BitmapFont();
-
-        cards = new HashMap();
-        inputCards = new ArrayList();
-        numberSelected = 0;
-        currRank = "aces";
-        int width = Gdx.graphics.getWidth()/4;
-
-        inputCards.add(new Card("h", "a"));
-        inputCards.add(new Card("c", "a"));
-        inputCards.add(new Card("d", "a"));
-        inputCards.add(new Card("s", "a"));
-
-        for (int i = 0; i < inputCards.size(); i++) {
-            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
-        }
-
-    }
-
-    public void render () {
-        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        count.getData().setScale(10);
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
-        batch.end();
-        batch.begin();
-        Iterator iter = cards.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry mapPair = (Map.Entry) iter.next();
-            Card card = (Card) mapPair.getKey();
-            float x = cards.get(card).getX();
-            float y = cards.get(card).getY();
-            batch.draw(card.getTexture(), x, y);
-        }
-        batch.end();
-
-        if(Gdx.input.justTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.println(Gdx.input.getX()+" "+Gdx.input.getY());
-
-            clickInCard(touchPos);
-        }
-
+    public PlayScreen(BSGame game) {
+        this.game = game;
     }
 
     private int clickInCard(Vector3 touchPos) {
@@ -100,12 +55,52 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
+        batch = new SpriteBatch();
+        count = new BitmapFont();
 
+        cards = new HashMap();
+        inputCards = new ArrayList();
+        numberSelected = 0;
+        currRank = "aces";
+        int width = Gdx.graphics.getWidth()/4;
+
+        inputCards.add(new Card("h", "a"));
+        inputCards.add(new Card("c", "a"));
+        inputCards.add(new Card("d", "a"));
+        inputCards.add(new Card("s", "a"));
+
+        for (int i = 0; i < inputCards.size(); i++) {
+            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
+        }
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.begin();
+        count.getData().setScale(10);
+        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
+        batch.end();
+        batch.begin();
+        Iterator iter = cards.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry mapPair = (Map.Entry) iter.next();
+            Card card = (Card) mapPair.getKey();
+            float x = cards.get(card).getX();
+            float y = cards.get(card).getY();
+            batch.draw(card.getTexture(), x, y);
+        }
+        batch.end();
+
+        if(Gdx.input.justTouched()) {
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            System.out.println(Gdx.input.getX()+" "+Gdx.input.getY());
+
+            clickInCard(touchPos);
+        }
     }
 
     @Override

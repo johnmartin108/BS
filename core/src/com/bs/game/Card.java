@@ -1,6 +1,6 @@
 package com.example.johnmartin.bs;
 
-import android.graphics.Bitmap;
+//import android.graphics.Bitmap;
 
 /**
  * Created by johnmartin on 5/19/16.
@@ -20,20 +20,20 @@ public class Card {
     }
 
     //for comparing cards
-    public int valueOf() {
-        switch (this.rank) {
-            case "A":
-                return 1;
-            case "J":
-                return 11;
-            case "Q":
-                return 12;
-            case "K":
-                return 13;
-            default:
-                return Integer.parseInt(this.rank);
-        }
-    }
+//    public int valueOf() {
+//        switch (this.rank) {
+//            case "A":
+//                return 1;
+//            case "J":
+//                return 11;
+//            case "Q":
+//                return 12;
+//            case "K":
+//                return 13;
+//            default:
+//                return Integer.parseInt(this.rank);
+//        }
+//    }
 
     //helper functions for building deck
     public static String toRank(int r) {
@@ -72,9 +72,9 @@ public class Card {
         }
     }
 
-    public Bitmap toImageAsset() {
-        //TODO: update with correct image assets
-        return null;
-    }
+//    public Bitmap toImageAsset() {
+//        //TODO: update with correct image assets
+//        return null;
+//    }
 
 }

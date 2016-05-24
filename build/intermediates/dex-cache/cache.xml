@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/ziyuanliu/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.9.3/1a3775429980a6c8da0cdefb656ad1dabf91d629/gdx-1.9.3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1a3775429980a6c8da0cdefb656ad1dabf91d629">
+        <dex dex="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/10/gdx-1.9.3_dfc0ba5569ee5dbeb6d62eedfa4c42b15e42f65d/classes.dex" />
+    </item>
+    <item
+        jar="/Users/ziyuanliu/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.9.3/924800875b5ce70081021240a1301b60993b62e6/gdx-box2d-1.9.3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="924800875b5ce70081021240a1301b60993b62e6">
+        <dex dex="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/10/gdx-box2d-1.9.3_89ac88f301a10122f963512891ed87c44657a136/classes.dex" />
+    </item>
+    <item
+        jar="/Users/ziyuanliu/cs65/BS/android/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="5a927c3761f7b03759e941518bd2a86e320c09b4">
+        <dex dex="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_d49b4e148b53679520264528c3577ba642322c33/classes.dex" />
+    </item>
+    <item
+        jar="/Users/ziyuanliu/cs65/BS/android/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="edb17f2b872897353d25fb01042e84f81b996a41">
+        <dex dex="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_94b2d531ec1fcb7ac04ae101630f992b5ac93f15/classes.dex" />
+    </item>
+    <item
+        jar="/Users/ziyuanliu/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.9.3/c45573bf68b55442990936f007e7d6823d259c1f/gdx-backend-android-1.9.3.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="c45573bf68b55442990936f007e7d6823d259c1f">
+        <dex dex="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/10/gdx-backend-android-1.9.3_c1818a8c512a797e94b8bc62b171f1ad14039a14/classes.dex" />
+    </item>
+
+</items>

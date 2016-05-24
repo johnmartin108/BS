@@ -1,0 +1,1 @@
+CHANGED,/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/instantRun/debug/folders/1/5/main/com/bs/game/BSGame.class

@@ -33,12 +33,22 @@ public class Bot extends Player {
         //get info from server - want number of cards in each player's hand, what was apparently just played,
         //what we're supposed to play
 
+
+
         //decide whether to call BS:
         double call = 0.0;
         //guaranteed:
         //was the last card from a hand just played?
         //do we know for a fact that the last player lied? (check turnPlays)?
         //(on highest difficulty) - just check what cards were played.
+
+        //uncertain:
+        //how close is the player to winning? (more aggressive as we get closer)
+        //how improbable is their play? (can compute probabilities directly - we'll see if that throws off bot behavior)
+        //what else have people said this turn? (may not matter because we don't know who lied) - this
+            //HAS NOT been implemented yet, and may never be
+        //TODO: consider weighting the number of turns taken so far - dumb heuristic but maybe right
+
 
         int cards_left = cards_in_hand.get(last_player);
 
@@ -112,22 +122,7 @@ public class Bot extends Player {
             }
         }
 
-
-
-
-        //uncertain:
-
-
-        //how close is the player to winning? (more aggressive as we get closer)
-
-
-        //how improbable is their play? (can compute probabilities directly - we'll see if that throws off bot behavior)
-        //what else have people said this turn? (may not matter because we don't know who lied)
-
-        //the above should have double values that we add, and check if they're over a certain threshold
-        //consider having random thresholds for different bots so they aren't all the same
-        //and/or add a random value at the end.
-
+        //introduce slight variance - call BS if above a certain threshold
         call += Math.random()/10;
 
         if (call > threshold) {
@@ -144,30 +139,38 @@ public class Bot extends Player {
             }
         }
 
-        if play.isEmpty() {
-            prioritize(targetRank);
+        if (play.isEmpty()) {
+            if (difficulty > 1) {
+                prioritize(targetRank);
+            }
             play.add(hand.remove(0));
         }
         else {
 
-            //maybe lie if we've
+            //maybe lie if we've only played one card
             if (play.size() == 1) {
                 if (hand.size() > 10) {
-                    v = Math.random();
+                    double v = Math.random();
                     if (v > .8) {
-                        prioritize(targetRank);
+                        if (difficulty > 1) {
+                            prioritize(targetRank);
+                        }
                         play.add(hand.remove(0));
                         play.add(hand.remove(0));
                     }
                     else if (v > .3) {
-                        prioritize(targetRank);
+                        if (difficulty > 1) {
+                            prioritize(targetRank);
+                        }
                         play.add(hand.remove(0));
                     }
                 }
                 else if (hand.size() > 5) {
-                    v = Math.random();
+                    double v = Math.random();
                     if (v > .55) {
-                        prioritize(targetRank);
+                        if (difficulty > 1) {
+                            prioritize(targetRank);
+                        }
                         play.add(hand.remove(0));
                     }
                 }
@@ -240,10 +243,11 @@ public class Bot extends Player {
     }
 
     public void callBS() {
+        //send relevant message to server
 
     }
 
     public void playCards(ArrayList<Card> cards) {
-
+        //send relevant message to server
     }
 }

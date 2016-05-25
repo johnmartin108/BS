@@ -62,7 +62,6 @@ public class MainMenu implements Screen {
         game.batch.draw(settingsButton, width / 2 - settingsButton.getWidth() / 2, 75);
         game.batch.end();
 
-//        stage.addActor(name);
 
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
@@ -78,8 +77,20 @@ public class MainMenu implements Screen {
                     dispose();
                 }
             }
+            else if (inSettingsButton(touchPos)) {
+                game.setScreen(new SettingsScreen(game));
+                dispose();
+            }
         }
 
+    }
+
+    private boolean inSettingsButton(Vector3 touchPos) {
+        if (touchPos.x > (width/2 - settingsButton.getWidth()/2) && touchPos.x < (width/2 + settingsButton.getWidth()/2)
+                && touchPos.y > (height - (75 + settingsButton.getHeight())) && touchPos.y < (height - 75)) {
+            return true;
+        }
+        return false;
     }
 
     private boolean inPlayButton(Vector3 touchPos) {

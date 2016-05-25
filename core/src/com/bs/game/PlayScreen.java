@@ -58,13 +58,15 @@ public class PlayScreen implements Screen {
         cards = new HashMap();
         inputCards = new ArrayList();
         numberSelected = 0;
-        int width = Gdx.graphics.getWidth()/4;
 
-        inputCards.add(new Card("h", "a"));
-        inputCards.add(new Card("c", "a"));
-        inputCards.add(new Card("d", "a"));
-        inputCards.add(new Card("s", "a"));
 
+//        inputCards.add(new Card("h", "a"));
+//        inputCards.add(new Card("c", "a"));
+//        inputCards.add(new Card("d", "a"));
+//        inputCards.add(new Card("s", "a"));
+
+        inputCards = new Deck().getCards();
+        int width = Gdx.graphics.getWidth()/inputCards.size();
         for (int i = 0; i < inputCards.size(); i++) {
             cards.put(inputCards.get(i), new CardInfo(i*width, 0));
         }

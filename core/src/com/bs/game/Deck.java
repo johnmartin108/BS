@@ -35,4 +35,8 @@ public class Deck {
             return cards.remove(0);
         }
     }
+
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
 }

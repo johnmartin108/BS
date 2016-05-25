@@ -46,6 +46,8 @@ public class BSGame extends Game {
 		font = new BitmapFont();
 		stage = new Stage();
 
+		setScreen(new MainMenu(this));
+
 		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		font.getData().scale(4.0f);
 
@@ -134,24 +136,7 @@ public class BSGame extends Game {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0.5f, 0.32f, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.input.setInputProcessor(stage);
-
-		batch.begin();
-
-		batch.draw(img, 0, 0);
-		batch.end();
-
-		stage.draw();
-
-
-//
-		if(Gdx.input.isTouched()) {
-			Vector3 touchPos = new Vector3();
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-//			System.out.println(Gdx.input.getX()+" "+Gdx.input.getY());
-		}
+		super.render();
 	}
 
 }

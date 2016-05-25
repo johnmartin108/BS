@@ -4,6 +4,10 @@
         "source": "/Users/nick/Dropbox/School/15-16 School/3 - 16S/9L - COSC 065/final_project/android/res/drawable-mdpi/ic_launcher.png"
     },
     {
+        "merged": "/Users/nick/Desktop/final_project/android/build/intermediates/res/merged/debug/drawable-mdpi-v4/ic_launcher.png",
+        "source": "/Users/nick/Desktop/final_project/android/res/drawable-mdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/ziyuanliu/cs65/BS/android/build/intermediates/res/merged/debug/drawable-mdpi-v4/ic_launcher.png",
         "source": "/Users/ziyuanliu/cs65/BS/android/res/drawable-mdpi/ic_launcher.png"
     }

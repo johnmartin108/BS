@@ -23,6 +23,7 @@ public class PlayScreen implements Screen {
     HashMap<Card, CardInfo> cards;
     private int numberSelected;
     private String currRank;
+    private String name;
     private BitmapFont count;
     final BSGame game;
     private Texture backButton;
@@ -31,6 +32,11 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(BSGame game) {
         this.game = game;
+    }
+
+    public PlayScreen(BSGame game, String name) {
+        this.game = game;
+        this.name = name;
     }
 
     private int clickInCard(Vector3 touchPos) {
@@ -68,11 +74,11 @@ public class PlayScreen implements Screen {
         count = new BitmapFont();
 
         backButton = new Texture("back.png");
+        currRank = "aces";
 
         cards = new HashMap();
         inputCards = new ArrayList();
         numberSelected = 0;
-        currRank = "aces";
         int width = Gdx.graphics.getWidth()/4;
 
         inputCards.add(new Card("h", "a"));

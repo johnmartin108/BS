@@ -1,10 +1,17 @@
 package com.bs.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+
+//import javafx.scene.control.Skin;
 
 /**
  * Created by nick on 5/24/16.
@@ -12,9 +19,11 @@ import com.badlogic.gdx.math.Vector3;
 public class MainMenu implements Screen {
 
     final BSGame game;
+    private Stage stage;
     private Texture mainImage;
     private Texture playButton;
     private Texture settingsButton;
+    private TextField name;
     int width;
     int height;
 
@@ -24,11 +33,17 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        stage = new Stage();
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         mainImage = new Texture("main.png");
         playButton = new Texture("play.png");
         settingsButton = new Texture("settings.png");
+//        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+//        skin.addRegions(new TextureAtlas("back.png"));
+//        name = new TextField("Enter your name", skin);
+//        name.setPosition(200, 200);
+//        name.setSize(200, 100);
     }
 
     @Override
@@ -38,16 +53,18 @@ public class MainMenu implements Screen {
 
         game.batch.begin();
         game.batch.draw(mainImage, width / 2 - mainImage.getWidth() / 2, (height - 100 - mainImage.getHeight()));
-        game.batch.draw(playButton, width/2 - playButton.getWidth()/2, 300);
-        game.batch.draw(settingsButton, width/2 - settingsButton.getWidth()/2, 75);
+        game.batch.draw(playButton, width / 2 - playButton.getWidth() / 2, 300);
+        game.batch.draw(settingsButton, width / 2 - settingsButton.getWidth() / 2, 75);
         game.batch.end();
 
-        if (Gdx.input.isTouched()) {
+//        stage.addActor(name);
+
+        if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (inPlayButton(touchPos)) {
-                game.setScreen(new PlayScreen(game));
-                dispose();
+                NameListener nameListener = new NameListener();
+                Gdx.input.getTextInput(nameListener, "What is your name?", "", "");
             }
         }
 
@@ -59,6 +76,20 @@ public class MainMenu implements Screen {
             return true;
         }
         return false;
+    }
+
+    public class NameListener implements Input.TextInputListener {
+
+        @Override
+        public void input(String text) {
+            game.setScreen(new PlayScreen(game, text));
+            dispose();
+        }
+
+        @Override
+        public void canceled() {
+
+        }
     }
 
     @Override

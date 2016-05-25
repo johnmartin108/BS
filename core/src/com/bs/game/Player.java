@@ -1,4 +1,4 @@
-package com.example.johnmartin.bs;
+package com.bs.game;
 
 import com.bs.game.Card;
 import java.util.ArrayList;

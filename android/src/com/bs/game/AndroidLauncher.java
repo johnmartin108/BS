@@ -1,53 +1,30 @@
 package com.bs.game;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.IntentFilter;
-import android.net.wifi.WpsInfo;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-import com.bs.game.BSGame;
-import com.bs.game.communication.WifiDirectBroadcastReceiver;
+import com.peak.salut.Callbacks.SalutCallback;
+import com.peak.salut.Callbacks.SalutDataCallback;
+import com.peak.salut.Callbacks.SalutDeviceCallback;
+import com.peak.salut.Salut;
+import com.peak.salut.SalutDataReceiver;
+import com.peak.salut.SalutDevice;
+import com.peak.salut.SalutServiceData;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AndroidLauncher extends AndroidApplication {
+
+public class AndroidLauncher extends AndroidApplication implements SalutDataCallback{
 	public static CommunicationBridge bridge;
-	WifiP2pManager mManager;
-	WifiP2pManager.Channel mChannel;
-	WifiDirectBroadcastReceiver mReceiver;
-	IntentFilter mIntentFilter;
+	private Salut network;
+	public static String playerName;
+	public static boolean isHost;
 
-	private void connectTo(int deviceInd){
-		WifiP2pDevice hostDevice = (WifiP2pDevice) mReceiver.peers.get(deviceInd);
-		final WifiP2pConfig config = new WifiP2pConfig();
-		config.deviceAddress = hostDevice.deviceAddress;
-		config.wps.setup = WpsInfo.PBC;
-
-		mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-
-			@Override
-			public void onSuccess() {
-				// WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-				Log.d("BSGAME", "connection success to "+config.toString());
-			}
-
-			@Override
-			public void onFailure(int reason) {
-				Log.d("BSGAME", "connection failure");
-			}
-		});
-	}
+	private static final String TAG = "BSGAME";
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -58,10 +35,27 @@ public class AndroidLauncher extends AndroidApplication {
 			public void onReceivedData(int name, Object obj) {
 				super.onReceivedData(name, obj);
 				switch (name){
+
+                    case Constants.M_SET_NAME:
+                        playerName = (String)obj;
+                        break;
+
 					case Constants.M_CONNECT_TO:
 						int index = (Integer)obj;
-						connectTo(index);
+                        SalutDevice host = network.foundDevices.get(index);
+                        connectWithHost(host);
+                        isHost = false;
 						break;
+
+                    case Constants.M_DISCOVER_PEERS:
+                        discoverServices();
+                        break;
+
+                    case Constants.M_BECOME_HOST:
+                        becomeHost();
+                        isHost = true;
+                        break;
+
 					default:
 						break;
 				}
@@ -70,72 +64,71 @@ public class AndroidLauncher extends AndroidApplication {
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new BSGame(bridge), config);
-
-		mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-		mChannel = mManager.initialize(this, getMainLooper(), null);
-		becomeHost();
-
-		mIntentFilter = new IntentFilter();
-		mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-		mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-		mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-		mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 	}
 
-	protected void joinHost(){
+    public void startNetwork(){
+        //establish connection
+        SalutDataReceiver dataReceiver = new SalutDataReceiver(this, this);
+        SalutServiceData serviceData = new SalutServiceData(Constants.N_SERVICE_NAME, 50489, playerName);
+        network = new Salut(dataReceiver, serviceData, new SalutCallback() {
+            @Override
+            public void call() {
+                Log.e(TAG, "Sorry, but this device does not support WiFi Direct.");
+            }
+        });
+    }
+
+    public void connectWithHost(SalutDevice host){
+        network.registerWithHost(host, new SalutCallback() {
+            @Override
+            public void call() {
+                // success on connection
+            }
+        }, new SalutCallback() {
+            @Override
+            public void call() {
+                // failure to connect
+            }
+        });
+
+    }
+
+	public void discoverServices(){
+		network.discoverWithTimeout(new SalutCallback() {
+			@Override
+			public void call() {
+				Log.d(TAG, "Look at all these devices! " + network.foundDevices.toString());
+
+                List peerlist = new ArrayList<String>();
+                for (SalutDevice dev: network.foundDevices){
+                    peerlist.add(dev.deviceName);
+                }
+
+                // update the ui here
+                bridge.sendDataToView(Constants.M_PEER_LIST, peerlist);
+			}
+
+		}, new SalutCallback() {
+			@Override
+			public void call() {
+				Log.d(TAG, "Bummer, we didn't find anyone. ");
+			}
+		}, 5000);
+	}
+
+	public void becomeHost(){
+		network.startNetworkService(new SalutDeviceCallback() {
+			@Override
+			public void call(SalutDevice device) {
+				Log.d(TAG, device.readableName + " has connected!");
+			}
+		});
 
 	}
 
-	protected void becomeHost(){
-		try {
-			mManager = (WifiP2pManager)getSystemService(Context.WIFI_P2P_SERVICE);
-			mChannel = mManager.initialize(this, getMainLooper(), new WifiP2pManager.ChannelListener() {
-				@Override
-				public void onChannelDisconnected() {
-					mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-				}
-			});
-			Class[] paramTypes = new Class[3];
-			paramTypes[0] = WifiP2pManager.Channel.class;
-			paramTypes[1] = String.class;
-			paramTypes[2] = WifiP2pManager.ActionListener.class;
-			Method setDeviceName = mManager.getClass().getMethod("setDeviceName", paramTypes);
-			setDeviceName.setAccessible(true);
-
-			Object arglist[] = new Object[3];
-			arglist[0] = mChannel;
-			arglist[1] = "BS Host";
-			arglist[2] = new WifiP2pManager.ActionListener() {
-
-				@Override
-				public void onSuccess() {
-					Log.d("setDeviceName succeeded", "true");
-				}
-
-				@Override
-				public void onFailure(int reason) {
-					Log.d("setDeviceName failed", "true");
-				}
-			};
-			setDeviceName.invoke(mManager, arglist);
-
-		}catch (Exception e){
-			Log.d("BSGAME", e.toString());
-		}
-	}
-
-	/* register the broadcast receiver with the intent values to be matched */
 	@Override
-	protected void onResume() {
-		super.onResume();
-		mReceiver = new WifiDirectBroadcastReceiver(mManager, mChannel, this);
-		registerReceiver(mReceiver, mIntentFilter);
-	}
-	/* unregister the broadcast receiver */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		unregisterReceiver(mReceiver);
+	public void onDataReceived(Object o) {
+
 	}
 }
 

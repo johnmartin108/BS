@@ -36,7 +36,6 @@ public class BSGame extends Game {
 
 	public BSGame(CommunicationBridge b){
 		bridge = b;
-
 	}
 
 

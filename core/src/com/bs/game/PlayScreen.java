@@ -3,6 +3,7 @@ package com.bs.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -24,6 +25,9 @@ public class PlayScreen implements Screen {
     private String currRank;
     private BitmapFont count;
     final BSGame game;
+    private Texture backButton;
+    private int width;
+    private int height;
 
     public PlayScreen(BSGame game) {
         this.game = game;
@@ -37,7 +41,8 @@ public class PlayScreen implements Screen {
             CardInfo info = (CardInfo) mapPair.getValue();
             float x = info.getX();
             float y = info.getY();
-            if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())) {
+            if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
+                    && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
                 if (info.getY() != 30) {
                     info.setXY(info.getX(), 30);
                     numberSelected++;
@@ -55,8 +60,14 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
+
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
+
         batch = new SpriteBatch();
         count = new BitmapFont();
+
+        backButton = new Texture("back.png");
 
         cards = new HashMap();
         inputCards = new ArrayList();
@@ -92,14 +103,24 @@ public class PlayScreen implements Screen {
             float y = cards.get(card).getY();
             batch.draw(card.getTexture(), x, y);
         }
+        batch.draw(backButton, 0, height - backButton.getHeight());
         batch.end();
 
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.println(Gdx.input.getX()+" "+Gdx.input.getY());
+            System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
 
             clickInCard(touchPos);
+            clickInBack(touchPos);
+        }
+    }
+
+    private void clickInBack(Vector3 touchPos) {
+        if (touchPos.x > 0 && touchPos.x < backButton.getWidth()
+                && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
+            game.setScreen(new MainMenu(game));
+            dispose();
         }
     }
 

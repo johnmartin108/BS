@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/nick/Dropbox/School/15-16 School/3 - 16S/9L - COSC 065/final_project/android/src/androidTest/assets"/><source path="/Users/nick/Dropbox/School/15-16 School/3 - 16S/9L - COSC 065/final_project/android/build/generated/assets/shaders/androidTest/debug"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/ziyuanliu/cs65/BS/android/src/androidTest/assets"/><source path="/Users/ziyuanliu/cs65/BS/android/build/generated/assets/shaders/androidTest/debug"/></dataSet></merger>

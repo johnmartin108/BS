@@ -4,38 +4,29 @@
     api-level="23"
     density="560dpi"
     format="7"
-    timestamp="1464137144729407000" >
+    timestamp="1464140325729370000" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="433" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="137" />
     <task
         name="verifier"
-        duration="0" />
+        duration="5" />
 
-    <build timestamp="1464136312908981000" >
+    <artifact
+        location="/Users/ziyuanliu/cs65/BS/android/build/outputs/apk/android-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="1464140325729370000" >
         <artifact
             location="/Users/ziyuanliu/cs65/BS/android/build/outputs/apk/android-debug.apk"
             type="MAIN" />
     </build>
-    <build
-        timestamp="1464136643532516000"
-        verifier="CLASS_ADDED" >
-        <artifact
-            location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/5/slice_6/classes.dex"
-            type="DEX" />
-    </build>
-    <build timestamp="1464137086109118000" >
-        <artifact
-            location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
-            type="DEX" />
-    </build>
-    <build timestamp="1464137144729407000" />
 
 </instant-run>

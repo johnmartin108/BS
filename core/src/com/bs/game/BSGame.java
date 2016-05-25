@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-<<<<<<< HEAD
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class BSGame extends ApplicationAdapter {
+public class BSGame extends Game {
 	SpriteBatch batch;
 	Texture img;
 	static CommunicationBridge bridge;
@@ -39,31 +38,11 @@ public class BSGame extends ApplicationAdapter {
 		bridge = b;
 
 	}
-=======
 
-import java.awt.Font;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.soap.Text;
-
-import sun.rmi.runtime.Log;
-//import com.bs.game.communication.*;
-
-public class BSGame extends Game {
-
-	public SpriteBatch batch;
-	public BitmapFont font;
->>>>>>> a02c344a50c517a9a15c3b47774d9d8a72cdf782
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-<<<<<<< HEAD
 		img = new Texture("badlogic.jpg");
 		font = new BitmapFont();
 		stage = new Stage();
@@ -175,14 +154,5 @@ public class BSGame extends Game {
 //			System.out.println(Gdx.input.getX()+" "+Gdx.input.getY());
 		}
 	}
-=======
-		font = new BitmapFont();
 
-		this.setScreen(new MainMenu(this));
-	}
-
-	public void render() {
-		super.render();
-	}
->>>>>>> a02c344a50c517a9a15c3b47774d9d8a72cdf782
 }

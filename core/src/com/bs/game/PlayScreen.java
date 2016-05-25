@@ -28,6 +28,7 @@ public class PlayScreen implements Screen {
     private BitmapFont count;
     final BSGame game;
     private Texture backButton;
+    private Texture goButton;
     private int width;
     private int height;
 
@@ -75,6 +76,8 @@ public class PlayScreen implements Screen {
         count = new BitmapFont();
 
         backButton = new Texture("back.png");
+        goButton = new Texture("go.png");
+
         currRank = "aces";
 
         cards = new HashMap();
@@ -112,6 +115,7 @@ public class PlayScreen implements Screen {
             batch.draw(card.getTexture(), x, y);
         }
         batch.draw(backButton, 10, height - backButton.getHeight());
+        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);
         batch.end();
 
         if(Gdx.input.justTouched()) {

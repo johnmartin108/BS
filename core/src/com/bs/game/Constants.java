@@ -4,7 +4,7 @@ package com.bs.game;
  * Created by ziyuanliu on 5/24/16.
  */
 public class Constants {
-    public static final String N_SERVICE_NAME = "BSGAME";
+    public static final String N_SERVICE_NAME = "_GA_";
 
     public static final int M_SET_NAME = 0;
     public static final int M_DISCOVER_PEERS = 1;

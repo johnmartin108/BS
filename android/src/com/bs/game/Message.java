@@ -13,5 +13,8 @@ public class Message {
     public static final int E_DECK = 0;
 
     @JsonField
-    public String eventType;
+    public int eventType;
+
+    @JsonField
+    public String message;
 }

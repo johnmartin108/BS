@@ -14,6 +14,7 @@ public class MainMenu implements Screen {
     final BSGame game;
     private Texture mainImage;
     private Texture playButton;
+    private Texture settingsButton;
     int width;
     int height;
 
@@ -27,6 +28,7 @@ public class MainMenu implements Screen {
         height = Gdx.graphics.getHeight();
         mainImage = new Texture("main.png");
         playButton = new Texture("play.png");
+        settingsButton = new Texture("settings.png");
     }
 
     @Override
@@ -36,7 +38,8 @@ public class MainMenu implements Screen {
 
         game.batch.begin();
         game.batch.draw(mainImage, width / 2 - mainImage.getWidth() / 2, (height - 100 - mainImage.getHeight()));
-        game.batch.draw(playButton, width/2 - playButton.getWidth()/2, 100);
+        game.batch.draw(playButton, width/2 - playButton.getWidth()/2, 300);
+        game.batch.draw(settingsButton, width/2 - settingsButton.getWidth()/2, 75);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
@@ -52,7 +55,7 @@ public class MainMenu implements Screen {
 
     private boolean inPlayButton(Vector3 touchPos) {
         if (touchPos.x > (width/2 - playButton.getWidth()/2) && touchPos.x < (width/2 + playButton.getWidth()/2)
-                && touchPos.y > (height - (100 + playButton.getHeight())) && touchPos.y < (height - 100)) {
+                && touchPos.y > (height - (300 + playButton.getHeight())) && touchPos.y < (height - 300)) {
             return true;
         }
         return false;

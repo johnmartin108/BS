@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 public class MainMenu implements Screen {
 
     final BSGame game;
+    private Texture mainImage;
     private Texture playButton;
     int width;
     int height;
@@ -24,6 +25,7 @@ public class MainMenu implements Screen {
     public void show() {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
+        mainImage = new Texture("main.png");
         playButton = new Texture("play.png");
     }
 
@@ -33,8 +35,7 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.font.draw(game.batch, "BS*", 1000, 1000);
-        game.font.getData().setScale(10);
+        game.batch.draw(mainImage, width / 2 - mainImage.getWidth() / 2, (height - 100 - mainImage.getHeight()));
         game.batch.draw(playButton, width/2 - playButton.getWidth()/2, 100);
         game.batch.end();
 
@@ -50,7 +51,6 @@ public class MainMenu implements Screen {
     }
 
     private boolean inPlayButton(Vector3 touchPos) {
-        System.out.println("" + touchPos.y);
         if (touchPos.x > (width/2 - playButton.getWidth()/2) && touchPos.x < (width/2 + playButton.getWidth()/2)
                 && touchPos.y > (height - (100 + playButton.getHeight())) && touchPos.y < (height - 100)) {
             return true;

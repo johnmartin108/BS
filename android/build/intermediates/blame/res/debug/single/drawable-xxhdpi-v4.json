@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/nick/Dropbox/School/15-16 School/3 - 16S/9L - COSC 065/final_project/android/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/ic_launcher.png",
+        "source": "/Users/nick/Dropbox/School/15-16 School/3 - 16S/9L - COSC 065/final_project/android/res/drawable-xxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/ziyuanliu/cs65/BS/android/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/ic_launcher.png",
         "source": "/Users/ziyuanliu/cs65/BS/android/res/drawable-xxhdpi/ic_launcher.png"
     }

@@ -1,6 +1,7 @@
 package com.bs.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -99,6 +100,7 @@ public class PlayScreen implements Screen {
         batch.begin();
         count.getData().setScale(10);
         count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
+        count.draw(batch, "Player: " + name, width - 1000, height - 20);
         batch.end();
         batch.begin();
         Iterator iter = cards.entrySet().iterator();

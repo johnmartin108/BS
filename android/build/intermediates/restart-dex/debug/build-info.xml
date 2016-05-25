@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="x86_64,x86"
+    abi="arm64-v8a,armeabi-v7a,armeabi"
     api-level="23"
     density="560dpi"
     format="7"
-    timestamp="1463702099245129000"
-    verifier="COMPATIBLE" >
+    timestamp="1464137144729407000" >
 
     <task
         name="javac"
-        duration="213" />
+        duration="0" />
     <task
         name="instant-run-dex"
-        duration="434" />
+        duration="0" />
     <task
         name="instant-run-transform"
-        duration="15" />
+        duration="0" />
     <task
         name="verifier"
-        duration="3" />
+        duration="0" />
 
-    <artifact
-        location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/reload-dex/debug/classes.dex"
-        type="RELOAD_DEX" />
-
-    <build timestamp="1463702048494245000" >
+    <build timestamp="1464136312908981000" >
         <artifact
             location="/Users/ziyuanliu/cs65/BS/android/build/outputs/apk/android-debug.apk"
             type="MAIN" />
     </build>
     <build
-        timestamp="1463702099245129000"
-        verifier="COMPATIBLE" >
+        timestamp="1464136643532516000"
+        verifier="CLASS_ADDED" >
         <artifact
-            location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/reload-dex/debug/classes.dex"
-            type="RELOAD_DEX" />
+            location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/5/slice_6/classes.dex"
+            type="DEX" />
     </build>
+    <build timestamp="1464137086109118000" >
+        <artifact
+            location="/Users/ziyuanliu/cs65/BS/android/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="1464137144729407000" />
 
 </instant-run>

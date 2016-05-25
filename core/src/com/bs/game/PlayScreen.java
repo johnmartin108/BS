@@ -111,7 +111,7 @@ public class PlayScreen implements Screen {
             float y = cards.get(card).getY();
             batch.draw(card.getTexture(), x, y);
         }
-        batch.draw(backButton, 0, height - backButton.getHeight());
+        batch.draw(backButton, 10, height - backButton.getHeight());
         batch.end();
 
         if(Gdx.input.justTouched()) {
@@ -125,7 +125,7 @@ public class PlayScreen implements Screen {
     }
 
     private void clickInBack(Vector3 touchPos) {
-        if (touchPos.x > 0 && touchPos.x < backButton.getWidth()
+        if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
             game.setScreen(new MainMenu(game));
             dispose();

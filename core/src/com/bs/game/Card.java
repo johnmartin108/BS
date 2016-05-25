@@ -1,6 +1,5 @@
 package com.bs.game;
 
-
 import com.badlogic.gdx.graphics.Texture;
 
 /**
@@ -16,7 +15,7 @@ public class Card {
         this.suit = suit;
         this.rank = rank;
 
-        String path = "small/card_a_" + this.suit + this.rank + ".png";
+        String path = "large/card_a_" + this.suit + this.rank + "_large.png";
         this.img = new Texture(path);
     }
 
@@ -81,6 +80,10 @@ public class Card {
         }
     }
 
+//    public Bitmap toImageAsset() {
+//        //TODO: update with correct image assets
+//        return null;
+//    }
     public Texture getTexture() {
         return this.img;
     }

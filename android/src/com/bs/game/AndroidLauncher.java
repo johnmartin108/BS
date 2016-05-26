@@ -38,6 +38,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	public static String playerName;
 	public static boolean isHost;
     public static boolean hasStarted;
+    private int num_players = 0;
+
     WifiManager wifiManager;
     List peerlist = new ArrayList<String>();
 
@@ -95,25 +97,29 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void startHost(){
         isHost = true;
         wifiManager.setWifiEnabled(false);
-
-
         wifiManager.setWifiEnabled(true);
+        
+        final Handler handler = new Handler();
 
-        new Handler().postDelayed(new Runnable() {
-
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SupplicantState supState;
-                do {
-                    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        SupplicantState supState;
+                        do {
+                            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                            NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                    WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-                    supState = wifiInfo.getSupplicantState();
-                }while (supState != SupplicantState.COMPLETED);
-                becomeHost();
+                            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                            supState = wifiInfo.getSupplicantState();
+                        }while (supState != SupplicantState.COMPLETED);
+                        becomeHost();
+                    }
+                }, 1000);
             }
-        }, 1000);
+        });
     }
 
     public static String random() {
@@ -275,7 +281,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             players.get(ID).addToHand(c);
             ID = (ID + 1) % num_players;
             if (!players.containsKey(ID)) {
-                players.put(ID, new Bot());
+                players.put(ID, new Player());
             }
         }
 

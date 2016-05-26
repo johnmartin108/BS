@@ -66,7 +66,7 @@ public class MainMenu implements Screen {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (inPlayButton(touchPos)) {
-                String name = prefs.getString("name", "");
+                
                 if (name.equals("")) {
                     NameListener nameListener = new NameListener();
                     Gdx.input.getTextInput(nameListener, "What is your name?", "", "");
@@ -105,8 +105,6 @@ public class MainMenu implements Screen {
         @Override
         public void input(String text) {
             game.bridge.sendDataToController(Constants.M_SET_NAME, text);
-            //prefs.putString("name", text);
-            //prefs.flush();
             game.setScreen(new JHScreen(game));
             dispose();
         }

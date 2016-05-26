@@ -42,6 +42,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
     WifiManager wifiManager;
     List peerlist = new ArrayList<String>();
+    public static String hostStatus = "";
 
     private Map<Integer, ArrayList<Card>> hands;
     private Map<Integer, SalutDevice> player_devices;
@@ -113,6 +114,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                             supState = wifiInfo.getSupplicantState();
+                            if (supState.toString()!=hostStatus){
+                                hostStatus = supState.toString();
+                                bridge.sendDataToView(Constants.M_HOST_STATUS, hostStatus);
+                            }
                         }while (supState != SupplicantState.COMPLETED);
                         becomeHost();
                     }

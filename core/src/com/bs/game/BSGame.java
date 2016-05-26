@@ -28,6 +28,7 @@ public class BSGame extends Game {
 	String status = "";
 
 	TextButton.TextButtonStyle textButtonStyle;
+	String hostStatus = "";
 
 	public BSGame(CommunicationBridge b){
 		bridge = b;
@@ -52,6 +53,7 @@ public class BSGame extends Game {
 		textButtonStyle.font = font;
 
 		final BSGame self = this;
+
 
 		bridge.view = new CommunicationCallBack(){
 			@Override
@@ -91,6 +93,11 @@ public class BSGame extends Game {
 						}else{
 							status = "Disconnected to host";
 						}
+						break;
+
+					case Constants.M_HOST_STATUS:
+						hostStatus = (String)obj;
+						break;
 					default:
 						break;
 				}

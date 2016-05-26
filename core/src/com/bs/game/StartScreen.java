@@ -33,7 +33,7 @@ public class StartScreen implements Screen {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
-        startButton = new Texture("play.png");
+        startButton = new Texture("start.png");
         bitFont = new BitmapFont();
     }
 

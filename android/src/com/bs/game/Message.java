@@ -28,7 +28,7 @@ public class Message {
     public int numPlayers;
 
     @JsonField
-    public Map<String, ArrayList<Card>> cardsInHands;
+    public ArrayList<ArrayList<Card>> cardsInHands;
 
     @JsonField
     public int targetRank;

@@ -260,6 +260,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             switch (newMessage.eventType) {
 
                 //only will receive these messages if isHost
+                case (Constants.M_START_GAME):
+                    startGame();
+                    break;
                 case (Constants.M_CALL_BS):
                     boolean telling_truth = true;
                     for (Card c: last_play) {

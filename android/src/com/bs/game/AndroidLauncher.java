@@ -317,6 +317,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     last_play = newMessage.playedCards;
                     nextTurn();
                     break;
+
+                //non-host messages just get forwarded to the respective views
                 default:
                     bridge.sendDataToView(newMessage.eventType, newMessage);
 
@@ -381,10 +383,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         });
 
         newTurn();
-
-
-
-
     }
 
     public void nextTurn() {
@@ -400,6 +398,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
+        bridge.sendDataToView(Constants.M_PLAYER_TURN, m);
     }
 
     public void newTurn() {
@@ -414,6 +413,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
+        bridge.sendDataToView(Constants.M_PLAYER_TURN_START, m);
     }
 
     public void endGame() {
@@ -426,6 +426,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
+        bridge.sendDataToView(Constants.M_GAME_OVER, m);
 
     }
 

@@ -1,6 +1,16 @@
 package com.bs.game;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,7 +31,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import com.bluelinelabs.logansquare.*;
 
@@ -30,13 +39,21 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	private Salut network;
 	public static String playerName;
 	public static boolean isHost;
+    public static boolean hasStarted;
+    WifiManager wifiManager;
 
 	private static final String TAG = "BSGAME";
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+
 		bridge = new CommunicationBridge();
+        initialize(new BSGame(bridge), config);
+
 		bridge.controller = new CommunicationCallBack(){
 			@Override
 			public void onReceivedData(int name, Object obj) {
@@ -51,6 +68,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 						int index = (Integer)obj;
                         SalutDevice host = network.foundDevices.get(index);
                         connectWithHost(host);
+
                         isHost = false;
 						break;
 
@@ -59,8 +77,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         break;
 
                     case Constants.M_BECOME_HOST:
-                        becomeHost();
-                        isHost = true;
+                        startHost();
                         break;
 
 					default:
@@ -68,12 +85,31 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 				}
 			}
 		};
+    }
 
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new BSGame(bridge), config);
+    public void startHost(){
+        isHost = true;
+        wifiManager.setWifiEnabled(false);
 
-        startNetwork();
-	}
+
+        wifiManager.setWifiEnabled(true);
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                SupplicantState supState;
+                do {
+                    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                    WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                    supState = wifiInfo.getSupplicantState();
+                }while (supState != SupplicantState.COMPLETED);
+                becomeHost();
+            }
+        }, 1000);
+    }
 
     public static String random() {
         Random generator = new Random();
@@ -127,6 +163,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
 	public void discoverServices(){
+        startNetwork();
 		network.discoverWithTimeout(new SalutCallback() {
 			@Override
 			public void call() {
@@ -152,40 +189,42 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	}
 
 	public void becomeHost(){
-        isHost = true;
-		network.startNetworkService(new SalutDeviceCallback() {
-            @Override
-            public void call(SalutDevice device) {
-                Log.d(TAG, device.readableName + " has connected!");
-                Toast.makeText(getBaseContext(), (CharSequence) device.readableName + " has connected!", Toast.LENGTH_LONG).show();
+        if (!hasStarted){
+            isHost = true;
+            startNetwork();
+            network.startNetworkService(new SalutDeviceCallback() {
+                @Override
+                public void call(SalutDevice device) {
+                    Log.d(TAG, device.readableName + " has connected!");
+                    Toast.makeText(getBaseContext(), (CharSequence) device.readableName + " has connected!", Toast.LENGTH_LONG).show();
 
-                Message myMessage = new Message();
-                myMessage.message = "connected your name is "+device.instanceName;
-                network.sendToDevice(device, myMessage, new SalutCallback() {
-                    @Override
-                    public void call() {
-                        Log.e(TAG, "Oh no! The data failed to send.");
-                    }
-                });
+                    Message myMessage = new Message();
+                    myMessage.message = "connected your name is "+device.instanceName;
+                    network.sendToDevice(device, myMessage, new SalutCallback() {
+                        @Override
+                        public void call() {
+                            Log.e(TAG, "Oh no! The data failed to send.");
+                        }
+                    });
 
-            }
-        }, new SalutCallback() {
-            @Override
-            public void call() {
-                Toast.makeText(getBaseContext(), (CharSequence)" Host service created!", Toast.LENGTH_LONG).show();
+                }
+            }, new SalutCallback() {
+                @Override
+                public void call() {
+                    Toast.makeText(getBaseContext(), (CharSequence)" Host service created!", Toast.LENGTH_LONG).show();
 
-            }
-        }, new SalutCallback() {
-            @Override
-            public void call() {
-                Toast.makeText(getBaseContext(), (CharSequence) " Host service failed to create!", Toast.LENGTH_LONG).show();
+                }
+            }, new SalutCallback() {
+                @Override
+                public void call() {
+                    Toast.makeText(getBaseContext(), (CharSequence) " Host service failed to create!", Toast.LENGTH_LONG).show();
 
-            }
-        });
+                }
+            });
 
-        Toast.makeText(this.getBaseContext(), (CharSequence)"you're host now", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getBaseContext(), (CharSequence)"you're host now", Toast.LENGTH_LONG).show();
 
-
+        }
     }
 
 	@Override
@@ -211,9 +250,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void onDestroy() {
         super.onDestroy();
 
-        if(isHost) {
+        if(isHost&&network!=null) {
             network.stopNetworkService(true);
-        }else {
+        }else if (network!=null){
             network.unregisterClient(false);
         }
     }

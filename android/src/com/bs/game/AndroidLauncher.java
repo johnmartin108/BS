@@ -38,17 +38,20 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	public static String playerName;
 	public static boolean isHost;
     public static boolean hasStarted;
-    private int num_players = 0;
 
     WifiManager wifiManager;
     List peerlist = new ArrayList<String>();
     public static String hostStatus = "";
 
-    private Map<Integer, ArrayList<Card>> hands;
+    private ArrayList<ArrayList<Card>> hands;
     private Map<Integer, SalutDevice> player_devices;
-    private Map<Integer, Player> players;
 
     private ArrayList<Card> cardPile;
+    private ArrayList<Card> last_play;
+    private int num_players = 0;
+    private int curr_player = 0;
+    private int prev_player = 0;
+    private int targetRank = 0;
 
 	private static final String TAG = "BSGAME";
 
@@ -253,6 +256,68 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         {
             String str = (String) data;
             Message newMessage = LoganSquare.parse(str, Message.class);
+
+            switch (newMessage.eventType) {
+
+                //only will receive these messages if isHost
+                case (Constants.M_CALL_BS):
+                    boolean telling_truth = true;
+                    for (Card c: last_play) {
+                        if (c.valueOf() != targetRank) {
+                            telling_truth = false;
+                        }
+                    }
+
+                    if (telling_truth) {
+                        if (hands.get(prev_player).isEmpty()) {
+                            endGame();
+                        }
+                        else {
+                            hands.get(curr_player).addAll(cardPile);
+                            Message m = new Message();
+                            m.eventType = Constants.M_PLAYER_BS_INCORRECT;
+                            m.CallerID = curr_player;
+                            m.PlayerID = prev_player;
+                            m.cardsInHands = hands;
+                            network.sendToAllDevices(m, new SalutCallback() {
+                                @Override
+                                public void call() {
+
+                                }
+                            });
+                        }
+                    }
+
+                    else {
+                        hands.get(prev_player).addAll(cardPile);
+                        Message m = new Message();
+                        m.eventType = Constants.M_PLAYER_BS_CORRECT;
+                        m.CallerID = curr_player;
+                        m.PlayerID = prev_player;
+                        m.cardsInHands = hands;
+                        network.sendToAllDevices(m, new SalutCallback() {
+                            @Override
+                            public void call() {
+
+                            }
+                        });
+                    }
+
+                    cardPile = new ArrayList<Card>();
+                    newTurn();
+
+                    break;
+
+                case Constants.M_PLAY_CARDS:
+                    hands = newMessage.cardsInHands;
+                    cardPile.addAll(newMessage.playedCards);
+                    last_play = newMessage.playedCards;
+                    nextTurn();
+                    break;
+                default:
+                    bridge.sendDataToView(newMessage.eventType, newMessage);
+
+            }
 //            Log.d(TAG, newMessage.message);  //See you on the other side!
             //Do other stuff with data.
 
@@ -266,14 +331,33 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	}
 
     public void startGame() {
-        int ID = 1;
+        int ID = 0;
+        hands = new ArrayList<ArrayList<Card>>();
+        Deck d = new Deck();
+        Card c;
+        while ((c = d.nextCard()) != null) {
+            if (hands.size() <= ID) {
+                hands.add(new ArrayList<Card>());
+            }
+            if (c.valueOf() == 1 && c.suitOf().equals("s")) {
+                curr_player = ID;
+            }
+            hands.get(ID).add(c);
+            ID = (ID + 1) % num_players;
+
+        }
+
+        ID = 0;
+        Message m = new Message();
+        m.eventType = Constants.M_PLAYER_ID;
+        m.PlayerID= ID++;
+        bridge.sendDataToView(Constants.M_PLAYER_ID, m);
 
         for (SalutDevice device: network.registeredClients) {
-            Message m = new Message();
+            m = new Message();
             player_devices.put(ID, device);
-            players.put(ID, new Player());
             m.PlayerID = ID++;
-            m.eventType = Constants.M_GAME_START;
+            m.eventType = Constants.M_PLAYER_ID;
             network.sendToDevice(device, m, new SalutCallback() {
                 @Override
                 public void call() {
@@ -282,21 +366,63 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             });
         }
 
-        ID = 0;
-        Deck d = new Deck();
-        Card c;
-        while ((c = d.nextCard()) != null) {
-            players.get(ID).addToHand(c);
-            ID = (ID + 1) % num_players;
-            if (!players.containsKey(ID)) {
-                players.put(ID, new Player());
-            }
-        }
+        m = new Message();
+        m.eventType = Constants.M_GAME_START;
+        m.cardsInHands = hands;
+        m.currentPlayerTurn = curr_player;
+        network.sendToAllDevices(m, new SalutCallback() {
+            @Override
+            public void call() {
 
-        hands = new HashMap<Integer, ArrayList<Card>>();
-        for (int i = 0; i < num_players; i++) {
-            hands.put(i, players.get(i).getHand());
-        }
+            }
+        });
+
+        newTurn();
+
+
+
+
+    }
+
+    public void nextTurn() {
+        Message m = new Message();
+        m.eventType = Constants.M_PLAYER_TURN;
+        prev_player = curr_player;
+        curr_player = (curr_player+1) % num_players;
+        m.cardPile = cardPile;
+        m.cardsInHands = hands;
+        network.sendToAllDevices(m, new SalutCallback() {
+            @Override
+            public void call() {
+
+            }
+        });
+    }
+
+    public void newTurn() {
+        Message m = new Message();
+        m.eventType = Constants.M_PLAYER_TURN_START;
+        m.cardPile = cardPile;
+        m.cardsInHands = hands;
+        targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
+        network.sendToAllDevices(m, new SalutCallback() {
+            @Override
+            public void call() {
+
+            }
+        });
+    }
+
+    public void endGame() {
+        Message m = new Message();
+        m.eventType = Constants.M_GAME_OVER;
+        m.PlayerID = prev_player;
+        network.sendToAllDevices(m, new SalutCallback() {
+            @Override
+            public void call() {
+
+            }
+        });
 
     }
 

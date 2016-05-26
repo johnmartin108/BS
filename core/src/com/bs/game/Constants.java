@@ -24,6 +24,7 @@ public class Constants {
     public static final int M_PLAYER_BS_CORRECT = 13;
     public static final int M_GAME_OVER = 14;
     public static final int M_GAME_START = 15;
+    public static final int M_PLAYER_ID = 16;
 
     public static final int M_CALL_BS = 20;
     public static final int M_PLAY_CARDS = 21;

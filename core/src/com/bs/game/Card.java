@@ -43,6 +43,10 @@ public class Card {
         }
     }
 
+    public String suitOf() {
+        return this.suit;
+    }
+
     //helper functions for building deck
     public static String toRank(int r) {
         if (2 <= r && r <= 10) {

@@ -63,11 +63,13 @@ public class HostScreen implements Screen {
 
             clickInBack(touchPos);
 
-            int diff = inEasyButton(touchPos) ? 0 : inMediumButton(touchPos) ? 1 : inHardButton(touchPos) ? 2 : inImpButton(touchPos)? 3 : 0;
-            game.bridge.sendDataToController(Constants.M_SET_DIFF, diff);
-            game.bridge.sendDataToController(Constants.M_BECOME_HOST, null);
-            game.setScreen(new StartScreen(game));
-            dispose();
+            int diff = inEasyButton(touchPos) ? 0 : inMediumButton(touchPos) ? 1 : inHardButton(touchPos) ? 2 : inImpButton(touchPos)? 3 : -1;
+            if(diff >= 0) {
+                game.bridge.sendDataToController(Constants.M_SET_DIFF, diff);
+                game.bridge.sendDataToController(Constants.M_BECOME_HOST, null);
+                game.setScreen(new StartScreen(game));
+                dispose();
+            }
 
         }
     }

@@ -173,29 +173,33 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
 	public void discoverServices(){
-        startNetwork();
-		network.discoverWithTimeout(new SalutCallback() {
-			@Override
-			public void call() {
-				Log.d(TAG, "Look at all these devices! " + network.foundDevices.toString());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startNetwork();
+                network.discoverWithTimeout(new SalutCallback() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "Look at all these devices! " + network.foundDevices.toString());
 
-                peerlist.clear();
-                for (SalutDevice dev: network.foundDevices){
-                    Log.d(TAG, "connecting! " + dev.instanceName);
-                    peerlist.add(dev.deviceName);
-                    return;
-                }
+                        peerlist.clear();
+                        for (SalutDevice dev: network.foundDevices){
+                            peerlist.add(dev.deviceName);
+                        }
 
-                // update the ui here
-                bridge.sendDataToView(Constants.M_PEER_LIST, peerlist);
-			}
+                        // update the ui here
+                        bridge.sendDataToView(Constants.M_PEER_LIST, peerlist);
+                    }
 
-		}, new SalutCallback() {
-			@Override
-			public void call() {
-				Log.d(TAG, "Bummer, we didn't find anyone. ");
-			}
-		}, 5000);
+                }, new SalutCallback() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "Bummer, we didn't find anyone. ");
+                    }
+                }, 5000);
+            }
+        });
+
 	}
 
 	public void becomeHost(){

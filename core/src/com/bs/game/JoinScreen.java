@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -21,6 +22,10 @@ public class JoinScreen implements Screen {
     BSGame game;
     int width;
     int height;
+
+    Stage stage;
+
+    BitmapFont font;
 
     Boolean updated = false;
 
@@ -44,16 +49,37 @@ public class JoinScreen implements Screen {
     @Override
     public void show() {
 
+        stage = new Stage();
+
+        textButtonStyle = new TextButton.TextButtonStyle();
+        font = new BitmapFont();
+
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font.getData().scale(4.0f);
+
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
         bitFont = new BitmapFont();
+        game.bridge.sendDataToController(Constants.M_DISCOVER_PEERS, null);
+        if(!game.peerlist.isEmpty()){
+            for(int i = 0; i < game.peerlist.size(); i++){
+                final String newBtnName = "btn" + String.valueOf(i);
+                String host = (String)game.peerlist.get(i);
+                TextButton newBtn = new TextButton(newBtnName, textButtonStyle);
+                newBtn.setPosition(400, 500+100*i);
+                newBtn.addListener(new ClickListener(){
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        super.touchUp(event, x, y, pointer, button);
+                        game.connectTo(newBtnName);
+                    }
+                });
+                stage.addActor(newBtn);
 
-        if(!hosts.isEmpty()){
-            for(int i = 0; i < hosts.size(); i++){
-                String newBtnName = "btn" + String.valueOf(i);
-                String host = hosts.get(i);
-                //TextButton i = new TextButton(host, style);
             }
         }
 
@@ -64,28 +90,19 @@ public class JoinScreen implements Screen {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
         game.batch.begin();
         bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Select a Host", 725, 1300);
+        for (int i = 0; i < game.peerlist.size(); i ++){
+            String peerName = (String)game.peerlist.get(i);
+            bitFont.draw(game.batch, peerName, 725, 1100-i*100);
+        }
+
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
 
-        game.batch.begin();
-        for (int i = 0; i < game.peerlist.size(); i ++){
-            final String btnName = (String)game.peerlist.get(i);
-            TextButton newBtn = new TextButton(btnName, textButtonStyle);
-            newBtn.setPosition(400, 500+100*i);
-            newBtn.addListener(new ClickListener(){
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
-                    game.connectTo(btnName);
-                    game.setScreen(new WaitScreen(game));
-                    dispose();
-                }
-            });
-        }
-        game.batch.end();
 
 
 

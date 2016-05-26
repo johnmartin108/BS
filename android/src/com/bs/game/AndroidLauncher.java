@@ -98,12 +98,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         isHost = true;
         wifiManager.setWifiEnabled(false);
         wifiManager.setWifiEnabled(true);
-        
-        final Handler handler = new Handler();
 
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

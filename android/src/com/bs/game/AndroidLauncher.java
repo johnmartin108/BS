@@ -1,9 +1,6 @@
 package com.bs.game;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.SupplicantState;
@@ -16,7 +13,7 @@ import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
+import com.bluelinelabs.logansquare.LoganSquare;
 import com.peak.salut.Callbacks.SalutCallback;
 import com.peak.salut.Callbacks.SalutDataCallback;
 import com.peak.salut.Callbacks.SalutDeviceCallback;
@@ -32,7 +29,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.bluelinelabs.logansquare.*;
 
 public class AndroidLauncher extends AndroidApplication implements SalutDataCallback{
 	public static CommunicationBridge bridge;
@@ -41,6 +37,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 	public static boolean isHost;
     public static boolean hasStarted;
     WifiManager wifiManager;
+    List peerlist = new ArrayList<String>();
 
 	private static final String TAG = "BSGAME";
 
@@ -169,7 +166,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 			public void call() {
 				Log.d(TAG, "Look at all these devices! " + network.foundDevices.toString());
 
-                List peerlist = new ArrayList<String>();
+                peerlist.clear();
                 for (SalutDevice dev: network.foundDevices){
                     Log.d(TAG, "connecting! " + dev.instanceName);
                     peerlist.add(dev.deviceName);
@@ -234,11 +231,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         {
             String str = (String) data;
             Message newMessage = LoganSquare.parse(str, Message.class);
-            Log.d(TAG, newMessage.message);  //See you on the other side!
+//            Log.d(TAG, newMessage.message);  //See you on the other side!
             //Do other stuff with data.
 
-            CharSequence chars = newMessage.message;
-            Toast.makeText(this.getBaseContext(), chars, Toast.LENGTH_LONG).show();
+//            CharSequence chars = newMessage.message;
+  //          Toast.makeText(this.getBaseContext(), chars, Toast.LENGTH_LONG).show();
         }
         catch (IOException ex)
         {

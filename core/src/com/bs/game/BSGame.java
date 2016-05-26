@@ -1,23 +1,16 @@
 package com.bs.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BSGame extends Game {
@@ -26,6 +19,8 @@ public class BSGame extends Game {
 	static CommunicationBridge bridge;
 	ArrayList peerlist = new ArrayList();
 	ArrayList buttons = new ArrayList();
+
+    Preferences prefs;
 
 	Stage stage;
 
@@ -46,6 +41,8 @@ public class BSGame extends Game {
 		font = new BitmapFont();
 		stage = new Stage();
 
+		prefs = Gdx.app.getPreferences(Constants.P_PREF_NAME);
+
 		setScreen(new MainMenu(this));
 
 		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -63,6 +60,9 @@ public class BSGame extends Game {
 				switch (name){
 					case Constants.M_PEER_LIST:
 						peerlist = (ArrayList)obj;
+
+                        prefs.putBoolean(Constants.P_PEERS_UPDATED, true);
+
 						System.out.println(peerlist);
 						status = "devices are "+peerlist.toString();
 

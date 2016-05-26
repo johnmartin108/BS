@@ -6,10 +6,8 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 //import javafx.scene.control.Skin;
@@ -73,7 +71,7 @@ public class MainMenu implements Screen {
                     Gdx.input.getTextInput(nameListener, "What is your name?", "", "");
                 }
                 else {
-                    game.setScreen(new PlayScreen(game, name));
+                    game.setScreen(new JHScreen(game));
                     dispose();
                 }
             }
@@ -105,9 +103,10 @@ public class MainMenu implements Screen {
 
         @Override
         public void input(String text) {
-            prefs.putString("name", text);
-            prefs.flush();
-            game.setScreen(new PlayScreen(game, text));
+            game.bridge.sendDataToController(Constants.M_SET_NAME, text);
+            //prefs.putString("name", text);
+            //prefs.flush();
+            game.setScreen(new JHScreen(game));
             dispose();
         }
 

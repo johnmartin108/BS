@@ -24,7 +24,9 @@ import com.peak.salut.SalutServiceData;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,6 +40,12 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public static boolean hasStarted;
     WifiManager wifiManager;
     List peerlist = new ArrayList<String>();
+
+    private Map<Integer, ArrayList<Card>> hands;
+    private Map<Integer, SalutDevice> player_devices;
+    private Map<Integer, Player> players;
+
+    private ArrayList<Card> cardPile;
 
 	private static final String TAG = "BSGAME";
 
@@ -242,6 +250,41 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             Log.e(TAG, "Failed to parse network data.");
         }
 	}
+
+    public void startGame() {
+        int ID = 1;
+
+        for (SalutDevice device: network.registeredClients) {
+            Message m = new Message();
+            player_devices.put(ID, device);
+            players.put(ID, new Player());
+            m.PlayerID = ID++;
+            m.eventType = Constants.M_GAME_START;
+            network.sendToDevice(device, m, new SalutCallback() {
+                @Override
+                public void call() {
+
+                }
+            });
+        }
+
+        ID = 0;
+        Deck d = new Deck();
+        Card c;
+        while ((c = d.nextCard()) != null) {
+            players.get(ID).addToHand(c);
+            ID = (ID + 1) % num_players;
+            if (!players.containsKey(ID)) {
+                players.put(ID, new Bot());
+            }
+        }
+
+        hands = new HashMap<Integer, ArrayList<Card>>();
+        for (int i = 0; i < num_players; i++) {
+            hands.put(i, players.get(i).getHand());
+        }
+
+    }
 
     @Override
     public void onDestroy() {

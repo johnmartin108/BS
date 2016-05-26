@@ -25,5 +25,7 @@ public class Player {
     public void addToHand(ArrayList<Card> c) {
         hand.addAll(c);
     }
+    public void addToHand(Card c) {hand.add(c);}
+    public ArrayList<Card> getHand() {return hand;}
 
 }

@@ -76,6 +76,7 @@ public class JoinScreen implements Screen {
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         super.touchUp(event, x, y, pointer, button);
                         game.connectTo(newBtnName);
+                        System.out.println("CLICKED");
                     }
                 });
                 stage.addActor(newBtn);
@@ -117,6 +118,14 @@ public class JoinScreen implements Screen {
         //prefs.flush();
 
     }
+
+//    private boolean inPlayButton(Vector3 touchPos) {
+//        if (touchPos.x > (width/2 - playButton.getWidth()/2) && touchPos.x < (width/2 + playButton.getWidth()/2)
+//                && touchPos.y > (height - (300 + playButton.getHeight())) && touchPos.y < (height - 300)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()

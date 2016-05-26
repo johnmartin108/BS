@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * Created by rcornew on 5/25/16.
@@ -43,11 +41,12 @@ public class StartScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        bitFont.getData().setScale(10);
+
+        bitFont.getData().setScale(7);
+        bitFont.draw(game.batch, "List of Players in game", 660, 1300);
+        bitFont.draw(game.batch, "Press Start when ready", 640, 1200);
         bitFont.draw(game.batch, "Host Status: "+game.hostStatus, 725, 900);
-        bitFont.draw(game.batch, "List of Players in game", 725, 1300);
-        bitFont.draw(game.batch, "Press Start when ready", 725, 1100);
-        for (int i = 0; i < game.peerlist.size(); i ++){
+        /*for (int i = 0; i < game.peerlist.size(); i ++){
             final String btnName = (String)game.peerlist.get(i);
             TextButton newBtn = new TextButton(btnName, textButtonStyle);
             newBtn.setPosition(400, 500+100*i);
@@ -57,7 +56,7 @@ public class StartScreen implements Screen {
                     super.touchUp(event, x, y, pointer, button);
                 }
             });
-        }
+        }*/
         game.batch.draw(startButton, width / 2 - startButton.getWidth() / 2, 50);
         game.batch.end();
 
@@ -67,8 +66,8 @@ public class StartScreen implements Screen {
 
             // Start the game
             if (inStartButton(touchPos)) {
-                game.bridge.sendDataToController(Constants.M_START_GAME, true);
-                game.setScreen(new StartScreen(game));
+                //game.bridge.sendDataToController(Constants.M_START_GAME, true);
+                game.setScreen(new PlayScreen(game));
                 dispose();
             }
         }

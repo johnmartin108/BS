@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 //import javafx.scene.control.Skin;
 
@@ -22,10 +21,11 @@ public class MainMenu implements Screen {
     private Texture mainImage;
     private Texture playButton;
     private Texture settingsButton;
-    private TextField name;
+//    private TextField name;
     int width;
     int height;
     private Preferences prefs;
+    String name = "";
 
     public MainMenu(BSGame game) {
         this.game = game;
@@ -47,6 +47,7 @@ public class MainMenu implements Screen {
 //        name = new TextField("Enter your name", skin);
 //        name.setPosition(200, 200);
 //        name.setSize(200, 100);
+
     }
 
     @Override
@@ -65,7 +66,7 @@ public class MainMenu implements Screen {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (inPlayButton(touchPos)) {
-                String name = prefs.getString("name", "");
+                
                 if (name.equals("")) {
                     NameListener nameListener = new NameListener();
                     Gdx.input.getTextInput(nameListener, "What is your name?", "", "");
@@ -104,8 +105,6 @@ public class MainMenu implements Screen {
         @Override
         public void input(String text) {
             game.bridge.sendDataToController(Constants.M_SET_NAME, text);
-            //prefs.putString("name", text);
-            //prefs.flush();
             game.setScreen(new JHScreen(game));
             dispose();
         }

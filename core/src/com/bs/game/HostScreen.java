@@ -61,6 +61,7 @@ public class HostScreen implements Screen {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
+            System.out.println(String.valueOf(touchPos));
             clickInBack(touchPos);
 
             int diff = inEasyButton(touchPos) ? 0 : inMediumButton(touchPos) ? 1 : inHardButton(touchPos) ? 2 : inImpButton(touchPos)? 3 : -1;

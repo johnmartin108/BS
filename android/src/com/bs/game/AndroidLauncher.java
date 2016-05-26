@@ -144,7 +144,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void startNetwork(){
         //establish connection
         SalutDataReceiver dataReceiver = new SalutDataReceiver(this, this);
-        SalutServiceData serviceData = new SalutServiceData(Constants.N_SERVICE_NAME, 50488, "BOB");
+        SalutServiceData serviceData = new SalutServiceData(Constants.N_SERVICE_NAME, 50488, playerName);
         network = new Salut(dataReceiver, serviceData, new SalutCallback() {
             @Override
             public void call() {
@@ -192,7 +192,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                         peerlist.clear();
                         for (SalutDevice dev: network.foundDevices){
-                            peerlist.add(dev.deviceName);
+                            peerlist.add(dev.readableName);
                         }
 
                         // update the ui here

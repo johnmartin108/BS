@@ -79,7 +79,7 @@ public class JoinScreen implements Screen {
                 final String newBtnName = (String)game.peerlist.get(i);
                 String host = (String)game.peerlist.get(i);
                 TextButton newBtn = new TextButton(newBtnName, textButtonStyle);
-                newBtn.setPosition(725, 1150-100*i);
+                newBtn.setPosition(725, 1000-100*i);
                 newBtn.addListener(new ClickListener(){
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -98,9 +98,7 @@ public class JoinScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.input.setInputProcessor(stage);
-        refreshPeerList();
-        stage.draw();
+
 
         game.batch.begin();
         bitFont.getData().setScale(10);
@@ -118,6 +116,9 @@ public class JoinScreen implements Screen {
 
             clickInBack(touchPos);
         }
+        Gdx.input.setInputProcessor(stage);
+        refreshPeerList();
+        stage.draw();
 
         //prefs.flush();
 

@@ -90,6 +90,88 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         startHost();
                         break;
 
+                    //only will receive these messages if isHost
+                    case (Constants.M_START_GAME):
+                        if (isHost) {
+                            num_players = network.registeredClients.size() + 1;
+                            startGame();
+                        }
+                        break;
+                    case (Constants.M_CALL_BS):
+                        boolean telling_truth = true;
+                        for (Card c: last_play) {
+                            if (c.valueOf() != targetRank) {
+                                telling_truth = false;
+                            }
+                        }
+
+                        if (telling_truth) {
+                            if (hands.get(prev_player).isEmpty()) {
+                                endGame();
+                            }
+                            else {
+                                hands.get(curr_player).addAll(cardPile);
+                                Message m = new Message();
+                                m.eventType = Constants.M_PLAYER_BS_INCORRECT;
+                                m.CallerID = curr_player;
+                                m.PlayerID = prev_player;
+                                m.cardsInHands = hands;
+                                network.sendToAllDevices(m, new SalutCallback() {
+                                    @Override
+                                    public void call() {
+
+                                    }
+                                });
+
+                                bridge.sendDataToView(Constants.M_HANDS, hands);
+                                bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                                bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                                bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
+                            }
+                        }
+
+                        else {
+                            hands.get(prev_player).addAll(cardPile);
+                            Message m = new Message();
+                            m.eventType = Constants.M_PLAYER_BS_CORRECT;
+                            m.CallerID = curr_player;
+                            m.PlayerID = prev_player;
+                            m.cardsInHands = hands;
+                            network.sendToAllDevices(m, new SalutCallback() {
+                                @Override
+                                public void call() {
+
+                                }
+                            });
+
+                            //send info to host as well
+                            bridge.sendDataToView(Constants.M_HANDS, hands);
+                            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                            bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
+                        }
+
+                        cardPile = new ArrayList<Card>();
+                        newTurn();
+
+                        break;
+
+                    case Constants.M_PLAY_CARDS:
+                        ArrayList<Card> playedCards = (ArrayList<Card>) obj;
+                        ArrayList<Card> newHand = new ArrayList<Card>();
+
+                        for (Card c: hands.get(curr_player)) {
+                            if (!playedCards.contains(c)) {
+                                newHand.add(c);
+                            }
+                        }
+
+                        hands.set(curr_player, newHand);
+                        cardPile.addAll(playedCards);
+                        last_play = playedCards;
+                        nextTurn();
+                        break;
+
 					default:
 						break;
 				}
@@ -256,74 +338,49 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             switch (newMessage.eventType) {
 
-                //only will receive these messages if isHost
-                case (Constants.M_START_GAME):
-                    if (isHost) {
-                        startGame();
-                    }
-                    break;
-                case (Constants.M_CALL_BS):
-                    boolean telling_truth = true;
-                    for (Card c: last_play) {
-                        if (c.valueOf() != targetRank) {
-                            telling_truth = false;
-                        }
-                    }
-
-                    if (telling_truth) {
-                        if (hands.get(prev_player).isEmpty()) {
-                            endGame();
-                        }
-                        else {
-                            hands.get(curr_player).addAll(cardPile);
-                            Message m = new Message();
-                            m.eventType = Constants.M_PLAYER_BS_INCORRECT;
-                            m.CallerID = curr_player;
-                            m.PlayerID = prev_player;
-                            m.cardsInHands = hands;
-                            network.sendToAllDevices(m, new SalutCallback() {
-                                @Override
-                                public void call() {
-
-                                }
-                            });
-
-                            bridge.sendDataToView(m.eventType, m);
-                        }
-                    }
-
-                    else {
-                        hands.get(prev_player).addAll(cardPile);
-                        Message m = new Message();
-                        m.eventType = Constants.M_PLAYER_BS_CORRECT;
-                        m.CallerID = curr_player;
-                        m.PlayerID = prev_player;
-                        m.cardsInHands = hands;
-                        network.sendToAllDevices(m, new SalutCallback() {
-                            @Override
-                            public void call() {
-
-                            }
-                        });
-
-                        bridge.sendDataToView(m.eventType, m);
-                    }
-
-                    cardPile = new ArrayList<Card>();
-                    newTurn();
-
-                    break;
-
-                case Constants.M_PLAY_CARDS:
-                    hands = newMessage.cardsInHands;
-                    cardPile.addAll(newMessage.playedCards);
-                    last_play = newMessage.playedCards;
-                    nextTurn();
-                    break;
-
                 //non-host messages just get forwarded to the respective views
+                case Constants.M_PLAYER_ID:
+                    bridge.sendDataToView(newMessage.eventType, newMessage.PlayerID);
+                    break;
+                case Constants.M_GAME_OVER:
+                    bridge.sendDataToView(newMessage.eventType, newMessage.PlayerID);
+                    break;
+                case Constants.M_GAME_START:
+                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.currentPlayerTurn);
+                    bridge.sendDataToView(Constants.M_GAME_START, null);
+                    break;
+                case Constants.M_PLAYER_BS_CORRECT:
+                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                    bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
+                    break;
+                case Constants.M_PLAYER_BS_INCORRECT:
+                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                    bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
+                    break;
+                case Constants.M_PLAYER_TURN:
+                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+                    bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
+                    break;
+                case Constants.M_PLAYER_TURN_START:
+                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+                    bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
+                    bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
+                    break;
+
+
+
+
                 default:
-                    bridge.sendDataToView(newMessage.eventType, newMessage);
+                    break;
 
             }
 //            Log.d(TAG, newMessage.message);  //See you on the other side!
@@ -343,6 +400,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         hands = new ArrayList<ArrayList<Card>>();
         Deck d = new Deck();
         Card c;
+        cardPile = new ArrayList<Card>();
+        targetRank = 0;
         while ((c = d.nextCard()) != null) {
             if (hands.size() <= ID) {
                 hands.add(new ArrayList<Card>());
@@ -355,11 +414,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
         }
 
+        Message m;
         ID = 0;
-        Message m = new Message();
-        m.eventType = Constants.M_PLAYER_ID;
-        m.PlayerID= ID++;
-        bridge.sendDataToView(Constants.M_PLAYER_ID, m);
+        bridge.sendDataToView(Constants.M_PLAYER_ID, ID++);
 
         for (SalutDevice device: network.registeredClients) {
             m = new Message();
@@ -385,6 +442,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             }
         });
 
+        bridge.sendDataToView(Constants.M_HANDS, hands);
+        bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+        bridge.sendDataToView(Constants.M_GAME_START, null);
+
         newTurn();
     }
 
@@ -402,7 +463,13 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
-        bridge.sendDataToView(Constants.M_PLAYER_TURN, m);
+
+        //host needs data too
+        bridge.sendDataToView(Constants.M_HANDS, hands);
+        bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+        bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+        bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
+        bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
     }
 
     public void newTurn() {
@@ -418,7 +485,12 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
-        bridge.sendDataToView(Constants.M_PLAYER_TURN_START, m);
+
+        //send same message to host
+        bridge.sendDataToView(Constants.M_HANDS, hands);
+        bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+        bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+        bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
     }
 
     public void endGame() {
@@ -431,7 +503,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             }
         });
-        bridge.sendDataToView(Constants.M_GAME_OVER, m);
+
+        bridge.sendDataToView(Constants.M_GAME_OVER, prev_player);
 
     }
 

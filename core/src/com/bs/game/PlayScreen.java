@@ -19,19 +19,21 @@ import java.util.Map;
 public class PlayScreen implements Screen {
 
     SpriteBatch batch;
-    ArrayList<ArrayList<Card>> hands;
+
     ArrayList<Card> inputCards;
     HashMap<Card, CardInfo> cards;
+
+    
     private int numberSelected;
-    private String currRank;
     private String name;
+    private String currRank;
     private BitmapFont count;
     final BSGame game;
     private Texture backButton;
     private Texture goButton;
     private int width;
     private int height;
-    private int ID;
+
 
     public PlayScreen(BSGame game) {
         this.game = game;
@@ -75,8 +77,14 @@ public class PlayScreen implements Screen {
         }
     }
 
+    public void updateViewState() {
+        inputCards = game.hands.get(game.ID);
+        currRank = game.targetRank + "";
+
+    }
     @Override
     public void render(float delta) {
+        updateViewState();
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -148,14 +156,21 @@ public class PlayScreen implements Screen {
                 && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
             HashMap<Card, CardInfo> copy = (HashMap<Card, CardInfo>) cards.clone();
             Iterator iter = cards.entrySet().iterator();
+            ArrayList<Card> play = new ArrayList<Card>();
             while (iter.hasNext()) {
                 Map.Entry mapPair = (Map.Entry) iter.next();
                 Card card = (Card) mapPair.getKey();
                 CardInfo cardInfo = (CardInfo) mapPair.getValue();
                 if (cardInfo.chosen) {
                     copy.remove(card);
+                    play.add(card);
                 }
             }
+            if (play.isEmpty()) {
+                return;
+            }
+
+            game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
             cards = copy;
             game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
             dispose();
@@ -163,48 +178,7 @@ public class PlayScreen implements Screen {
         }
     }
 
-    //TODO: need UI people to fill this in. uncomment and make screens show up accordingly. I'm assuming all game functions happen in playscreen. If not we should probably talk.
-    //I'm not sure how to get the message data through correctly. But if nothing else this should give you an idea of
-    //what things we need the UI to be able to do.
 
-//    public void onReceivedData(int name, Object obj) {
-//        String str = (String) obj;
-//        Message m = LoganSquare.parse(str, Message.class);
-//        switch (name) {
-//            case Constants.M_PLAYER_ID:
-//                ID = m.PlayerID;
-//                break;
-//            case Constants.M_GAME_OVER:
-//                //TODO: protocol for finishing game
-//                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
-//                //TODO: protocol for handling game events like incorrect BS calls
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_BS_INCORRECT:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_TURN:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                if (ID = m.PlayerID) {
-//                    //do a turn
-//                }
-//                else {
-//                    //display waiting screen
-//                }
-//                break;
-//            case Constants.M_PLAYER_TURN_START:
-//                //same as above, but there should be no option to call BS
-//                break;
-//
-//
-//
-//
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {

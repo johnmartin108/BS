@@ -36,6 +36,15 @@ public class BSGame extends Game {
 	Texture goButton;
 	boolean isConnected;
 
+	ArrayList<ArrayList<Card>> hands;
+	ArrayList<Card> cardPile;
+	int curr_player;
+	int prev_player;
+	int ID;
+	int targetRank;
+
+
+
 	public BSGame(CommunicationBridge b){
 		bridge = b;
 	}
@@ -119,6 +128,50 @@ public class BSGame extends Game {
 						break;
 					default:
 						break;
+
+					case Constants.M_PLAYER_ID:
+						ID = (Integer) obj;
+						break;
+					case Constants.M_HANDS:
+						hands = (ArrayList<ArrayList<Card>>) obj;
+						break;
+					case Constants.M_TARGET_RANK:
+						targetRank = (Integer) obj;
+						break;
+					case Constants.M_PREV_PLAYER:
+						prev_player = (Integer) obj;
+						break;
+					case Constants.M_CARD_PILE:
+						cardPile = (ArrayList<Card>) obj;
+						break;
+					case Constants.M_CURRENT_PLAYER:
+						curr_player = (Integer) obj;
+						break;
+
+					//***** GAME FLOW MESSAGES *****
+					case Constants.M_GAME_OVER:
+						//TODO: protocol for finishing game
+						int winner = (Integer) obj;
+						break;
+					case Constants.M_PLAYER_BS_CORRECT:
+						//TODO: protocol for handling game events like incorrect BS calls
+						cardPile = new ArrayList<Card>();
+						break;
+					case Constants.M_PLAYER_BS_INCORRECT:
+						//TODO: protocol for handling incorrect BS - check variables curr_player and prev_player
+						cardPile = new ArrayList<Card>();
+						break;
+					case Constants.M_PLAYER_TURN:
+						if (ID == curr_player) {
+							//do a turn
+						}
+						else {
+							//display waiting screen
+						}
+						break;
+					case Constants.M_PLAYER_TURN_START:
+						//same as above, but there should be no option to call BS
+						break;
 				}
 
 			}
@@ -163,6 +216,22 @@ public class BSGame extends Game {
 	@Override
 	public void render () {
 		super.render();
+	}
+
+	//TODO: need UI people to fill this in. uncomment and make screens show up accordingly. I'm assuming all game functions happen in playscreen. If not we should probably talk.
+	//I'm not sure how to get the message data through correctly. But if nothing else this should give you an idea of
+	//what things we need the UI to be able to do.
+
+	public void onReceivedData(int name, Object obj) {
+
+		switch (name) {
+			//***** MESSAGES UPDATING VALUES *****
+
+
+
+
+
+		}
 	}
 
 }

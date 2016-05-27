@@ -8,6 +8,7 @@ public class Constants {
     public static final String P_PREF_NAME = "My Preferences";
     public static final String P_PEERS_UPDATED = "P_PEERS_UPDATED";
 
+    //setup messages
     public static final int M_SET_NAME = 0;
     public static final int M_DISCOVER_PEERS = 1;
     public static final int M_PEER_LIST = 2;
@@ -20,15 +21,24 @@ public class Constants {
     public static final int M_DEVICE_CONNECTED = 9;
     public static final int M_CONNECTION_STATUS = 10;
 
-    public static final int M_PLAYER_TURN = 10;
+    //messages from host
+    public static final int M_PLAYER_TURN = 16;
     public static final int M_PLAYER_TURN_START = 11;
     public static final int M_PLAYER_BS_INCORRECT = 12;
     public static final int M_PLAYER_BS_CORRECT = 13;
     public static final int M_GAME_OVER = 14;
     public static final int M_GAME_START = 15;
-    public static final int M_PLAYER_ID = 16;
 
+    //messages to host
     public static final int M_CALL_BS = 20;
     public static final int M_PLAY_CARDS = 21;
+
+    //variable updatem essages
+    public static final int M_HANDS = 30;
+    public static final int M_CURRENT_PLAYER = 31;
+    public static final int M_PREV_PLAYER = 32;
+    public static final int M_TARGET_RANK = 33;
+    public static final int M_CARD_PILE = 34;
+    public static final int M_PLAYER_ID = 35;
 
 }

@@ -163,7 +163,10 @@ public class PlayScreen implements Screen {
         }
     }
 
-    //TODO: need UI people to fill this in. uncomment and make screens show up accordingly.
+    //TODO: need UI people to fill this in. uncomment and make screens show up accordingly. I'm assuming all game functions happen in playscreen. If not we should probably talk.
+    //I'm not sure how to get the message data through correctly. But if nothing else this should give you an idea of
+    //what things we need the UI to be able to do.
+
 //    public void onReceivedData(int name, Object obj) {
 //        String str = (String) obj;
 //        Message m = LoganSquare.parse(str, Message.class);
@@ -179,7 +182,7 @@ public class PlayScreen implements Screen {
 //                hands = m.cardsInHands;
 //                inputCards = hands.get(ID);
 //                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
+//            case Constants.M_PLAYER_BS_INCORRECT:
 //                hands = m.cardsInHands;
 //                inputCards = hands.get(ID);
 //                break;

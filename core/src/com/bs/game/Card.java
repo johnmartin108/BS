@@ -2,6 +2,8 @@ package com.bs.game;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+
 /**
  * Created by johnmartin on 5/19/16.
  */
@@ -17,6 +19,12 @@ public class Card {
 
         String path = "large/card_a_" + this.suit + this.rank + "_large.png";
         this.img = new Texture(path);
+    }
+
+    //rank, suit
+    public Card(ArrayList<String> vals) {
+        this.suit = vals.get(1);
+        this.rank = vals.get(0);
     }
 
     public String toString() {
@@ -90,6 +98,12 @@ public class Card {
 //    }
     public Texture getTexture() {
         return this.img;
+    }
+
+    public ArrayList<String> toCompressable() {
+        ArrayList<String> result = new ArrayList<String>();
+        result.add(this.rank);
+        result.add(this.suit);
     }
 
 }

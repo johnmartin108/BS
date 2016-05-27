@@ -69,7 +69,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 			@Override
 			public void onReceivedData(int name, Object obj) {
 				super.onReceivedData(name, obj);
+                Message m;
 				switch (name){
+
 
                     case Constants.M_SET_NAME:
                         playerName = (String)obj;
@@ -99,78 +101,43 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         }
                         break;
                     case (Constants.M_CALL_BS):
-                        boolean telling_truth = true;
-                        for (Card c: last_play) {
-                            if (c.valueOf() != targetRank) {
-                                telling_truth = false;
+                        m = new Message();
+                        m.eventType = Constants.M_CALL_BS;
+                        network.sendToHost(m, new SalutCallback() {
+                            @Override
+                            public void call() {
+
                             }
-                        }
+                        });
+                        break;
 
-                        if (telling_truth) {
-                            if (hands.get(prev_player).isEmpty()) {
-                                endGame();
-                            }
-                            else {
-                                hands.get(curr_player).addAll(cardPile);
-                                Message m = new Message();
-                                m.eventType = Constants.M_PLAYER_BS_INCORRECT;
-                                m.CallerID = curr_player;
-                                m.PlayerID = prev_player;
-                                m.cardsInHands = hands;
-                                network.sendToAllDevices(m, new SalutCallback() {
-                                    @Override
-                                    public void call() {
+                    case Constants.M_PLAY_CARDS:
+                        ArrayList<Card> playedCards = (ArrayList<Card>) obj;
 
-                                    }
-                                });
-
-                                bridge.sendDataToView(Constants.M_HANDS, hands);
-                                bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                                bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
-                                bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
-                            }
-                        }
-
-                        else {
-                            hands.get(prev_player).addAll(cardPile);
-                            Message m = new Message();
-                            m.eventType = Constants.M_PLAYER_BS_CORRECT;
-                            m.CallerID = curr_player;
-                            m.PlayerID = prev_player;
-                            m.cardsInHands = hands;
-                            network.sendToAllDevices(m, new SalutCallback() {
+                        if (!isHost) {
+                            m = new Message();
+                            m.eventType = Constants.M_PLAY_CARDS;
+                            m.playedCards = Card.toCardsDump(playedCards);
+                            network.sendToHost(m, new SalutCallback() {
                                 @Override
                                 public void call() {
 
                                 }
                             });
-
-                            //send info to host as well
-                            bridge.sendDataToView(Constants.M_HANDS, hands);
-                            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
-                            bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
                         }
-
-                        cardPile = new ArrayList<Card>();
-                        newTurn();
-
-                        break;
-
-                    case Constants.M_PLAY_CARDS:
-                        ArrayList<Card> playedCards = (ArrayList<Card>) obj;
-                        ArrayList<Card> newHand = new ArrayList<Card>();
-
-                        for (Card c: hands.get(curr_player)) {
-                            if (!playedCards.contains(c)) {
-                                newHand.add(c);
+                        else {
+                            ArrayList<Card> newHand = new ArrayList<Card>();
+                            for (Card c: hands.get(curr_player)) {
+                                if (!playedCards.contains(c)) {
+                                    newHand.add(c);
+                                }
                             }
-                        }
 
-                        hands.set(curr_player, newHand);
-                        cardPile.addAll(playedCards);
-                        last_play = playedCards;
-                        nextTurn();
+                            hands.set(curr_player, newHand);
+                            cardPile.addAll(playedCards);
+                            last_play = playedCards;
+                            nextTurn();
+                        }
                         break;
 
 					default:
@@ -347,39 +314,113 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     bridge.sendDataToView(newMessage.eventType, newMessage.PlayerID);
                     break;
                 case Constants.M_GAME_START:
-                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.currentPlayerTurn);
                     bridge.sendDataToView(Constants.M_GAME_START, null);
                     break;
                 case Constants.M_PLAYER_BS_CORRECT:
-                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
                     bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
                     bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
                     break;
                 case Constants.M_PLAYER_BS_INCORRECT:
-                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
                     bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
                     bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
                     break;
                 case Constants.M_PLAYER_TURN:
-                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                    bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
-                    bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
+                    bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
+                    bridge.sendDataToView(Constants.M_LAST_PLAY, Card.fromCardsDump(newMessage.prevPlay));
                     bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
                     break;
                 case Constants.M_PLAYER_TURN_START:
-                    bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
+                    bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                    bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+                    bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
                     bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
                     bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
                     break;
 
+                //***** HOST OPERATIONS *****
+                case (Constants.M_PLAY_CARDS):
+                    ArrayList<Card> playedCards = Card.fromCardsDump(newMessage.playedCards);
+                    ArrayList<Card> newHand = new ArrayList<Card>();
 
+                    for (Card c: hands.get(curr_player)) {
+                        if (!playedCards.contains(c)) {
+                            newHand.add(c);
+                        }
+                    }
 
+                    hands.set(curr_player, newHand);
+                    cardPile.addAll(playedCards);
+                    last_play = playedCards;
+
+                    nextTurn();
+                    break;
+
+                case (Constants.M_CALL_BS):
+                    boolean telling_truth = true;
+                    for (Card c: last_play) {
+                        if (c.valueOf() != targetRank) {
+                            telling_truth = false;
+                        }
+                    }
+
+                    if (telling_truth) {
+                        if (hands.get(prev_player).isEmpty()) {
+                            endGame();
+                        }
+                        else {
+                            hands.get(curr_player).addAll(cardPile);
+                            Message m = new Message();
+                            m.eventType = Constants.M_PLAYER_BS_INCORRECT;
+                            m.CallerID = curr_player;
+                            m.PlayerID = prev_player;
+                            m.cardsInHands = Card.toHandsDump(hands);
+                            network.sendToAllDevices(m, new SalutCallback() {
+                                @Override
+                                public void call() {
+
+                                }
+                            });
+
+                            bridge.sendDataToView(Constants.M_HANDS, hands);
+                            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                            bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
+                        }
+                    }
+
+                    else {
+                        hands.get(prev_player).addAll(cardPile);
+                        Message m = new Message();
+                        m.eventType = Constants.M_PLAYER_BS_CORRECT;
+                        m.CallerID = curr_player;
+                        m.PlayerID = prev_player;
+                        m.cardsInHands = Card.toHandsDump(hands);
+                        network.sendToAllDevices(m, new SalutCallback() {
+                            @Override
+                            public void call() {
+
+                            }
+                        });
+
+                        //send info to host as well
+                        bridge.sendDataToView(Constants.M_HANDS, hands);
+                        bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                        bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                        bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
+                    }
+
+                    cardPile = new ArrayList<Card>();
+                    newTurn();
+
+                    break;
 
                 default:
                     break;
@@ -437,7 +478,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
         m = new Message();
         m.eventType = Constants.M_GAME_START;
-        m.cardsInHands = hands;
+        m.cardsInHands = Card.toHandsDump(hands);
         m.currentPlayerTurn = curr_player;
         network.sendToAllDevices(m, new SalutCallback() {
             @Override
@@ -458,9 +499,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         m.eventType = Constants.M_PLAYER_TURN;
         prev_player = curr_player;
         curr_player = (curr_player+1) % num_players;
-        m.cardPile = cardPile;
-        m.prevPlay = last_play;
-        m.cardsInHands = hands;
+        m.cardPile = Card.toCardsDump(cardPile);
+        m.prevPlay = Card.toCardsDump(last_play);
+        m.cardsInHands = Card.toHandsDump(hands);
         m.PlayerID = curr_player;
         network.sendToAllDevices(m, new SalutCallback() {
             @Override
@@ -481,8 +522,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void newTurn() {
         Message m = new Message();
         m.eventType = Constants.M_PLAYER_TURN_START;
-        m.cardPile = cardPile;
-        m.cardsInHands = hands;
+        m.cardPile = Card.toCardsDump(cardPile);
+        m.cardsInHands = Card.toHandsDump(hands);
         m.PlayerID = curr_player;
         targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
         network.sendToAllDevices(m, new SalutCallback() {

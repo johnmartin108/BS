@@ -100,10 +100,51 @@ public class Card {
         return this.img;
     }
 
-    public ArrayList<String> toCompressable() {
+    public ArrayList<String> toSerializable() {
         ArrayList<String> result = new ArrayList<String>();
         result.add(this.rank);
         result.add(this.suit);
+        return result;
+    }
+
+    public static ArrayList<ArrayList<ArrayList<String>>> toHandsDump(ArrayList<ArrayList<Card>> e) {
+        ArrayList<ArrayList<ArrayList<String>>> result = new ArrayList<ArrayList<ArrayList<String>>>();
+        for (int i = 0; i < e.size(); i++) {
+            result.add(new ArrayList<ArrayList<String>>());
+            for (Card c: e.get(i)) {
+                result.get(i).add(c.toSerializable());
+            }
+        }
+
+        return result;
+    }
+
+    public static ArrayList<ArrayList<String>> toCardsDump(ArrayList<Card> e) {
+        ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+        for (Card c: e) {
+            result.add(c.toSerializable());
+        }
+        return result;
+    }
+
+    public static ArrayList<ArrayList<Card>> fromHandsDump(ArrayList<ArrayList<ArrayList<String>>> e) {
+        ArrayList<ArrayList<Card>> result = new ArrayList<ArrayList<Card>>();
+        for (int i = 0; i < e.size(); i++) {
+            result.add(new ArrayList<Card>());
+            for (ArrayList<String> nums: e.get(i)) {
+                result.get(i).add(new Card(nums));
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<Card> fromCardsDump(ArrayList<ArrayList<String>> e) {
+        ArrayList<Card> result = new ArrayList<Card>();
+        for (ArrayList<String> nums: e) {
+            result.add(new Card(nums));
+        }
+
+        return result;
     }
 
 }

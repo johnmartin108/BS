@@ -28,7 +28,7 @@ public class Message {
     public int numPlayers;
 
     @JsonField
-    public ArrayList<ArrayList<Card>> cardsInHands;
+    public ArrayList<ArrayList<ArrayList<String>>> cardsInHands;
 
     @JsonField
     public int targetRank;
@@ -43,14 +43,14 @@ public class Message {
     public int PlayerID;
 
     @JsonField
-    public ArrayList<Card> cardPile;
+    public ArrayList<ArrayList<String>> cardPile;
 
     @JsonField
-    public ArrayList<Card> prevPlay;
+    public ArrayList<ArrayList<String>> prevPlay;
 
     @JsonField
-    public ArrayList<Card> addCards;
+    public ArrayList<ArrayList<String>> addCards;
 
     @JsonField
-    public ArrayList<Card> playedCards;
+    public ArrayList<ArrayList<String>> playedCards;
 }

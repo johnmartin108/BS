@@ -24,6 +24,7 @@ import com.peak.salut.SalutServiceData;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -403,6 +404,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         Card c;
         cardPile = new ArrayList<Card>();
         targetRank = 0;
+        player_devices = new HashMap<Integer, SalutDevice>();
+
         while ((c = d.nextCard()) != null) {
             if (hands.size() <= ID) {
                 hands.add(new ArrayList<Card>());

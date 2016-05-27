@@ -79,7 +79,7 @@ public class PlayScreen implements Screen {
 
     public void updateViewState() {
         inputCards = game.hands.get(game.ID);
-        currRank = game.targetRank + "";
+        currRank = convertToStringRank(game.targetRank);
 
     }
     @Override
@@ -238,6 +238,16 @@ public class PlayScreen implements Screen {
         public void setChosen() {
             this.chosen = !this.chosen;
         }
+    }
+
+    public String convertToStringRank(int rank) {
+        switch(rank) {
+            case 0:
+                return "aces";
+            case 1:
+                return "ones";
+        }
+        return "";
     }
 
 }

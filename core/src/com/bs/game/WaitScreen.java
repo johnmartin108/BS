@@ -27,7 +27,7 @@ public class WaitScreen implements Screen {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
-        bitFont = new BitmapFont();
+        bitFont = game.font;
     }
 
     @Override

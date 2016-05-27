@@ -71,7 +71,7 @@ public class OtherPlay implements Screen {
         batch.begin();
         count.getData().setScale(10);
         count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
-        count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 300, 600);
+        count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 600);
         batch.end();
         batch.begin();
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);

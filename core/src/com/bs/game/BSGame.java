@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 
+import javax.xml.soap.Text;
+
 public class BSGame extends Game {
 	SpriteBatch batch;
 	Texture img;
@@ -43,6 +45,8 @@ public class BSGame extends Game {
 		img = new Texture("badlogic.jpg");
 		font = new BitmapFont();
 		stage = new Stage();
+
+		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
 		backButton = new Texture("back.png");
 		goButton = new Texture("go.png");

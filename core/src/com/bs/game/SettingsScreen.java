@@ -32,7 +32,7 @@ public class SettingsScreen implements Screen {
     public void show() {
         prefs = Gdx.app.getPreferences("My Preferences");
         name = prefs.getString("name");
-        nameString = new BitmapFont();
+        nameString = game.font;
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
@@ -46,7 +46,7 @@ public class SettingsScreen implements Screen {
         game.batch.begin();
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         nameString.getData().setScale(10);
-        nameString.draw(game.batch, name, 200, 200);
+//        nameString.draw(game.batch, name, 200, 200);
         game.batch.end();
 
         if(Gdx.input.justTouched()) {

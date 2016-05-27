@@ -16,27 +16,26 @@ import java.util.Map;
 /**
  * Created by nick on 5/24/16.
  */
-public class CalledBSScreen implements Screen {
+public class OtherWaitScreen implements Screen {
 
     SpriteBatch batch;
-    private int ID1;
-    private int ID2;
+    private int numberPlayed;
+    private String suitPlayed;
     private BitmapFont count;
     final BSGame game;
     private Texture backButton;
+    private Texture goButton;
     private int width;
     private int height;
     private int ID;
     private float elapsed = 0;
 
-    public CalledBSScreen(BSGame game) {
+    public OtherWaitScreen(BSGame game) {
         this.game = game;
     }
 
-    public CalledBSScreen(BSGame game, int ID1, int ID2) {
+    public OtherWaitScreen(BSGame game, int numberPlayed, String suitPlayed) {
         this.game = game;
-        this.ID1 = ID1;
-        this.ID2 = ID2;
     }
 
     @Override
@@ -48,24 +47,24 @@ public class CalledBSScreen implements Screen {
         batch = new SpriteBatch();
         count = game.font;
 
-        backButton = game.backButton;
+        backButton = new Texture("back.png");
 
     }
 
     @Override
     public void render(float delta) {
-        elapsed += delta;
-
-        if (elapsed > 5.0) {
-            game.setScreen(new PlayScreen(game));
-        }
-
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        elapsed += delta;
+
+        if (elapsed > 7.0) {
+            game.setScreen(new OtherPlay(game, 2, 6, "aces"));
+        }
+
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, ID1 + " called BS on " + ID2 + "\nThey were right!\n" + ID2 + " collected the pile.", 500, 1000);
+        count.draw(batch, "Waiting for player " + "to play...", 200, 1100);
         batch.end();
 
         if(Gdx.input.justTouched()) {

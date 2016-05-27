@@ -32,7 +32,7 @@ public class StartScreen implements Screen {
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
         startButton = new Texture("start.png");
-        bitFont = new BitmapFont();
+        bitFont = game.font;
     }
 
     @Override

@@ -29,6 +29,8 @@ public class BSGame extends Game {
 
 	TextButton.TextButtonStyle textButtonStyle;
 	String hostStatus = "";
+	Texture backButton;
+	Texture goButton;
 
 	public BSGame(CommunicationBridge b){
 		bridge = b;
@@ -41,6 +43,9 @@ public class BSGame extends Game {
 		img = new Texture("badlogic.jpg");
 		font = new BitmapFont();
 		stage = new Stage();
+
+		backButton = new Texture("back.png");
+		goButton = new Texture("go.png");
 
 		prefs = Gdx.app.getPreferences(Constants.P_PREF_NAME);
 

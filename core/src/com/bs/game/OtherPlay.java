@@ -57,7 +57,7 @@ public class OtherPlay implements Screen {
     @Override
     public void render(float delta) {
 
-        goButton = new Texture("go.png");
+        goButton = new Texture("bs.png");
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

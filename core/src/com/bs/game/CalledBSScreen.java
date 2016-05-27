@@ -47,7 +47,17 @@ public class CalledBSScreen implements Screen {
         batch = new SpriteBatch();
         count = new BitmapFont();
 
-        backButton = new Texture("back.png");
+        backButton = game.backButton;
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new PlayScreen(game));
+                    }
+                },
+                5000
+        );
 
     }
 

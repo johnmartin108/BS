@@ -48,11 +48,11 @@ public class PlayScreen implements Screen {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        batch = new SpriteBatch();
-        count = new BitmapFont();
+        batch = game.batch;
+        count = game.font;
 
-        backButton = new Texture("back.png");
-        goButton = new Texture("go.png");
+        backButton = game.backButton;
+        goButton = game.goButton;
 
         currRank = "aces";
 

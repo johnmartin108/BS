@@ -261,7 +261,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                 //only will receive these messages if isHost
                 case (Constants.M_START_GAME):
-                    startGame();
+                    if (isHost) {
+                        startGame();
+                    }
                     break;
                 case (Constants.M_CALL_BS):
                     boolean telling_truth = true;
@@ -288,6 +290,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                                 }
                             });
+
+                            bridge.sendDataToView(m.eventType, m);
                         }
                     }
 
@@ -304,6 +308,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                             }
                         });
+
+                        bridge.sendDataToView(m.eventType, m);
                     }
 
                     cardPile = new ArrayList<Card>();
@@ -392,6 +398,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         curr_player = (curr_player+1) % num_players;
         m.cardPile = cardPile;
         m.cardsInHands = hands;
+        m.PlayerID = curr_player;
         network.sendToAllDevices(m, new SalutCallback() {
             @Override
             public void call() {
@@ -406,6 +413,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         m.eventType = Constants.M_PLAYER_TURN_START;
         m.cardPile = cardPile;
         m.cardsInHands = hands;
+        m.PlayerID = curr_player;
         targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
         network.sendToAllDevices(m, new SalutCallback() {
             @Override

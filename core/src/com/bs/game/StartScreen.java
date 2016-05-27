@@ -66,7 +66,7 @@ public class StartScreen implements Screen {
 
             // Start the game
             if (inStartButton(touchPos)) {
-                //game.bridge.sendDataToController(Constants.M_START_GAME, true);
+                game.bridge.sendDataToController(Constants.M_START_GAME, true);
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }

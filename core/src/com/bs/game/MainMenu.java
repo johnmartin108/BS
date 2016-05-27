@@ -104,9 +104,15 @@ public class MainMenu implements Screen {
 
         @Override
         public void input(String text) {
-            game.bridge.sendDataToController(Constants.M_SET_NAME, text);
-            game.setScreen(new JHScreen(game));
-            dispose();
+            if (text.equals("")) {
+                NameListener nameListener = new NameListener();
+                Gdx.input.getTextInput(nameListener, "Name can't be blank. Try again!", "", "");
+            }
+            else {
+                game.bridge.sendDataToController(Constants.M_SET_NAME, text);
+                game.setScreen(new JHScreen(game));
+                dispose();
+            }
         }
 
         @Override

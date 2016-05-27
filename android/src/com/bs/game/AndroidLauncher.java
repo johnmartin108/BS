@@ -24,7 +24,6 @@ import com.peak.salut.SalutServiceData;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -158,7 +157,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void connectWithHost(SalutDevice host){
         final SalutDevice finalHost = host;
         Log.d(TAG, "Attempting to connect with host "+host.instanceName);
-       final ScheduledExecutorService worker =
+        final ScheduledExecutorService worker =
                 Executors.newSingleThreadScheduledExecutor();
         network.registerWithHost(host, new SalutCallback() {
             @Override
@@ -166,9 +165,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 // success on connection
                 Log.d(TAG, "connection success.");
                 Toast.makeText(getBaseContext(), (CharSequence)"Connected with "+finalHost.readableName, Toast.LENGTH_LONG).show();
-
-
-
             }
         }, new SalutCallback() {
             @Override
@@ -177,7 +173,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 Log.e(TAG, "Oh no! FAILED TO CONNECT TO HOST:"+finalHost.instanceName);
             }
         });
-
     }
 
 	public void discoverServices(){

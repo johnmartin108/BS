@@ -52,6 +52,7 @@ public class JoinScreen implements Screen {
     public void show() {
 
         stage = new Stage();
+        stage.clear();
 
 
         textButtonStyle = new TextButton.TextButtonStyle();
@@ -89,6 +90,30 @@ public class JoinScreen implements Screen {
 
     }
 
+    public void refreshPeerList(){
+        stage.clear();
+        if(!game.peerlist.isEmpty()){
+            for(int i = 0; i < game.peerlist.size(); i++){
+                //final String newBtnName = "btn" + String.valueOf(i);
+                final String host = (String)game.peerlist.get(i);
+                TextButton newBtn = new TextButton(host, textButtonStyle);
+                newBtn.setPosition(400, 500+100*i);
+                newBtn.addListener(new ClickListener(){
+
+
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        super.touchUp(event, x, y, pointer, button);
+                        game.connectTo(host);
+
+                        System.out.println("CLICKED");
+                    }
+                });
+                stage.addActor(newBtn);
+
+            }
+        }
+    }
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
@@ -99,13 +124,19 @@ public class JoinScreen implements Screen {
         game.batch.begin();
         bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Select a Host", 725, 1300);
-        for (int i = 0; i < game.peerlist.size(); i ++){
-            String peerName = (String)game.peerlist.get(i);
-            bitFont.draw(game.batch, peerName, 725, 1100-i*100);
-        }
+//        for (int i = 0; i < game.peerlist.size(); i ++){
+//            String peerName = (String)game.peerlist.get(i);
+//            bitFont.draw(game.batch, peerName, 725, 1100-i*100);
+//        }
 
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
+
+        Gdx.input.setInputProcessor(stage);
+        refreshPeerList();
+        stage.draw();
+
+
 
 
 

@@ -16,15 +16,11 @@ import java.util.Map;
 /**
  * Created by nick on 5/24/16.
  */
-public class PlayScreen implements Screen {
+public class OtherPlay implements Screen {
 
     SpriteBatch batch;
-    ArrayList<ArrayList<Card>> hands;
-    ArrayList<Card> inputCards;
-    HashMap<Card, CardInfo> cards;
-    private int numberSelected;
-    private String currRank;
-    private String name;
+    private int numberPlayed;
+    private String suitPlayed;
     private BitmapFont count;
     final BSGame game;
     private Texture backButton;
@@ -33,13 +29,15 @@ public class PlayScreen implements Screen {
     private int height;
     private int ID;
 
-    public PlayScreen(BSGame game) {
+    public OtherPlay(BSGame game) {
         this.game = game;
     }
 
-    public PlayScreen(BSGame game, String name) {
+    public OtherPlay(BSGame game, int ID, int numberPlayed, String suitPlayed) {
         this.game = game;
-        this.name = name;
+        this.ID = ID;
+        this.numberPlayed = numberPlayed;
+        this.suitPlayed = suitPlayed;
     }
 
     @Override
@@ -48,53 +46,26 @@ public class PlayScreen implements Screen {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        batch = new SpriteBatch();
-        count = new BitmapFont();
+        batch = game.batch;
+        count = game.font;
 
         backButton = new Texture("back.png");
         goButton = new Texture("go.png");
 
-        currRank = "aces";
-
-        cards = new HashMap();
-        inputCards = new ArrayList();
-        numberSelected = 0;
-
-
-        inputCards.add(new Card("h", "a"));
-        inputCards.add(new Card("c", "a"));
-        inputCards.add(new Card("d", "a"));
-        inputCards.add(new Card("s", "a"));
-        inputCards.add(new Card("d", "j"));
-        inputCards.add(new Card("s", "k"));
-
-//        inputCards = new Deck().getCards();
-        int width = Gdx.graphics.getWidth()/inputCards.size();
-        for (int i = 0; i < inputCards.size(); i++) {
-            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
-        }
     }
 
     @Override
     public void render(float delta) {
+
+        goButton = new Texture("go.png");
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
-        count.draw(batch, "Player: " + name, width - 1000, height - 20);
+        count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
         batch.end();
         batch.begin();
-        Iterator iter = cards.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry mapPair = (Map.Entry) iter.next();
-            Card card = (Card) mapPair.getKey();
-            float x = cards.get(card).getX();
-            float y = cards.get(card).getY();
-            batch.draw(card.getTexture(), x, y);
-        }
-        batch.draw(backButton, 10, height - backButton.getHeight());
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);
         batch.end();
 
@@ -103,36 +74,18 @@ public class PlayScreen implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
 
-            clickInCard(touchPos);
             clickInBack(touchPos);
             clickInGo(touchPos);
         }
     }
 
-    private int clickInCard(Vector3 touchPos) {
-        Iterator iter = cards.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry mapPair = (Map.Entry) iter.next();
-            Card card = (Card) mapPair.getKey();
-            CardInfo info = (CardInfo) mapPair.getValue();
-            float x = info.getX();
-            float y = info.getY();
-            if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-                    && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
-                if (info.getY() != 30) {
-                    info.setXY(info.getX(), 30);
-                    numberSelected++;
-                }
-                else {
-                    info.setXY(info.getX(), 0);
-                    numberSelected--;
-                }
-                info.setChosen();
-            }
 
+    private void clickInGo(Vector3 touchPos) {
+        if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
+                && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
+            game.setScreen(new CalledBSScreen(game, 1, 2));
+            dispose();
         }
-
-        return -1;
     }
 
     private void clickInBack(Vector3 touchPos) {
@@ -140,26 +93,6 @@ public class PlayScreen implements Screen {
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
             game.setScreen(new MainMenu(game));
             dispose();
-        }
-    }
-
-    private void clickInGo(Vector3 touchPos) {
-        if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
-                && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
-            HashMap<Card, CardInfo> copy = (HashMap<Card, CardInfo>) cards.clone();
-            Iterator iter = cards.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry mapPair = (Map.Entry) iter.next();
-                Card card = (Card) mapPair.getKey();
-                CardInfo cardInfo = (CardInfo) mapPair.getValue();
-                if (cardInfo.chosen) {
-                    copy.remove(card);
-                }
-            }
-            cards = copy;
-            game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
-            dispose();
-            numberSelected = 0;
         }
     }
 

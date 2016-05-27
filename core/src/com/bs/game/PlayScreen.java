@@ -238,4 +238,14 @@ public class PlayScreen implements Screen {
         }
     }
 
+    public String convertToStringRank(int rank) {
+        switch(rank) {
+            case 0:
+                return "aces";
+            case 1:
+                return "ones";
+        }
+        return "";
+    }
+
 }

@@ -61,7 +61,7 @@ public class PlayWaitScreen implements Screen {
         elapsed += delta;
 
         if (elapsed > 7.0) {
-            game.setScreen(new OtherPlay(game, 1, numberPlayed, suitPlayed));
+            game.setScreen(new OtherWaitScreen(game));
         }
 
         batch.begin();

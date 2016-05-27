@@ -55,7 +55,7 @@ public class JoinScreen implements Screen {
 
 
         textButtonStyle = new TextButton.TextButtonStyle();
-        font = new BitmapFont();
+        font = game.font;
 
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         font.getData().scale(4.0f);

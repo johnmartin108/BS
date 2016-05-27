@@ -47,7 +47,7 @@ public class PlayWaitScreen implements Screen {
         height = Gdx.graphics.getHeight();
 
         batch = new SpriteBatch();
-        count = new BitmapFont();
+        count = game.font;
 
         backButton = new Texture("back.png");
 
@@ -67,7 +67,7 @@ public class PlayWaitScreen implements Screen {
         batch.begin();
         count.getData().setScale(10);
         count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
-                "\nThey have " + (int) (7 - elapsed) + " seconds\n to call BS!", 500, 1000);
+                "\nThey have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 1100);
         batch.end();
 
         if(Gdx.input.justTouched()) {

@@ -83,7 +83,7 @@ public class PlayScreen implements Screen {
         batch.begin();
         count.getData().setScale(10);
         count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
-        count.draw(batch, "Player: " + name, width - 1000, height - 20);
+//        count.draw(batch, "Player: " + name, width - 1000, height - 20);
         batch.end();
         batch.begin();
         Iterator iter = cards.entrySet().iterator();

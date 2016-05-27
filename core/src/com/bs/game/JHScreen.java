@@ -40,7 +40,7 @@ public class JHScreen implements Screen{
         hostBtn = new Texture("host.png");
         backButton = new Texture("back.png");
 
-        bitFont = new BitmapFont();
+        bitFont = game.font;
 
     }
 

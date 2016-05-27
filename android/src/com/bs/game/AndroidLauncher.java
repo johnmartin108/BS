@@ -366,6 +366,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     bridge.sendDataToView(Constants.M_HANDS, newMessage.cardsInHands);
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
                     bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
+                    bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
                     bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
                     break;
                 case Constants.M_PLAYER_TURN_START:
@@ -455,6 +456,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         prev_player = curr_player;
         curr_player = (curr_player+1) % num_players;
         m.cardPile = cardPile;
+        m.prevPlay = last_play;
         m.cardsInHands = hands;
         m.PlayerID = curr_player;
         network.sendToAllDevices(m, new SalutCallback() {
@@ -469,6 +471,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
         bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
+        bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
         bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
     }
 

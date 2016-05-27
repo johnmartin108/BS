@@ -21,6 +21,7 @@ public class PlayScreen implements Screen {
     SpriteBatch batch;
 
     ArrayList<Card> inputCards;
+    ArrayList<ArrayList<Card>> hands;
     HashMap<Card, CardInfo> cards;
 
     
@@ -37,6 +38,9 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(BSGame game) {
         this.game = game;
+        this.hands = game.hands;
+        this.inputCards = hands.get(game.ID);
+        this.currRank = game.targetRank + "";
     }
 
     public PlayScreen(BSGame game, String name) {
@@ -77,14 +81,8 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void updateViewState() {
-        inputCards = game.hands.get(game.ID);
-        currRank = game.targetRank + "";
-
-    }
     @Override
     public void render(float delta) {
-        updateViewState();
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

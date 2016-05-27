@@ -32,6 +32,9 @@ public class OtherPlay implements Screen {
 
     public OtherPlay(BSGame game) {
         this.game = game;
+        this.ID = game.prev_player;
+        this.suitPlayed = game.targetRank + "";
+        this.numberPlayed = game.lastPlay.size();
     }
 
     public OtherPlay(BSGame game, int ID, int numberPlayed, String suitPlayed) {
@@ -64,7 +67,7 @@ public class OtherPlay implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (elapsed > 7.0) {
-            game.setScreen(new CalledBSScreen(game, 1, 2));
+            game.setScreen(new CalledBSScreen(game));
             dispose();
         }
 
@@ -104,45 +107,6 @@ public class OtherPlay implements Screen {
         }
     }
 
-    //TODO: need UI people to fill this in. uncomment and make screens show up accordingly.
-//    public void onReceivedData(int name, Object obj) {
-//        String str = (String) obj;
-//        Message m = LoganSquare.parse(str, Message.class);
-//        switch (name) {
-//            case Constants.M_PLAYER_ID:
-//                ID = m.PlayerID;
-//                break;
-//            case Constants.M_GAME_OVER:
-//                //TODO: protocol for finishing game
-//                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
-//                //TODO: protocol for handling game events like incorrect BS calls
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_TURN:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                if (ID = m.PlayerID) {
-//                    //do a turn
-//                }
-//                else {
-//                    //display waiting screen
-//                }
-//                break;
-//            case Constants.M_PLAYER_TURN_START:
-//                //same as above, but there should be no option to call BS
-//                break;
-//
-//
-//
-//
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {

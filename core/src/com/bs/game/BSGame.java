@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.soap.Text;
 
@@ -106,6 +107,10 @@ public class BSGame extends Game {
 
 					case Constants.M_HOST_STATUS:
 						hostStatus = (String)obj;
+						break;
+
+					case Constants.M_DEVICE_CONNECTED:
+						peerlist = (ArrayList<String>) obj;
 						break;
 					default:
 						break;

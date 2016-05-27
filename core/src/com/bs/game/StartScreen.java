@@ -44,19 +44,13 @@ public class StartScreen implements Screen {
 
         bitFont.getData().setScale(7);
         bitFont.draw(game.batch, "List of Players in game", 660, 1300);
-        bitFont.draw(game.batch, "Press Start when ready", 640, 1200);
-        bitFont.draw(game.batch, "Host Status: "+game.hostStatus, 725, 900);
-        /*for (int i = 0; i < game.peerlist.size(); i ++){
-            final String btnName = (String)game.peerlist.get(i);
-            TextButton newBtn = new TextButton(btnName, textButtonStyle);
-            newBtn.setPosition(400, 500+100*i);
-            newBtn.addListener(new ClickListener(){
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
-                }
-            });
-        }*/
+        bitFont.draw(game.batch, "Press Start when ready", 660, 1200);
+        bitFont.draw(game.batch, "Host Status: "+game.hostStatus, 660, 1100);
+        for (int i = 0; i < game.peerlist.size(); i ++){
+            String devName = (String)game.peerlist.get(i);
+            bitFont.draw(game.batch, devName, 720, 900-i*100);
+        }
+
         game.batch.draw(startButton, width / 2 - startButton.getWidth() / 2, 50);
         game.batch.end();
 

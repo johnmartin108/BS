@@ -79,7 +79,7 @@ public class JoinScreen implements Screen {
                 final String newBtnName = (String)game.peerlist.get(i);
                 String host = (String)game.peerlist.get(i);
                 TextButton newBtn = new TextButton(newBtnName, textButtonStyle);
-                newBtn.setPosition(400, 500+100*i);
+                newBtn.setPosition(725, 1150-100*i);
                 newBtn.addListener(new ClickListener(){
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

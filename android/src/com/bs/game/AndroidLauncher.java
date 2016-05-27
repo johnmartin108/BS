@@ -213,16 +213,17 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 @Override
                 public void call(SalutDevice device) {
                     Log.d(TAG, device.readableName + " has connected!");
+                    bridge.sendDataToView(Constants.M_DEVICE_CONNECTED, network.getReadableRegisteredNames());
                     Toast.makeText(getBaseContext(), (CharSequence) device.readableName + " has connected!", Toast.LENGTH_LONG).show();
 
-                    Message myMessage = new Message();
-                    myMessage.message = "connected your name is "+device.instanceName;
-                    network.sendToDevice(device, myMessage, new SalutCallback() {
-                        @Override
-                        public void call() {
-                            Log.e(TAG, "Oh no! The data failed to send.");
-                        }
-                    });
+//                    Message myMessage = new Message();
+//                    myMessage.message = "connected your name is "+device.instanceName;
+//                    network.sendToDevice(device, myMessage, new SalutCallback() {
+//                        @Override
+//                        public void call() {
+//                            Log.e(TAG, "Oh no! The data failed to send.");
+//                        }
+//                    });
 
                 }
             }, new SalutCallback() {

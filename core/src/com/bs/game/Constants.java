@@ -17,6 +17,7 @@ public class Constants {
     public static final int M_SET_DIFF = 6;
     public static final int M_START_GAME = 7;
     public static final int M_HOST_STATUS = 8;
+    public static final int M_DEVICE_CONNECTED = 9;
 
     public static final int M_PLAYER_TURN = 10;
     public static final int M_PLAYER_TURN_START = 11;

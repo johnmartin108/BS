@@ -68,46 +68,47 @@ public class JoinScreen implements Screen {
         backButton = new Texture("back.png");
         bitFont = new BitmapFont();
         game.bridge.sendDataToController(Constants.M_DISCOVER_PEERS, null);
+
+
+    }
+
+    public void refreshPeerList(){
+        stage.clear();
         if(!game.peerlist.isEmpty()){
             for(int i = 0; i < game.peerlist.size(); i++){
-                final String newBtnName = "btn" + String.valueOf(i);
+                final String newBtnName = (String)game.peerlist.get(i);
                 String host = (String)game.peerlist.get(i);
                 TextButton newBtn = new TextButton(newBtnName, textButtonStyle);
                 newBtn.setPosition(400, 500+100*i);
-                newBtn.addListener(new ChangeListener() {
+                newBtn.addListener(new ClickListener(){
                     @Override
-                    public void changed(ChangeEvent event, Actor actor) {
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        super.touchUp(event, x, y, pointer, button);
                         game.connectTo(newBtnName);
                         System.out.println("CLICKED");
                     }
-
                 });
+                
                 stage.addActor(newBtn);
 
             }
         }
-
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
+        Gdx.input.setInputProcessor(stage);
+        refreshPeerList();
+        stage.draw();
 
         game.batch.begin();
         bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Select a Host", 725, 1300);
-        for (int i = 0; i < game.peerlist.size(); i ++){
-            String peerName = (String)game.peerlist.get(i);
-            bitFont.draw(game.batch, peerName, 725, 1100-i*100);
-        }
+
 
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
-
-
 
 
 

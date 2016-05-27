@@ -59,12 +59,12 @@ public class OtherWaitScreen implements Screen {
         elapsed += delta;
 
         if (elapsed > 7.0) {
-            game.setScreen(new OtherPlay(game, 2, 6, suitPlayed));
+            game.setScreen(new OtherPlay(game, 2, 6, "aces"));
         }
 
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, "Waiting for other players to play...", 250, 1100);
+        count.draw(batch, "Waiting for player " + "to play...", 200, 1100);
         batch.end();
 
         if(Gdx.input.justTouched()) {

@@ -28,6 +28,7 @@ public class PlayWaitScreen implements Screen {
     private int width;
     private int height;
     private int ID;
+    private float elapsed = 0;
 
     public PlayWaitScreen(BSGame game) {
         this.game = game;
@@ -50,16 +51,6 @@ public class PlayWaitScreen implements Screen {
 
         backButton = new Texture("back.png");
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        game.setScreen(new OtherPlay(game, 1, numberPlayed, suitPlayed));
-                    }
-                },
-                5000
-        );
-
     }
 
     @Override
@@ -67,9 +58,16 @@ public class PlayWaitScreen implements Screen {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        elapsed += delta;
+
+        if (elapsed > 7.0) {
+            game.setScreen(new OtherPlay(game, 1, numberPlayed, suitPlayed));
+        }
+
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players...", 500, 1000);
+        count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
+                "\nThey have " + (int) (7 - elapsed) + " seconds\n to call BS!", 500, 1000);
         batch.end();
 
         if(Gdx.input.justTouched()) {

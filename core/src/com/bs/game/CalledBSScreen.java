@@ -27,6 +27,7 @@ public class CalledBSScreen implements Screen {
     private int width;
     private int height;
     private int ID;
+    private float elapsed = 0;
 
     public CalledBSScreen(BSGame game) {
         this.game = game;
@@ -49,20 +50,16 @@ public class CalledBSScreen implements Screen {
 
         backButton = game.backButton;
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        game.setScreen(new PlayScreen(game));
-                    }
-                },
-                5000
-        );
-
     }
 
     @Override
     public void render(float delta) {
+        elapsed += delta;
+
+        if (elapsed > 5.0) {
+            game.setScreen(new PlayScreen(game));
+        }
+
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

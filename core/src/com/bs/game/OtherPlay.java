@@ -28,6 +28,7 @@ public class OtherPlay implements Screen {
     private int width;
     private int height;
     private int ID;
+    private float elapsed = 0;
 
     public OtherPlay(BSGame game) {
         this.game = game;
@@ -50,20 +51,27 @@ public class OtherPlay implements Screen {
         count = game.font;
 
         backButton = new Texture("back.png");
-        goButton = new Texture("go.png");
+        goButton = new Texture("bs.png");
 
     }
 
     @Override
     public void render(float delta) {
 
-        goButton = new Texture("bs.png");
+        elapsed += delta;
+
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (elapsed > 7.0) {
+            game.setScreen(new CalledBSScreen(game, 1, 2));
+            dispose();
+        }
 
         batch.begin();
         count.getData().setScale(10);
         count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
+        count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 300, 600);
         batch.end();
         batch.begin();
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);

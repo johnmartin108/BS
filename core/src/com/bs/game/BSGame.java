@@ -34,6 +34,7 @@ public class BSGame extends Game {
 	String hostStatus = "";
 	Texture backButton;
 	Texture goButton;
+	boolean isConnected;
 
 	public BSGame(CommunicationBridge b){
 		bridge = b;
@@ -96,13 +97,13 @@ public class BSGame extends Game {
 						break;
 
 					case Constants.M_CONNECT_TO_HOST:
-						boolean isConnected = (Boolean) obj;
-
-						if (isConnected){
-							status = "Connected to host";
-						}else{
-							status = "Disconnected to host";
-						}
+//						boolean isConnected = (Boolean) obj;
+//
+//						if (isConnected){
+//							status = "Connected to host";
+//						}else{
+//							status = "Disconnected to host";
+//						}
 						break;
 
 					case Constants.M_HOST_STATUS:
@@ -111,6 +112,10 @@ public class BSGame extends Game {
 
 					case Constants.M_DEVICE_CONNECTED:
 						peerlist = (ArrayList<String>) obj;
+						break;
+
+					case Constants.M_CONNECTION_STATUS:
+						isConnected = (Boolean)obj;
 						break;
 					default:
 						break;

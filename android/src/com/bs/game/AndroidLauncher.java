@@ -164,6 +164,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             public void call() {
                 // success on connection
                 Log.d(TAG, "connection success.");
+                bridge.sendDataToView(Constants.M_CONNECTION_STATUS, true);
                 Toast.makeText(getBaseContext(), (CharSequence)"Connected with "+finalHost.readableName, Toast.LENGTH_LONG).show();
             }
         }, new SalutCallback() {

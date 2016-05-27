@@ -108,7 +108,9 @@ public class JoinScreen implements Screen {
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
 
-
+        if (game.isConnected){
+            game.setScreen(new WaitScreen(game));
+        }
 
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();

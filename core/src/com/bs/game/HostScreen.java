@@ -38,7 +38,7 @@ public class HostScreen implements Screen {
         hardBtn = new Texture("hard.png");
         impBtn = new Texture("impossible.png");
         backButton = new Texture("back.png");
-        bitFont = new BitmapFont();
+        bitFont = game.font;
 
     }
 

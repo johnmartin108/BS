@@ -106,6 +106,7 @@ public class PlayScreen implements Screen {
             float x = i*handWidth;
             float y = cardInfo.getY() + offset;
             cardInfo.setXY(x, y - offset);
+            if (offset > 0) cardInfo.setBack(true);
             i++;
             if (i == 30) {
                 offset = 0;
@@ -131,32 +132,44 @@ public class PlayScreen implements Screen {
     private int clickInCard(Vector3 touchPos) {
         Iterator iter = cards.entrySet().iterator();
         float maxX = 0;
-        CardInfo selected = new CardInfo();
+        CardInfo selected = null;
         while (iter.hasNext()) {
             Map.Entry mapPair = (Map.Entry) iter.next();
             Card card = (Card) mapPair.getKey();
             CardInfo info = (CardInfo) mapPair.getValue();
             float x = info.getX();
             float y = info.getY();
-            if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-                    && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
-                if (info.getX() > maxX) {
-                    maxX = info.getX();
-                    selected = info;
+            if (info.getBack()) {
+                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
+                        && (height - touchPos.y) > card.getTexture().getHeight() && (height - touchPos.y) < (card.getTexture().getHeight() + 200)) {
+                    if (info.getX() > maxX) {
+                        maxX = info.getX();
+                        selected = info;
+                    }
+                }
+            }
+            else {
+                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
+                        && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
+                    if (info.getX() > maxX) {
+                        maxX = info.getX();
+                        selected = info;
+                    }
                 }
             }
 
         }
 
-        if (selected.getY() != 30) {
+        if (selected != null && selected.getY() != 30) {
             selected.setXY(selected.getX(), 30);
             numberSelected++;
+            selected.setChosen();
         }
-        else {
+        else if (selected != null) {
             selected.setXY(selected.getX(), 0);
             numberSelected--;
+            selected.setChosen();
         }
-        selected.setChosen();
         return -1;
     }
 
@@ -226,17 +239,20 @@ public class PlayScreen implements Screen {
         private float x;
         private float y;
         private boolean chosen;
+        private boolean back;
 
         public CardInfo() {
             x = 0;
             y = 0;
             chosen = false;
+            back = false;
         }
 
         public CardInfo(float x, float y) {
             this.x = x;
             this.y = y;
             chosen = false;
+            back = false;
         }
 
         public void setXY(float x, float y) {
@@ -254,6 +270,14 @@ public class PlayScreen implements Screen {
 
         public void setChosen() {
             this.chosen = !this.chosen;
+        }
+
+        public void setBack(boolean b) {
+            this.back = b;
+        }
+
+        public boolean getBack() {
+            return back;
         }
     }
 

@@ -96,7 +96,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     //only will receive these messages if isHost
                     case (Constants.M_START_GAME):
                         if (isHost) {
-                            num_players = network.registeredClients.size() + 1;
+                            num_players = 1;
+                            if (network != null) {
+                                num_players += network.registeredClients.size();
+                            }
+
                             startGame();
                         }
                         break;
@@ -463,34 +467,37 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         ID = 0;
         bridge.sendDataToView(Constants.M_PLAYER_ID, ID++);
 
-        for (SalutDevice device: network.registeredClients) {
+        if (network != null) {
+            for (SalutDevice device : network.registeredClients) {
+                m = new Message();
+                player_devices.put(ID, device);
+                m.PlayerID = ID++;
+                m.eventType = Constants.M_PLAYER_ID;
+                network.sendToDevice(device, m, new SalutCallback() {
+                    @Override
+                    public void call() {
+
+                    }
+                });
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+
+
             m = new Message();
-            player_devices.put(ID, device);
-            m.PlayerID = ID++;
-            m.eventType = Constants.M_PLAYER_ID;
-            network.sendToDevice(device, m, new SalutCallback() {
+            m.eventType = Constants.M_GAME_START;
+            m.cardsInHands = Card.toHandsDump(hands);
+            m.currentPlayerTurn = curr_player;
+            network.sendToAllDevices(m, new SalutCallback() {
                 @Override
                 public void call() {
 
                 }
             });
         }
-
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e) {}
-
-        m = new Message();
-        m.eventType = Constants.M_GAME_START;
-        m.cardsInHands = Card.toHandsDump(hands);
-        m.currentPlayerTurn = curr_player;
-        network.sendToAllDevices(m, new SalutCallback() {
-            @Override
-            public void call() {
-
-            }
-        });
 
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
@@ -505,20 +512,22 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
     public void nextTurn() {
-        Message m = new Message();
-        m.eventType = Constants.M_PLAYER_TURN;
-        prev_player = curr_player;
-        curr_player = (curr_player+1) % num_players;
-        m.cardPile = Card.toCardsDump(cardPile);
-        m.prevPlay = Card.toCardsDump(last_play);
-        m.cardsInHands = Card.toHandsDump(hands);
-        m.PlayerID = curr_player;
-        network.sendToAllDevices(m, new SalutCallback() {
-            @Override
-            public void call() {
+        if (network != null) {
+            Message m = new Message();
+            m.eventType = Constants.M_PLAYER_TURN;
+            prev_player = curr_player;
+            curr_player = (curr_player + 1) % num_players;
+            m.cardPile = Card.toCardsDump(cardPile);
+            m.prevPlay = Card.toCardsDump(last_play);
+            m.cardsInHands = Card.toHandsDump(hands);
+            m.PlayerID = curr_player;
+            network.sendToAllDevices(m, new SalutCallback() {
+                @Override
+                public void call() {
 
-            }
-        });
+                }
+            });
+        }
 
         //host needs data too
         bridge.sendDataToView(Constants.M_HANDS, hands);
@@ -530,18 +539,20 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
     public void newTurn() {
-        Message m = new Message();
-        m.eventType = Constants.M_PLAYER_TURN_START;
-        m.cardPile = Card.toCardsDump(cardPile);
-        m.cardsInHands = Card.toHandsDump(hands);
-        m.PlayerID = curr_player;
-        targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
-        network.sendToAllDevices(m, new SalutCallback() {
-            @Override
-            public void call() {
+        if (network != null) {
+            Message m = new Message();
+            m.eventType = Constants.M_PLAYER_TURN_START;
+            m.cardPile = Card.toCardsDump(cardPile);
+            m.cardsInHands = Card.toHandsDump(hands);
+            m.PlayerID = curr_player;
+            targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
+            network.sendToAllDevices(m, new SalutCallback() {
+                @Override
+                public void call() {
 
-            }
-        });
+                }
+            });
+        }
 
         //send same message to host
         bridge.sendDataToView(Constants.M_HANDS, hands);
@@ -551,15 +562,17 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
     public void endGame() {
-        Message m = new Message();
-        m.eventType = Constants.M_GAME_OVER;
-        m.PlayerID = prev_player;
-        network.sendToAllDevices(m, new SalutCallback() {
-            @Override
-            public void call() {
+        if (network != null) {
+            Message m = new Message();
+            m.eventType = Constants.M_GAME_OVER;
+            m.PlayerID = prev_player;
+            network.sendToAllDevices(m, new SalutCallback() {
+                @Override
+                public void call() {
 
-            }
-        });
+                }
+            });
+        }
 
         bridge.sendDataToView(Constants.M_GAME_OVER, prev_player);
 

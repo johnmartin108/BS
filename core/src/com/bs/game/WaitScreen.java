@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by rcornew on 5/25/16.
@@ -50,7 +51,25 @@ public class WaitScreen implements Screen {
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
 
+        if(Gdx.input.justTouched()) {
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+
+            clickInBack(touchPos);
+
+        }
+
     }
+
+
+    private void clickInBack(Vector3 touchPos) {
+        if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
+                && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
+            game.setScreen(new JoinScreen(game));
+            dispose();
+        }
+    }
+
 
     @Override
     public void resize(int width, int height) {

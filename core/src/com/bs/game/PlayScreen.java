@@ -88,20 +88,32 @@ public class PlayScreen implements Screen {
 
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1000);
+        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1350);
 //        count.draw(batch, "Player: " + name, width - 1000, height - 20);
         batch.end();
         batch.begin();
         Iterator iter = cards.entrySet().iterator();
+        int i = 0;
+        int offset = 0;
+        if (cards.entrySet().size() >= 26) offset = 200;
+        int handWidth = width/cards.entrySet().size();
+        if (cards.entrySet().size() >= 26) handWidth = width/26;
         while (iter.hasNext()) {
             Map.Entry mapPair = (Map.Entry) iter.next();
             Card card = (Card) mapPair.getKey();
-            float x = cards.get(card).getX();
-            float y = cards.get(card).getY();
+            CardInfo cardInfo = (CardInfo) mapPair.getValue();
+            float x = i*handWidth;
+            float y = cardInfo.getY() + offset;
+            cardInfo.setXY(x, y - offset);
+            i++;
+            if (i == 30) {
+                offset = 0;
+                i = 0;
+            }
             batch.draw(card.getTexture(), x, y);
         }
         batch.draw(backButton, 10, height - backButton.getHeight());
-        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);
+        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 950);
         batch.end();
 
         if(Gdx.input.justTouched()) {
@@ -117,6 +129,8 @@ public class PlayScreen implements Screen {
 
     private int clickInCard(Vector3 touchPos) {
         Iterator iter = cards.entrySet().iterator();
+        float maxX = 0;
+        CardInfo selected = new CardInfo();
         while (iter.hasNext()) {
             Map.Entry mapPair = (Map.Entry) iter.next();
             Card card = (Card) mapPair.getKey();
@@ -125,19 +139,23 @@ public class PlayScreen implements Screen {
             float y = info.getY();
             if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
                     && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
-                if (info.getY() != 30) {
-                    info.setXY(info.getX(), 30);
-                    numberSelected++;
+                if (info.getX() > maxX) {
+                    maxX = info.getX();
+                    selected = info;
                 }
-                else {
-                    info.setXY(info.getX(), 0);
-                    numberSelected--;
-                }
-                info.setChosen();
             }
 
         }
 
+        if (selected.getY() != 30) {
+            selected.setXY(selected.getX(), 30);
+            numberSelected++;
+        }
+        else {
+            selected.setXY(selected.getX(), 0);
+            numberSelected--;
+        }
+        selected.setChosen();
         return -1;
     }
 
@@ -151,7 +169,7 @@ public class PlayScreen implements Screen {
 
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
-                && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
+                && (height - touchPos.y) > 950 && (height - touchPos.y) < 950 + goButton.getHeight()) {
             HashMap<Card, CardInfo> copy = (HashMap<Card, CardInfo>) cards.clone();
             Iterator iter = cards.entrySet().iterator();
             ArrayList<Card> play = new ArrayList<Card>();

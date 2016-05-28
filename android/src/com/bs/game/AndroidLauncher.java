@@ -476,6 +476,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             });
         }
 
+        try {
+            Thread.sleep(500);
+        }
+        catch (InterruptedException e) {}
+
         m = new Message();
         m.eventType = Constants.M_GAME_START;
         m.cardsInHands = Card.toHandsDump(hands);
@@ -490,6 +495,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
         bridge.sendDataToView(Constants.M_GAME_START, null);
+
+        try {
+            Thread.sleep(200);
+        }
+        catch (InterruptedException e) {}
 
         newTurn();
     }

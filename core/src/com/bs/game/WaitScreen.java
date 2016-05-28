@@ -32,6 +32,15 @@ public class WaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (game.isGameStarted) {
+            if (game.ID == game.curr_player) {
+                game.setScreen(new PlayScreen(game));
+            }
+            else {
+                game.setScreen(new PlayWaitScreen(game));
+            }
+        }
+
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

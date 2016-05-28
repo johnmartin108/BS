@@ -35,6 +35,7 @@ public class BSGame extends Game {
 	Texture backButton;
 	Texture goButton;
 	boolean isConnected;
+	boolean isGameStarted = false;
 
 	ArrayList<ArrayList<Card>> hands;
 	ArrayList<Card> cardPile;
@@ -153,6 +154,9 @@ public class BSGame extends Game {
 						break;
 
 					//***** GAME FLOW MESSAGES *****
+					case Constants.M_GAME_START:
+						isGameStarted = true;
+						break;
 					case Constants.M_GAME_OVER:
 						//TODO: protocol for finishing game
 						int winner = (Integer) obj;

@@ -25,6 +25,8 @@ public class Card {
     public Card(ArrayList<String> vals) {
         this.suit = vals.get(1);
         this.rank = vals.get(0);
+        String path = "cards/" + getPath(this.suit, this.rank) + ".png";
+        this.img = new Texture(path);
     }
 
     public String toString() {

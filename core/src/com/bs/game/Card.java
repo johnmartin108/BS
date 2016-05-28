@@ -16,8 +16,8 @@ public class Card {
     public Card(String suit, String rank) {
         this.suit = suit;
         this.rank = rank;
-
-        String path = "large/card_a_" + this.suit + this.rank + "_large.png";
+        System.out.print(this.suit);
+        String path = "cards/" + getPath(this.suit, this.rank) + ".png";
         this.img = new Texture(path);
     }
 
@@ -90,6 +90,37 @@ public class Card {
             default:
                 return "h";
         }
+    }
+
+    public static String getPath(String suit, String rank) {
+        String fullSuit = "";
+        String fullRank = "" + rank;
+        if (suit.equals("h")) {
+            fullSuit = "hearts";
+        }
+        else if(suit.equals("d")) {
+            fullSuit = "diamonds";
+        }
+        else if(suit.equals("c")) {
+            fullSuit = "clubs";
+        }
+        else if(suit.equals("s")) {
+            fullSuit = "spades";
+        }
+        if (rank.equals("a")) {
+            fullRank = "ace";
+        }
+        else if(rank.equals("j")) {
+            fullRank = "jack";
+        }
+        else if(rank.equals("q")) {
+            fullRank = "queen";
+        }
+        else if(rank.equals("k")) {
+            fullRank = "king";
+        }
+        return fullRank + "_of_" + fullSuit;
+
     }
 
 //    public Bitmap toImageAsset() {

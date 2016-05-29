@@ -46,7 +46,7 @@ public class BSGame extends Game {
 	int curr_player;
 	int prev_player;
 	int ID;
-	int targetRank;
+	int targetRank = 1;
 
 
 

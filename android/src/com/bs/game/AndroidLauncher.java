@@ -509,7 +509,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
         catch (InterruptedException e) {}
 
-        newTurn();
+//        newTurn();
     }
 
     public void nextTurn() {

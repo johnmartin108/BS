@@ -16,15 +16,14 @@ public class Card {
     public Card(String suit, String rank) {
         this.suit = suit;
         this.rank = rank;
-        System.out.print(this.suit);
         String path = "cards/" + getPath(this.suit, this.rank) + ".png";
         this.img = new Texture(path);
     }
 
     //rank, suit
     public Card(ArrayList<String> vals) {
-        this.suit = vals.get(1);
         this.rank = vals.get(0);
+        this.suit = vals.get(1);
         String path = "cards/" + getPath(this.suit, this.rank) + ".png";
         this.img = new Texture(path);
     }
@@ -125,10 +124,7 @@ public class Card {
 
     }
 
-//    public Bitmap toImageAsset() {
-//        //TODO: update with correct image assets
-//        return null;
-//    }
+
     public Texture getTexture() {
         return this.img;
     }
@@ -148,7 +144,6 @@ public class Card {
                 result.get(i).add(c.toSerializable());
             }
         }
-
         return result;
     }
 
@@ -176,7 +171,6 @@ public class Card {
         for (ArrayList<String> nums: e) {
             result.add(new Card(nums));
         }
-
         return result;
     }
 

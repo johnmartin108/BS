@@ -39,8 +39,8 @@ public class PlayScreen implements Screen {
     public PlayScreen(BSGame game) {
         this.game = game;
         this.hands = game.hands;
-        this.inputCards = hands.get(game.ID);
-        this.currRank = game.targetRank + "";
+        this.inputCards = game.hands.get(game.ID);
+        this.currRank = convertToStringRank(game.targetRank);
     }
 
     public PlayScreen(BSGame game, String name) {
@@ -59,8 +59,6 @@ public class PlayScreen implements Screen {
 
         backButton = game.backButton;
         goButton = game.goButton;
-
-        currRank = "aces";
 
         cards = new HashMap();
 //        inputCards = new ArrayList();

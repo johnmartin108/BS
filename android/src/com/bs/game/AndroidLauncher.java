@@ -346,7 +346,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.PlayerID);
                     bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
-                    bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
+                    bridge.sendDataToView(Constants.M_TARGET_RANK, newMessage.targetRank);
                     bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
                     break;
 

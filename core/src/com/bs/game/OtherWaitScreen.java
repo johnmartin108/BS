@@ -63,7 +63,6 @@ public class OtherWaitScreen implements Screen {
             else {
                 game.setScreen(new PlayWaitScreen(game));
             }
-            dispose();
         }
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

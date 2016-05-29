@@ -62,13 +62,11 @@ public class OtherPlay implements Screen {
     public void render(float delta) {
         if (game.wrongBSCall || game.rightBSCall) {
             game.setScreen(new CalledBSScreen(game));
-            dispose();
         }
 
         elapsed += delta;
         if (elapsed > 7.0) {
             game.setScreen(new PlayScreen(game));
-            dispose();
         }
 
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);

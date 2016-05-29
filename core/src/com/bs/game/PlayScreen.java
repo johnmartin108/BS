@@ -175,7 +175,6 @@ public class PlayScreen implements Screen {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
             game.setScreen(new MainMenu(game));
-            dispose();
         }
     }
 
@@ -201,7 +200,6 @@ public class PlayScreen implements Screen {
             game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
             cards = copy;
             game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
-            dispose();
             numberSelected = 0;
         }
     }

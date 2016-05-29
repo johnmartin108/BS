@@ -40,7 +40,6 @@ public class WaitScreen implements Screen {
             else {
                 game.setScreen(new OtherWaitScreen(game));
             }
-            dispose();
         }
 
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);

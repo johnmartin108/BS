@@ -28,6 +28,11 @@ public class Card {
         this.img = new Texture(path);
     }
 
+    public void loadTexture() {
+        String path = "cards/" + getPath(this.suit, this.rank) + ".png";
+        this.img = new Texture(path);
+    }
+
     public String toString() {
         return this.suit + " " + this.rank;
     }

@@ -57,6 +57,7 @@ public class OtherWaitScreen implements Screen {
     @Override
     public void render(float delta) {
         if (!game.lastPlay.equals(this.lastPlay)) {
+            Gdx.app.log("BSGame", game.curr_player + " " + game.ID);
             if (game.curr_player == game.ID) {
                 game.setScreen(new OtherPlay(game));
             }

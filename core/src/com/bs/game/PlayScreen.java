@@ -75,8 +75,12 @@ public class PlayScreen implements Screen {
 //        inputCards = new Deck().getCards();
         int width = Gdx.graphics.getWidth()/inputCards.size();
         for (int i = 0; i < inputCards.size(); i++) {
+            inputCards.get(i).loadTexture();
             cards.put(inputCards.get(i), new CardInfo(i*width, 0));
         }
+
+        Gdx.app.log("BSGame", currRank);
+        Gdx.app.log("BSGame", inputCards.toString());
     }
 
     @Override
@@ -110,6 +114,7 @@ public class PlayScreen implements Screen {
                 offset = 0;
                 i = 0;
             }
+
             batch.draw(card.getTexture(), x, y);
         }
         batch.draw(backButton, 10, height - backButton.getHeight());

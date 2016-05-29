@@ -100,6 +100,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             if (network != null) {
                                 num_players += network.registeredClients.size();
                             }
+                            Log.d("num_players:", num_players+"");
 
                             startGame();
                         }
@@ -324,26 +325,26 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     break;
                 case Constants.M_PLAYER_BS_CORRECT:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
-                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                    bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.CallerID);
+                    bridge.sendDataToView(Constants.M_PREV_PLAYER, newMessage.PlayerID);
                     bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
                     break;
                 case Constants.M_PLAYER_BS_INCORRECT:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
-                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                    bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.CallerID);
+                    bridge.sendDataToView(Constants.M_PREV_PLAYER, newMessage.PlayerID);
                     bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
                     break;
                 case Constants.M_PLAYER_TURN:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
-                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.PlayerID);
                     bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
                     bridge.sendDataToView(Constants.M_LAST_PLAY, Card.fromCardsDump(newMessage.prevPlay));
                     bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
                     break;
                 case Constants.M_PLAYER_TURN_START:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
-                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                    bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.PlayerID);
                     bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
                     bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
                     bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);

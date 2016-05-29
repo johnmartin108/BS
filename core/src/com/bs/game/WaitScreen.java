@@ -38,7 +38,7 @@ public class WaitScreen implements Screen {
                 game.setScreen(new PlayScreen(game));
             }
             else {
-                game.setScreen(new PlayWaitScreen(game));
+                game.setScreen(new OtherWaitScreen(game));
             }
             dispose();
         }

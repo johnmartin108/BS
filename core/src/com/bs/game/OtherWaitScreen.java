@@ -28,12 +28,13 @@ public class OtherWaitScreen implements Screen {
     private int width;
     private int height;
     private int ID;
-    private float elapsed = 0;
+    private ArrayList<Card> lastPlay;
 
     public OtherWaitScreen(BSGame game) {
         this.game = game;
         this.suitPlayed = game.targetRank + "";
         this.numberPlayed = game.lastPlay.size();
+        this.lastPlay = game.lastPlay;
     }
 
     public OtherWaitScreen(BSGame game, int numberPlayed, String suitPlayed) {
@@ -55,14 +56,17 @@ public class OtherWaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (!game.lastPlay.equals(this.lastPlay)) {
+            if (game.curr_player == game.ID) {
+                game.setScreen(new OtherPlay(game));
+            }
+            else {
+                game.setScreen(new PlayWaitScreen(game));
+            }
+            dispose();
+        }
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        elapsed += delta;
-
-        if (elapsed > 7.0) {
-            game.setScreen(new OtherPlay(game));
-        }
 
         batch.begin();
         count.getData().setScale(10);

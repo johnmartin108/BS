@@ -57,19 +57,33 @@ public class PlayWaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (game.wrongBSCall || game.rightBSCall) {
+            game.setScreen(new CalledBSScreen(game));
+            dispose();
+        }
 
         elapsed += delta;
 
         if (elapsed > 7.0) {
             game.setScreen(new OtherWaitScreen(game));
+            dispose();
         }
+
+        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
-                "\nThey have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 1100);
+        if (game.prev_player == game.ID) {
+            count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
+                    "\nThey have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 1100);
+        }
+        else {
+            count.draw(batch, game.curr_player + " played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
+                    "\nThey have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 1100);
+        }
         batch.end();
 
         if(Gdx.input.justTouched()) {

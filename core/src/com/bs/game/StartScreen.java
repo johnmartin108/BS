@@ -42,11 +42,11 @@ public class StartScreen implements Screen {
                 game.setScreen(new PlayScreen(game));
             }
             else {
-                game.setScreen(new PlayWaitScreen(game));
+                game.setScreen(new OtherWaitScreen(game));
             }
             dispose();
         }
-        
+
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

@@ -60,16 +60,21 @@ public class OtherPlay implements Screen {
 
     @Override
     public void render(float delta) {
+        if (game.wrongBSCall || game.rightBSCall) {
+            game.setScreen(new CalledBSScreen(game));
+            dispose();
+        }
 
         elapsed += delta;
+        if (elapsed > 7.0) {
+            game.setScreen(new PlayScreen(game));
+            dispose();
+        }
 
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (elapsed > 7.0) {
-            game.setScreen(new CalledBSScreen(game));
-            dispose();
-        }
+
 
         batch.begin();
         count.getData().setScale(10);
@@ -94,8 +99,7 @@ public class OtherPlay implements Screen {
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
                 && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
-            game.setScreen(new CalledBSScreen(game, 1, 2));
-            dispose();
+            game.bridge.sendDataToController(Constants.M_CALL_BS, null);
         }
     }
 

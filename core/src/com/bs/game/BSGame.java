@@ -36,10 +36,13 @@ public class BSGame extends Game {
 	Texture goButton;
 	boolean isConnected;
 	boolean isGameStarted = false;
+	boolean gameFinished = false;
+	boolean rightBSCall = false;
+	boolean wrongBSCall = false;
 
 	ArrayList<ArrayList<Card>> hands;
 	ArrayList<Card> cardPile;
-	ArrayList<Card> lastPlay;
+	ArrayList<Card> lastPlay = new ArrayList<Card>();
 	int curr_player;
 	int prev_player;
 	int ID;
@@ -158,16 +161,18 @@ public class BSGame extends Game {
 						isGameStarted = true;
 						break;
 					case Constants.M_GAME_OVER:
-						//TODO: protocol for finishing game
 						int winner = (Integer) obj;
+						gameFinished = true;
 						break;
 					case Constants.M_PLAYER_BS_CORRECT:
-						//TODO: protocol for handling game events like incorrect BS calls
 						cardPile = new ArrayList<Card>();
+						lastPlay = new ArrayList<Card>();
+						rightBSCall = true;
 						break;
 					case Constants.M_PLAYER_BS_INCORRECT:
-						//TODO: protocol for handling incorrect BS - check variables curr_player and prev_player
 						cardPile = new ArrayList<Card>();
+						lastPlay = new ArrayList<Card>();
+						wrongBSCall = true;
 						break;
 					case Constants.M_PLAYER_TURN:
 						if (ID == curr_player) {
@@ -179,6 +184,7 @@ public class BSGame extends Game {
 						break;
 					case Constants.M_PLAYER_TURN_START:
 						//same as above, but there should be no option to call BS
+
 						break;
 				}
 

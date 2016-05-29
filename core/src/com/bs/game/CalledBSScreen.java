@@ -57,7 +57,14 @@ public class CalledBSScreen implements Screen {
         elapsed += delta;
 
         if (elapsed > 5.0) {
-            game.setScreen(new PlayScreen(game));
+            game.rightBSCall = false;
+            game.wrongBSCall = false;
+            if (game.curr_player == game.ID) {
+                game.setScreen(new PlayScreen(game));
+            }
+            else {
+                game.setScreen(new PlayWaitScreen(game));
+            }
         }
 
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
@@ -65,7 +72,12 @@ public class CalledBSScreen implements Screen {
 
         batch.begin();
         count.getData().setScale(10);
-        count.draw(batch, ID1 + " called BS on " + ID2 + "\nThey were right!\n" + ID2 + " collected the pile.", 500, 1000);
+        if (game.rightBSCall) {
+            count.draw(batch, ID1 + " called BS on " + ID2 + "\nThey were right!\n" + ID2 + " collected the pile.", 500, 1000);
+        }
+        else if (game.wrongBSCall) {
+            count.draw(batch, ID1 + " called BS on " + ID2 + "\nThey were wrong!\n" + ID1 + " collected the pile.", 500, 1000);
+        }
         batch.end();
 
         if(Gdx.input.justTouched()) {
@@ -85,45 +97,6 @@ public class CalledBSScreen implements Screen {
         }
     }
 
-    //TODO: need UI people to fill this in. uncomment and make screens show up accordingly.
-//    public void onReceivedData(int name, Object obj) {
-//        String str = (String) obj;
-//        Message m = LoganSquare.parse(str, Message.class);
-//        switch (name) {
-//            case Constants.M_PLAYER_ID:
-//                ID = m.PlayerID;
-//                break;
-//            case Constants.M_GAME_OVER:
-//                //TODO: protocol for finishing game
-//                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
-//                //TODO: protocol for handling game events like incorrect BS calls
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_BS_CORRECT:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                break;
-//            case Constants.M_PLAYER_TURN:
-//                hands = m.cardsInHands;
-//                inputCards = hands.get(ID);
-//                if (ID = m.PlayerID) {
-//                    //do a turn
-//                }
-//                else {
-//                    //display waiting screen
-//                }
-//                break;
-//            case Constants.M_PLAYER_TURN_START:
-//                //same as above, but there should be no option to call BS
-//                break;
-//
-//
-//
-//
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {

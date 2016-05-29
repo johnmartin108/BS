@@ -15,7 +15,7 @@ public class Deck {
     public Deck() {
         this.cards = new ArrayList<Card>();
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 14; j++) {
+            for (int j = 1; j < 14; j++) {
                 this.cards.add(new Card(Card.toSuit(i), Card.toRank(j)));
             }
         }

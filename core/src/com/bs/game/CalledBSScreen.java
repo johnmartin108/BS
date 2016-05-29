@@ -31,6 +31,8 @@ public class CalledBSScreen implements Screen {
 
     public CalledBSScreen(BSGame game) {
         this.game = game;
+        this.ID1 = game.curr_player;
+        this.ID2 = game.prev_player;
     }
 
     public CalledBSScreen(BSGame game, int ID1, int ID2) {
@@ -63,7 +65,7 @@ public class CalledBSScreen implements Screen {
                 game.setScreen(new PlayScreen(game));
             }
             else {
-                game.setScreen(new PlayWaitScreen(game));
+                game.setScreen(new OtherWaitScreen(game));
             }
         }
 

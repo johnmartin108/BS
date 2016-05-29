@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -100,21 +101,27 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             if (network != null) {
                                 num_players += network.registeredClients.size();
                             }
-                            Log.d("num_players:", num_players+"");
 
                             startGame();
                         }
                         break;
                     case (Constants.M_CALL_BS):
-                        m = new Message();
-                        m.eventType = Constants.M_CALL_BS;
-                        network.sendToHost(m, new SalutCallback() {
-                            @Override
-                            public void call() {
+                        if (!isHost) {
+                            m = new Message();
+                            m.eventType = Constants.M_CALL_BS;
+                            network.sendToHost(m, new SalutCallback() {
+                                @Override
+                                public void call() {
 
-                            }
-                        });
-                        break;
+                                }
+                            });
+                            break;
+                        }
+                        else {
+                            handleBSCall();
+                            break;
+                        }
+
 
                     case Constants.M_PLAY_CARDS:
                         ArrayList<Card> playedCards = (ArrayList<Card>) obj;
@@ -369,61 +376,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     break;
 
                 case (Constants.M_CALL_BS):
-                    boolean telling_truth = true;
-                    for (Card c: last_play) {
-                        if (c.valueOf() != targetRank) {
-                            telling_truth = false;
-                        }
-                    }
-
-                    if (telling_truth) {
-                        if (hands.get(prev_player).isEmpty()) {
-                            endGame();
-                        }
-                        else {
-                            hands.get(curr_player).addAll(cardPile);
-                            Message m = new Message();
-                            m.eventType = Constants.M_PLAYER_BS_INCORRECT;
-                            m.CallerID = curr_player;
-                            m.PlayerID = prev_player;
-                            m.cardsInHands = Card.toHandsDump(hands);
-                            network.sendToAllDevices(m, new SalutCallback() {
-                                @Override
-                                public void call() {
-
-                                }
-                            });
-
-                            bridge.sendDataToView(Constants.M_HANDS, hands);
-                            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
-                            bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
-                        }
-                    }
-
-                    else {
-                        hands.get(prev_player).addAll(cardPile);
-                        Message m = new Message();
-                        m.eventType = Constants.M_PLAYER_BS_CORRECT;
-                        m.CallerID = curr_player;
-                        m.PlayerID = prev_player;
-                        m.cardsInHands = Card.toHandsDump(hands);
-                        network.sendToAllDevices(m, new SalutCallback() {
-                            @Override
-                            public void call() {
-
-                            }
-                        });
-
-                        //send info to host as well
-                        bridge.sendDataToView(Constants.M_HANDS, hands);
-                        bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                        bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
-                        bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
-                    }
-
-                    cardPile = new ArrayList<Card>();
-                    newTurn();
+                    handleBSCall();
 
                     break;
 
@@ -459,10 +412,12 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             if (c.valueOf() == 1 && c.suitOf().equals("s")) {
                 curr_player = ID;
             }
-            hands.get(ID).add(c);
+            hands.get(ID).add(new Card(c.toSerializable()));
             ID = (ID + 1) % num_players;
 
         }
+
+        hands = Card.fromHandsDump(Card.toHandsDump(hands));
 
         Message m;
         ID = 0;
@@ -536,7 +491,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
         bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
         bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
-        bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
+        bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
     }
 
     public void newTurn() {
@@ -559,7 +514,65 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
-        bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
+        bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
+    }
+
+    public void handleBSCall() {
+        boolean telling_truth = true;
+        for (Card c: last_play) {
+            if (c.valueOf() != targetRank) {
+                telling_truth = false;
+            }
+        }
+
+        if (telling_truth) {
+            if (hands.get(prev_player).isEmpty()) {
+                endGame();
+            }
+            else {
+                hands.get(curr_player).addAll(cardPile);
+                Message m = new Message();
+                m.eventType = Constants.M_PLAYER_BS_INCORRECT;
+                m.CallerID = curr_player;
+                m.PlayerID = prev_player;
+                m.cardsInHands = Card.toHandsDump(hands);
+                network.sendToAllDevices(m, new SalutCallback() {
+                    @Override
+                    public void call() {
+
+                    }
+                });
+
+                bridge.sendDataToView(Constants.M_HANDS, hands);
+                bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+                bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+                bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
+            }
+        }
+
+        else {
+            hands.get(prev_player).addAll(cardPile);
+            Message m = new Message();
+            m.eventType = Constants.M_PLAYER_BS_CORRECT;
+            m.CallerID = curr_player;
+            m.PlayerID = prev_player;
+            m.cardsInHands = Card.toHandsDump(hands);
+            network.sendToAllDevices(m, new SalutCallback() {
+                @Override
+                public void call() {
+
+                }
+            });
+
+            //send info to host as well
+            bridge.sendDataToView(Constants.M_HANDS, hands);
+            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+            bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
+        }
+
+        cardPile = new ArrayList<Card>();
+        newTurn();
     }
 
     public void endGame() {

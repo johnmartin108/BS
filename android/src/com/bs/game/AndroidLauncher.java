@@ -152,6 +152,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                                 if (add) newHand.add(c);
                             }
 
+                            Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
+                            Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
                             if (newHand.isEmpty()) {
                                 gameOver = true;
                             }
@@ -356,6 +358,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 case Constants.M_PLAYER_TURN:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.PlayerID);
+                    bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
                     bridge.sendDataToView(Constants.M_CARD_PILE, Card.fromCardsDump(newMessage.cardPile));
                     bridge.sendDataToView(Constants.M_LAST_PLAY, Card.fromCardsDump(newMessage.prevPlay));
                     bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
@@ -385,6 +388,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         if (add) newHand.add(c);
                     }
 
+                    Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
+                    Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
                     if (newHand.isEmpty()) {
                         gameOver = true;
                     }
@@ -504,6 +509,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         //host needs data too
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+        bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
         bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
         bridge.sendDataToView(Constants.M_PLAYER_TURN, null);

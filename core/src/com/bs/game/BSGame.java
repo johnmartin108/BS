@@ -41,7 +41,7 @@ public class BSGame extends Game {
 	boolean wrongBSCall = false;
 
 	ArrayList<ArrayList<Card>> hands;
-	ArrayList<Card> cardPile;
+	ArrayList<Card> cardPile = new ArrayList<Card>();
 	ArrayList<Card> lastPlay = new ArrayList<Card>();
 	int curr_player;
 	int prev_player;

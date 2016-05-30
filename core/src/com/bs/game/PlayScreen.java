@@ -162,7 +162,6 @@ public class PlayScreen implements Screen {
 
             }
 
-            i++;
             ctr = (game.ID + 1 + inc)%game.hands.size();
         }
         

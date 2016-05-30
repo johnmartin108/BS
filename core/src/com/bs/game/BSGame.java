@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.soap.Text;
 
 public class BSGame extends Game {
 	SpriteBatch batch;
@@ -231,21 +230,4 @@ public class BSGame extends Game {
 	public void render () {
 		super.render();
 	}
-
-	//TODO: need UI people to fill this in. uncomment and make screens show up accordingly. I'm assuming all game functions happen in playscreen. If not we should probably talk.
-	//I'm not sure how to get the message data through correctly. But if nothing else this should give you an idea of
-	//what things we need the UI to be able to do.
-
-	public void onReceivedData(int name, Object obj) {
-
-		switch (name) {
-			//***** MESSAGES UPDATING VALUES *****
-
-
-
-
-
-		}
-	}
-
 }

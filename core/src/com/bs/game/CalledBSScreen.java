@@ -61,11 +61,20 @@ public class CalledBSScreen implements Screen {
         if (elapsed > 5.0) {
             game.rightBSCall = false;
             game.wrongBSCall = false;
-            if (game.curr_player == game.ID) {
-                game.setScreen(new PlayScreen(game));
+            if (game.gameFinished) {
+                if (game.prev_player == game.ID) {
+                    game.setScreen(new WinScreen(game));
+                }
+                else {
+                    game.setScreen(new LossScreen(game));
+                }
             }
             else {
-                game.setScreen(new OtherWaitScreen(game));
+                if (game.curr_player == game.ID) {
+                    game.setScreen(new PlayScreen(game));
+                } else {
+                    game.setScreen(new OtherWaitScreen(game));
+                }
             }
         }
 

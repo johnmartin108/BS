@@ -59,7 +59,12 @@ public class OtherWaitScreen implements Screen {
         if (!game.lastPlay.equals(this.lastPlay)) {
             Gdx.app.log("BSGame", game.curr_player + " " + game.ID);
             if (game.curr_player == game.ID) {
-                game.setScreen(new OtherPlay(game));
+                if (game.hands.get(game.prev_player).isEmpty()) {
+                    game.setScreen(new MandatoryBSScreen(game));
+                }
+                else {
+                    game.setScreen(new OtherPlay(game));
+                }
             }
             else {
                 game.setScreen(new PlayWaitScreen(game));

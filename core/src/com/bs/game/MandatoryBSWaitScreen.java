@@ -56,7 +56,6 @@ public class MandatoryBSWaitScreen implements Screen {
 
 
         batch.begin();
-        count.getData().setScale(10);
         count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nYou are out of cards. " +
                 "Waiting for next player to call BS!", 250, 1100);
         

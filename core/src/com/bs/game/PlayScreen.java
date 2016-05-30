@@ -94,7 +94,7 @@ public class PlayScreen implements Screen {
             card.loadTexture();
             Texture texture = card.getTexture();
             final Image img = new Image(texture);
-
+            img.setScale(0.5f);
 
             CardInfo cardInfo = new CardInfo(i*width, 0);
 
@@ -132,6 +132,30 @@ public class PlayScreen implements Screen {
 
             img.setPosition(x, y - offset);
             stage.addActor(img);
+
+            // lets add card pile here
+            Texture t = new Texture("decks/large/deck_4_large.png");
+
+            for (Card c: game.cardPile){
+                Image image = new Image(t);
+
+                // set their position here
+
+            }
+
+            int inc = 0;
+            int ctr = (game.ID + 1 + inc)%game.hands.size();
+            while(ctr != game.ID){
+                ArrayList<Card> hand = game.hands.get(ctr);
+
+                for (Card c: hand){
+                    // draw their hand
+
+                }
+
+                i++;
+                ctr = (game.ID + 1 + inc)%game.hands.size();
+            }
         }
 
         Gdx.app.log("BSGame", currRank);

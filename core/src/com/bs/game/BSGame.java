@@ -168,7 +168,6 @@ public class BSGame extends Game {
 						isGameStarted = true;
 						break;
 					case Constants.M_GAME_OVER:
-						int winner = (Integer) obj;
 						gameFinished = true;
 						break;
 					case Constants.M_PLAYER_BS_CORRECT:

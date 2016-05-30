@@ -76,7 +76,6 @@ public class PlayScreen implements Screen {
         cards = new HashMap();
         numberSelected = 0;
 
-        inputCards = new Deck().getCards();
         int width = Gdx.graphics.getWidth()/inputCards.size();
         offset = inputCards.size() >= 26 ? 200 : 0;
 

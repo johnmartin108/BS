@@ -66,6 +66,7 @@ public class BSGame extends Game {
 		generator.scaleForPixelHeight(150);
 		parameter.minFilter = Texture.TextureFilter.Nearest;
 		parameter.magFilter = Texture.TextureFilter.MipMapLinearNearest;
+		parameter.kerning = true;
 		font = generator.generateFont(parameter);
 		generator.dispose();
 

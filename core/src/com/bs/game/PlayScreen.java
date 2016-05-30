@@ -117,10 +117,12 @@ public class PlayScreen implements Screen {
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     super.touchUp(event, x, y, pointer, button);
                     if (selectedCard.contains(card)){
+                        numberSelected--;
                         selectedCard.remove(card);
                         img.setPosition(img.getX(), img.getY() - 200);
 
                     }else{
+                        numberSelected++;
                         selectedCard.add(card);
                         img.setPosition(img.getX(), img.getY() + 200);
                     }
@@ -145,25 +147,25 @@ public class PlayScreen implements Screen {
         // lets add card pile here
         Texture t = new Texture("decks/large/deck_4_large.png");
 
-        for (Card c: game.cardPile){
-            Image image = new Image(t);
-
-            // set their position here
-
-        }
-
-        int inc = 0;
-        int ctr = (game.ID + 1 + inc)%game.hands.size();
-        while(ctr != game.ID){
-            ArrayList<Card> hand = game.hands.get(ctr);
-
-            for (Card c: hand){
-                // draw their hand
-
-            }
-
-            ctr = (game.ID + 1 + inc)%game.hands.size();
-        }
+//        for (Card c: game.cardPile){
+//            Image image = new Image(t);
+//
+//            // set their position here
+//
+//        }
+//
+//        int inc = 0;
+//        int ctr = (game.ID + 1 + inc)%game.hands.size();
+//        while(ctr != game.ID){
+//            ArrayList<Card> hand = game.hands.get(ctr);
+//
+//            for (Card c: hand){
+//                // draw their hand
+//
+//            }
+//
+//            ctr = (game.ID + 1 + inc)%game.hands.size();
+//        }
         
         Gdx.app.log("BSGame", currRank);
         Gdx.app.log("BSGame", inputCards.toString());

@@ -134,7 +134,7 @@ public class PlayScreen implements Screen {
 
     private int clickInCard(Vector3 touchPos) {
         Iterator iter = cards.entrySet().iterator();
-        float maxX = 0;
+        float maxX = -1;
         CardInfo selected = null;
         while (iter.hasNext()) {
             Map.Entry mapPair = (Map.Entry) iter.next();
@@ -152,6 +152,7 @@ public class PlayScreen implements Screen {
                 }
             }
             else {
+                if (info.getX() == 0) System.out.println(touchPos.x + " should be between " + info.getX() + " and " + (info.getX() + card.getTexture().getWidth()));
                 if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
                         && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
                     if (info.getX() > maxX) {

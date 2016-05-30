@@ -52,7 +52,6 @@ public class JHScreen implements Screen{
         //System.out.println("HELLLLLLLLLLO");
 
         game.batch.begin();
-        bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Join or Host a Game?", 525, 1300);
         game.batch.draw(joinBtn, width/2 - joinBtn.getWidth()/2, 700);
         game.batch.draw(hostBtn, width/2 - hostBtn.getWidth()/2, 300);

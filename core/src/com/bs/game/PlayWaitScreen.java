@@ -73,7 +73,6 @@ public class PlayWaitScreen implements Screen {
 
 
         batch.begin();
-        count.getData().setScale(10);
         if (game.prev_player == game.ID) {
             count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for other players..." +
                     "\nThey have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 1100);

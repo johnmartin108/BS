@@ -47,7 +47,6 @@ public class HostScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Select Your Difficulty", 550, 1400);
         game.batch.draw(easyBtn, width/2 - easyBtn.getWidth()/2, 950);
         game.batch.draw(mediumBtn, width/2 - mediumBtn.getWidth()/2, 650);

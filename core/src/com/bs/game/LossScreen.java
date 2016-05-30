@@ -47,7 +47,6 @@ public class LossScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "You lost! Player " + PlayerID + " won.", 500, 1300);
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();

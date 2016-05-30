@@ -45,8 +45,6 @@ public class SettingsScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(backButton, 10, height - backButton.getHeight());
-        nameString.getData().setScale(10);
-//        nameString.draw(game.batch, name, 200, 200);
         game.batch.end();
 
         if(Gdx.input.justTouched()) {

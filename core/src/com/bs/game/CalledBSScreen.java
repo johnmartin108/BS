@@ -82,7 +82,6 @@ public class CalledBSScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        count.getData().setScale(10);
         if (game.rightBSCall) {
             count.draw(batch, ID1 + " called BS on " + ID2 + "\nThey were right!\n" + ID2 + " collected the pile.", 500, 1000);
         }

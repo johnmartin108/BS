@@ -58,12 +58,14 @@ public class BSGame extends Game {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
 		stage = new Stage();
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 20;
+		parameter.size = 150;
+		generator.scaleForPixelHeight(150);
+		parameter.minFilter = Texture.TextureFilter.Nearest;
+		parameter.magFilter = Texture.TextureFilter.MipMapLinearNearest;
 		font = generator.generateFont(parameter);
 		generator.dispose();
 
@@ -76,8 +78,8 @@ public class BSGame extends Game {
 
 		setScreen(new MainMenu(this));
 
-		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		font.getData().scale(4.0f);
+//		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//		font.getData().scale(4.0f);
 
 		textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.font = font;

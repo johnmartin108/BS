@@ -101,7 +101,6 @@ public class JoinScreen implements Screen {
 
 
         game.batch.begin();
-        bitFont.getData().setScale(10);
         bitFont.draw(game.batch, "Select a Host", 725, 1300);
 
 

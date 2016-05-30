@@ -79,9 +79,6 @@ public class BSGame extends Game {
 
 		setScreen(new MainMenu(this));
 
-//		font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//		font.getData().scale(4.0f);
-
 		textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.font = font;
 

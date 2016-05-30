@@ -139,10 +139,16 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         }
                         else {
                             ArrayList<Card> newHand = new ArrayList<Card>();
+                            boolean add;
                             for (Card c: hands.get(curr_player)) {
-                                if (!playedCards.contains(c)) {
-                                    newHand.add(c);
+                                add = true;
+                                for (Card d: playedCards) {
+                                    if (c.valueOf() == d.valueOf() && c.suitOf().equals(d.suitOf())) {
+                                        add = false;
+                                        break;
+                                    }
                                 }
+                                if (add) newHand.add(c);
                             }
 
                             hands.set(curr_player, newHand);
@@ -368,6 +374,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         for (Card d: playedCards) {
                             if (c.valueOf() == d.valueOf() && c.suitOf().equals(d.suitOf())) {
                                 add = false;
+                                break;
                             }
                         }
                         if (add) newHand.add(c);

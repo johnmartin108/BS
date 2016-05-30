@@ -500,6 +500,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             m.cardsInHands = Card.toHandsDump(hands);
             m.PlayerID = curr_player;
             targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
+            m.targetRank = targetRank;
             network.sendToAllDevices(m, new SalutCallback() {
                 @Override
                 public void call() {

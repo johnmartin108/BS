@@ -142,29 +142,29 @@ public class PlayScreen implements Screen {
 
         }
 
-        //            // lets add card pile here
-//            Texture t = new Texture("decks/large/deck_4_large.png");
-//
-//            for (Card c: game.cardPile){
-//                Image image = new Image(t);
-//
-//                // set their position here
-//
-//            }
-//
-//            int inc = 0;
-//            int ctr = (game.ID + 1 + inc)%game.hands.size();
-//            while(ctr != game.ID){
-//                ArrayList<Card> hand = game.hands.get(ctr);
-//
-//                for (Card c: hand){
-//                    // draw their hand
-//
-//                }
-//
-//                i++;
-//                ctr = (game.ID + 1 + inc)%game.hands.size();
-//            }
+        // lets add card pile here
+        Texture t = new Texture("decks/large/deck_4_large.png");
+
+        for (Card c: game.cardPile){
+            Image image = new Image(t);
+
+            // set their position here
+
+        }
+
+        int inc = 0;
+        int ctr = (game.ID + 1 + inc)%game.hands.size();
+        while(ctr != game.ID){
+            ArrayList<Card> hand = game.hands.get(ctr);
+
+            for (Card c: hand){
+                // draw their hand
+
+            }
+
+            i++;
+            ctr = (game.ID + 1 + inc)%game.hands.size();
+        }
         
         Gdx.app.log("BSGame", currRank);
         Gdx.app.log("BSGame", inputCards.toString());
@@ -205,51 +205,6 @@ public class PlayScreen implements Screen {
             clickInGo(touchPos);
         }
     }
-
-//    private int clickInCard(Vector3 touchPos) {
-//        Iterator iter = cards.entrySet().iterator();
-//        float maxX = -1;
-//        CardInfo selected = null;
-//        while (iter.hasNext()) {
-//            Map.Entry mapPair = (Map.Entry) iter.next();
-//            Card card = (Card) mapPair.getKey();
-//            CardInfo info = (CardInfo) mapPair.getValue();
-//            float x = info.getX();
-//            float y = info.getY();
-//            if (info.getBack()) {
-//                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-//                        && (height - touchPos.y) > card.getTexture().getHeight() && (height - touchPos.y) < (card.getTexture().getHeight() + 200)) {
-//                    if (info.getX() > maxX) {
-//                        maxX = info.getX();
-//                        selected = info;
-//                    }
-//                }
-//            }
-//            else {
-//                if (info.getX() == 0) System.out.println(touchPos.x + " should be between " + info.getX() + " and " + (info.getX() + card.getTexture().getWidth()));
-//                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-//                        && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
-//                    if (info.getX() > maxX) {
-//                        maxX = info.getX();
-//                        selected = info;
-//                    }
-//                }
-//            }
-//
-//        }
-//
-//        if (selected != null && selected.getY() != 30) {
-//            selected.setXY(selected.getX(), 30);
-//            numberSelected++;
-//            selected.setChosen();
-//        }
-//        else if (selected != null) {
-//            selected.setXY(selected.getX(), 0);
-//            numberSelected--;
-//            selected.setChosen();
-//        }
-//        return -1;
-//    }
 
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()

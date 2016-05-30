@@ -155,7 +155,6 @@ public class BSGame extends Game {
 						wrongBSCall = true;
 						break;
 					case Constants.M_PLAYER_TURN:
-						prev_player = curr_player;
 						break;
 					case Constants.M_PLAYER_TURN_START:
 						break;

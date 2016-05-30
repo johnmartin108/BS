@@ -268,11 +268,11 @@ public class PlayScreen implements Screen {
             }
             game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
 
-            if (inputCards.size() == numberSelected) {
+            if (inputCards.size() == selectedCard.size()) {
                 game.setScreen(new MandatoryBSWaitScreen(game));
             }
             else {
-                game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
+                game.setScreen(new PlayWaitScreen(game, selectedCard.size(), currRank));
             }
         }
     }

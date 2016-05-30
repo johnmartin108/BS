@@ -90,7 +90,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        count.getData().setScale(10);
+//        count.getData().setScale(10);
         count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1350);
 //        count.draw(batch, "Player: " + name, width - 1000, height - 20);
         batch.end();

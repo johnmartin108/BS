@@ -139,10 +139,16 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         }
                         else {
                             ArrayList<Card> newHand = new ArrayList<Card>();
+                            boolean add;
                             for (Card c: hands.get(curr_player)) {
-                                if (!playedCards.contains(c)) {
-                                    newHand.add(c);
+                                add = true;
+                                for (Card d: playedCards) {
+                                    if (c.valueOf() == d.valueOf() && c.suitOf().equals(d.suitOf())) {
+                                        add = false;
+                                        break;
+                                    }
                                 }
+                                if (add) newHand.add(c);
                             }
 
                             hands.set(curr_player, newHand);
@@ -185,7 +191,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         }while (supState != SupplicantState.COMPLETED);
                         becomeHost();
                     }
-                }, 1000);
+                }, 2000);
             }
         });
     }
@@ -362,10 +368,16 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     ArrayList<Card> playedCards = Card.fromCardsDump(newMessage.playedCards);
                     ArrayList<Card> newHand = new ArrayList<Card>();
 
+                    boolean add;
                     for (Card c: hands.get(curr_player)) {
-                        if (!playedCards.contains(c)) {
-                            newHand.add(c);
+                        add = true;
+                        for (Card d: playedCards) {
+                            if (c.valueOf() == d.valueOf() && c.suitOf().equals(d.suitOf())) {
+                                add = false;
+                                break;
+                            }
                         }
+                        if (add) newHand.add(c);
                     }
 
                     hands.set(curr_player, newHand);
@@ -500,6 +512,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             m.cardsInHands = Card.toHandsDump(hands);
             m.PlayerID = curr_player;
             targetRank = (targetRank % 13) + 1;  //13 -> 1 -> 2 ...
+            m.targetRank = targetRank;
             network.sendToAllDevices(m, new SalutCallback() {
                 @Override
                 public void call() {

@@ -205,7 +205,12 @@ public class PlayScreen implements Screen {
 
             game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
             cards = copy;
-            game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
+            if (copy.isEmpty()) {
+                game.setScreen(new MandatoryBSWaitScreen(game));
+            }
+            else {
+                game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
+            }
             numberSelected = 0;
         }
     }

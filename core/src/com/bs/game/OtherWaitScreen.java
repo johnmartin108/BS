@@ -57,7 +57,7 @@ public class OtherWaitScreen implements Screen {
     @Override
     public void render(float delta) {
         if (!game.lastPlay.equals(this.lastPlay)) {
-            Gdx.app.log("BSGame", game.curr_player + " " + game.ID);
+            Gdx.app.log("BSGame", game.curr_player + " " + game.prev_player + " " + game.ID);
             if (game.curr_player == game.ID) {
                 if (game.hands.get(game.prev_player).isEmpty()) {
                     game.setScreen(new MandatoryBSScreen(game));
@@ -67,7 +67,12 @@ public class OtherWaitScreen implements Screen {
                 }
             }
             else {
-                game.setScreen(new PlayWaitScreen(game));
+                if (game.hands.get(game.prev_player).isEmpty()) {
+                    game.setScreen(new MandatoryBSWaitScreen(game));
+                }
+                else {
+                    game.setScreen(new PlayWaitScreen(game));
+                }
             }
         }
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);

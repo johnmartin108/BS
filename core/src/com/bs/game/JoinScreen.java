@@ -63,7 +63,7 @@ public class JoinScreen implements Screen {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
-        bitFont = new BitmapFont();
+        bitFont = game.font;
         game.bridge.sendDataToController(Constants.M_DISCOVER_PEERS, null);
 
 

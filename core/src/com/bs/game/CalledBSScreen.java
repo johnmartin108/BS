@@ -62,7 +62,7 @@ public class CalledBSScreen implements Screen {
             game.rightBSCall = false;
             game.wrongBSCall = false;
             if (game.gameFinished) {
-                if (game.prev_player == game.ID) {
+                if (game.gameWinner == game.ID) {
                     game.setScreen(new WinScreen(game));
                 }
                 else {

@@ -34,14 +34,6 @@ public class WinScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (game.isGameStarted) {
-            if (game.ID == game.curr_player) {
-                game.setScreen(new PlayScreen(game));
-            }
-            else {
-                game.setScreen(new OtherWaitScreen(game));
-            }
-        }
 
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -64,7 +56,7 @@ public class WinScreen implements Screen {
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
-            game.setScreen(new JoinScreen(game));
+            game.setScreen(new MainMenu(game));
             dispose();
         }
     }

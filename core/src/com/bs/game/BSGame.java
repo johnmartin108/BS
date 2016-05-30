@@ -47,6 +47,7 @@ public class BSGame extends Game {
 	int prev_player;
 	int ID;
 	int targetRank = 1;
+	int gameWinner;
 
 
 
@@ -142,6 +143,7 @@ public class BSGame extends Game {
 						isGameStarted = true;
 						break;
 					case Constants.M_GAME_OVER:
+						gameWinner = (Integer) obj;
 						gameFinished = true;
 						break;
 					case Constants.M_PLAYER_BS_CORRECT:

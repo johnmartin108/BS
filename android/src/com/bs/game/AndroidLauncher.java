@@ -53,7 +53,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     private int curr_player = 0;
     private int prev_player = 0;
     private int targetRank = 0;
-    private boolean gameOver = false;
+    private boolean emptyHand = false;
 
 	private static final String TAG = "BSGAME";
 
@@ -155,7 +155,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
                             Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
                             if (newHand.isEmpty()) {
-                                gameOver = true;
+                                emptyHand = true;
                             }
 
                             hands.set(curr_player, newHand);
@@ -391,7 +391,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
                     Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
                     if (newHand.isEmpty()) {
-                        gameOver = true;
+                        emptyHand = true;
                     }
 
                     hands.set(curr_player, newHand);
@@ -550,9 +550,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
 
         if (telling_truth) {
-            if (gameOver) {
+            if (emptyHand) {
                 endGame();
-                Gdx.app.log("host", "game is over");
                 try {Thread.sleep(200);} catch (InterruptedException e) {}
             }
             hands.get(curr_player).addAll(cardPile);
@@ -575,6 +574,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
 
         else {
+            emptyHand = false;
             hands.get(prev_player).addAll(cardPile);
             Message m = new Message();
             m.eventType = Constants.M_PLAYER_BS_CORRECT;
@@ -601,8 +601,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         catch (InterruptedException e) {}
 
 
-        cardPile.clear();
-        newTurn();
+        if (!emptyHand) {
+            cardPile.clear();
+            newTurn();
+        }
     }
 
     public void endGame() {

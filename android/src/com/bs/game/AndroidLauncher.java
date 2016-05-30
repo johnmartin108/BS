@@ -449,11 +449,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 });
             }
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-            }
-
+            try {Thread.sleep(500);} catch (InterruptedException e) {}
 
             m = new Message();
             m.eventType = Constants.M_GAME_START;
@@ -540,26 +536,25 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         if (telling_truth) {
             if (hands.get(prev_player).isEmpty()) {
                 endGame();
+                try {Thread.sleep(200);} catch (InterruptedException e) {}
             }
-            else {
-                hands.get(curr_player).addAll(cardPile);
-                Message m = new Message();
-                m.eventType = Constants.M_PLAYER_BS_INCORRECT;
-                m.CallerID = curr_player;
-                m.PlayerID = prev_player;
-                m.cardsInHands = Card.toHandsDump(hands);
-                network.sendToAllDevices(m, new SalutCallback() {
-                    @Override
-                    public void call() {
+            hands.get(curr_player).addAll(cardPile);
+            Message m = new Message();
+            m.eventType = Constants.M_PLAYER_BS_INCORRECT;
+            m.CallerID = curr_player;
+            m.PlayerID = prev_player;
+            m.cardsInHands = Card.toHandsDump(hands);
+            network.sendToAllDevices(m, new SalutCallback() {
+                @Override
+                public void call() {
 
-                    }
-                });
+                }
+            });
 
-                bridge.sendDataToView(Constants.M_HANDS, hands);
-                bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
-                bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
-                bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
-            }
+            bridge.sendDataToView(Constants.M_HANDS, hands);
+            bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+            bridge.sendDataToView(Constants.M_PREV_PLAYER, prev_player);
+            bridge.sendDataToView(Constants.M_PLAYER_BS_INCORRECT, null);
         }
 
         else {

@@ -7,11 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by nick on 5/24/16.
@@ -34,7 +40,11 @@ public class PlayScreen implements Screen {
     private Texture goButton;
     private int width;
     private int height;
+    private int offset;
 
+    private Set<Card> selectedCard;
+
+    private Stage stage;
 
     public PlayScreen(BSGame game) {
         this.game = game;
@@ -50,6 +60,8 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
+        stage = new Stage();
+        selectedCard = new HashSet<Card>();
 
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
@@ -58,6 +70,7 @@ public class PlayScreen implements Screen {
         count = game.font;
 
         backButton = game.backButton;
+
         goButton = game.goButton;
 
         cards = new HashMap();
@@ -74,107 +87,138 @@ public class PlayScreen implements Screen {
 
 //        inputCards = new Deck().getCards();
         int width = Gdx.graphics.getWidth()/inputCards.size();
+        offset = inputCards.size() >= 26 ? 200 : 0;
+
         for (int i = 0; i < inputCards.size(); i++) {
-            inputCards.get(i).loadTexture();
-            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
+            final Card card = inputCards.get(i);
+            card.loadTexture();
+            Texture texture = card.getTexture();
+            final Image img = new Image(texture);
+
+
+            CardInfo cardInfo = new CardInfo(i*width, 0);
+
+            float x = i * width;
+            float y = cardInfo.getY() + offset;
+
+            cardInfo.setXY(x, y - offset);
+
+            if (offset > 0){
+                cardInfo.setBack(true);
+            }
+
+            if (i+1 == 30) {
+                offset = 0;
+                i = 0;
+            }
+
+            img.addListener(new ClickListener(){
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    if (selectedCard.contains(card)){
+                        selectedCard.remove(card);
+                        img.setPosition(img.getX(), img.getY() - 200);
+
+                    }else{
+                        selectedCard.add(card);
+                        img.setPosition(img.getX(), img.getY() + 200);
+                    }
+                }
+            });
+//            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
+
+
+
+            img.setPosition(x, y - offset);
+            stage.addActor(img);
         }
 
         Gdx.app.log("BSGame", currRank);
         Gdx.app.log("BSGame", inputCards.toString());
     }
 
-    @Override
-    public void render(float delta) {
-
-        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+    public void drawInstruction(){
         batch.begin();
         count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1350);
-//        count.draw(batch, "Player: " + name, width - 1000, height - 20);
         batch.end();
-        batch.begin();
-        Iterator iter = cards.entrySet().iterator();
-        int i = 0;
-        int offset = 0;
-        if (cards.entrySet().size() >= 26) offset = 200;
-        int handWidth = width/cards.entrySet().size();
-        if (cards.entrySet().size() >= 26) handWidth = width/26;
-        while (iter.hasNext()) {
-            Map.Entry mapPair = (Map.Entry) iter.next();
-            Card card = (Card) mapPair.getKey();
-            CardInfo cardInfo = (CardInfo) mapPair.getValue();
-            float x = i*handWidth;
-            float y = cardInfo.getY() + offset;
-            cardInfo.setXY(x, y - offset);
-            if (offset > 0) cardInfo.setBack(true);
-            i++;
-            if (i == 30) {
-                offset = 0;
-                i = 0;
-            }
+    }
 
-            batch.draw(card.getTexture(), x, y);
-        }
+    public void drawCards(){
+        batch.begin();
+
+        Gdx.input.setInputProcessor(stage);
+        stage.draw();
         batch.draw(backButton, 10, height - backButton.getHeight());
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 950);
         batch.end();
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        drawInstruction();
+
+
+        drawCards();
 
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
+//            System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
 
-            clickInCard(touchPos);
+//            clickInCard(touchPos);
             clickInBack(touchPos);
             clickInGo(touchPos);
         }
     }
 
-    private int clickInCard(Vector3 touchPos) {
-        Iterator iter = cards.entrySet().iterator();
-        float maxX = -1;
-        CardInfo selected = null;
-        while (iter.hasNext()) {
-            Map.Entry mapPair = (Map.Entry) iter.next();
-            Card card = (Card) mapPair.getKey();
-            CardInfo info = (CardInfo) mapPair.getValue();
-            float x = info.getX();
-            float y = info.getY();
-            if (info.getBack()) {
-                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-                        && (height - touchPos.y) > card.getTexture().getHeight() && (height - touchPos.y) < (card.getTexture().getHeight() + 200)) {
-                    if (info.getX() > maxX) {
-                        maxX = info.getX();
-                        selected = info;
-                    }
-                }
-            }
-            else {
-                if (info.getX() == 0) System.out.println(touchPos.x + " should be between " + info.getX() + " and " + (info.getX() + card.getTexture().getWidth()));
-                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
-                        && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
-                    if (info.getX() > maxX) {
-                        maxX = info.getX();
-                        selected = info;
-                    }
-                }
-            }
-
-        }
-
-        if (selected != null && selected.getY() != 30) {
-            selected.setXY(selected.getX(), 30);
-            numberSelected++;
-            selected.setChosen();
-        }
-        else if (selected != null) {
-            selected.setXY(selected.getX(), 0);
-            numberSelected--;
-            selected.setChosen();
-        }
-        return -1;
-    }
+//    private int clickInCard(Vector3 touchPos) {
+//        Iterator iter = cards.entrySet().iterator();
+//        float maxX = -1;
+//        CardInfo selected = null;
+//        while (iter.hasNext()) {
+//            Map.Entry mapPair = (Map.Entry) iter.next();
+//            Card card = (Card) mapPair.getKey();
+//            CardInfo info = (CardInfo) mapPair.getValue();
+//            float x = info.getX();
+//            float y = info.getY();
+//            if (info.getBack()) {
+//                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
+//                        && (height - touchPos.y) > card.getTexture().getHeight() && (height - touchPos.y) < (card.getTexture().getHeight() + 200)) {
+//                    if (info.getX() > maxX) {
+//                        maxX = info.getX();
+//                        selected = info;
+//                    }
+//                }
+//            }
+//            else {
+//                if (info.getX() == 0) System.out.println(touchPos.x + " should be between " + info.getX() + " and " + (info.getX() + card.getTexture().getWidth()));
+//                if (touchPos.x > info.getX() && touchPos.x < (info.getX() + card.getTexture().getWidth())
+//                        && (height - touchPos.y) > 0 && (height - touchPos.y) < (card.getTexture().getHeight())) {
+//                    if (info.getX() > maxX) {
+//                        maxX = info.getX();
+//                        selected = info;
+//                    }
+//                }
+//            }
+//
+//        }
+//
+//        if (selected != null && selected.getY() != 30) {
+//            selected.setXY(selected.getX(), 30);
+//            numberSelected++;
+//            selected.setChosen();
+//        }
+//        else if (selected != null) {
+//            selected.setXY(selected.getX(), 0);
+//            numberSelected--;
+//            selected.setChosen();
+//        }
+//        return -1;
+//    }
 
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
@@ -186,31 +230,19 @@ public class PlayScreen implements Screen {
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
                 && (height - touchPos.y) > 950 && (height - touchPos.y) < 950 + goButton.getHeight()) {
-            HashMap<Card, CardInfo> copy = (HashMap<Card, CardInfo>) cards.clone();
-            Iterator iter = cards.entrySet().iterator();
-            ArrayList<Card> play = new ArrayList<Card>();
-            while (iter.hasNext()) {
-                Map.Entry mapPair = (Map.Entry) iter.next();
-                Card card = (Card) mapPair.getKey();
-                CardInfo cardInfo = (CardInfo) mapPair.getValue();
-                if (cardInfo.chosen) {
-                    copy.remove(card);
-                    play.add(card);
-                }
-            }
+            ArrayList<Card> play = new ArrayList<Card>(selectedCard);
+
             if (play.isEmpty()) {
                 return;
             }
-
             game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
-            cards = copy;
-            if (copy.isEmpty()) {
+
+            if (cards.size() == selectedCard.size()) {
                 game.setScreen(new MandatoryBSWaitScreen(game));
             }
             else {
                 game.setScreen(new PlayWaitScreen(game, numberSelected, currRank));
             }
-            numberSelected = 0;
         }
     }
 

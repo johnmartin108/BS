@@ -179,4 +179,8 @@ public class Card {
         return result;
     }
 
+    @Override
+    public int hashCode() {
+        return (suit+rank).hashCode();
+    }
 }

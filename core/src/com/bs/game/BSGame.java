@@ -100,32 +100,9 @@ public class BSGame extends Game {
 
 						System.out.println(peerlist);
 						status = "devices are "+peerlist.toString();
-
-						buttons.clear();
-						for (int i = 0; i < peerlist.size(); i ++){
-							final String btnName = (String)peerlist.get(i);
-							TextButton newBtn = new TextButton(btnName, textButtonStyle);
-							newBtn.setPosition(400, 500+100*i);
-							newBtn.addListener(new ClickListener(){
-								@Override
-								public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-									super.touchUp(event, x, y, pointer, button);
-									self.connectTo(btnName);
-								}
-							});
-							buttons.add(newBtn);
-						}
-
 						break;
 
 					case Constants.M_CONNECT_TO_HOST:
-//						boolean isConnected = (Boolean) obj;
-//
-//						if (isConnected){
-//							status = "Connected to host";
-//						}else{
-//							status = "Disconnected to host";
-//						}
 						break;
 
 					case Constants.M_HOST_STATUS:
@@ -139,8 +116,7 @@ public class BSGame extends Game {
 					case Constants.M_CONNECTION_STATUS:
 						isConnected = (Boolean)obj;
 						break;
-					default:
-						break;
+
 
 					case Constants.M_PLAYER_ID:
 						ID = (Integer) obj;
@@ -192,6 +168,9 @@ public class BSGame extends Game {
 					case Constants.M_PLAYER_TURN_START:
 						//same as above, but there should be no option to call BS
 
+						break;
+
+					default:
 						break;
 				}
 

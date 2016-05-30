@@ -165,13 +165,13 @@ public class BSGame extends Game {
 						gameFinished = true;
 						break;
 					case Constants.M_PLAYER_BS_CORRECT:
-						cardPile = new ArrayList<Card>();
-						lastPlay = new ArrayList<Card>();
+						cardPile.clear();
+						lastPlay.clear();
 						rightBSCall = true;
 						break;
 					case Constants.M_PLAYER_BS_INCORRECT:
-						cardPile = new ArrayList<Card>();
-						lastPlay = new ArrayList<Card>();
+						cardPile.clear();
+						lastPlay.clear();
 						wrongBSCall = true;
 						break;
 					case Constants.M_PLAYER_TURN:

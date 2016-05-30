@@ -402,7 +402,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         Deck d = new Deck();
         Card c;
         cardPile = new ArrayList<Card>();
-        targetRank = 0;
+        targetRank = 1;
         player_devices = new HashMap<Integer, SalutDevice>();
 
         while ((c = d.nextCard()) != null) {
@@ -417,7 +417,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
         }
 
-        hands = Card.fromHandsDump(Card.toHandsDump(hands));
+//        hands = Card.fromHandsDump(Card.toHandsDump(hands));
 
         Message m;
         ID = 0;
@@ -464,7 +464,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
         catch (InterruptedException e) {}
 
-//        newTurn();
     }
 
     public void nextTurn() {
@@ -489,7 +488,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
-        bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
         bridge.sendDataToView(Constants.M_LAST_PLAY, last_play);
         bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
     }
@@ -513,6 +511,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         //send same message to host
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
+        bridge.sendDataToView(Constants.M_TARGET_RANK, targetRank);
         bridge.sendDataToView(Constants.M_CARD_PILE, cardPile);
         bridge.sendDataToView(Constants.M_PLAYER_TURN_START, null);
     }
@@ -571,7 +570,13 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             bridge.sendDataToView(Constants.M_PLAYER_BS_CORRECT, null);
         }
 
-        cardPile = new ArrayList<Card>();
+        try {
+            Thread.sleep(200);
+        }
+        catch (InterruptedException e) {}
+
+
+        cardPile.clear();
         newTurn();
     }
 

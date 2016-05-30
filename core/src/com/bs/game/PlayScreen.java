@@ -128,34 +128,46 @@ public class PlayScreen implements Screen {
             });
 //            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
 
-
-
             img.setPosition(x, y - offset);
             stage.addActor(img);
 
-            // lets add card pile here
-            Texture t = new Texture("decks/large/deck_4_large.png");
 
-            for (Card c: game.cardPile){
-                Image image = new Image(t);
+            Image backButtonImage = new Image(backButton);
+            backButtonImage.setPosition(10, height - backButton.getHeight());
+            stage.addActor(backButtonImage);
 
-                // set their position here
+            Image goButtonImage = new Image(goButton);
+            goButtonImage.setPosition(Gdx.graphics.getWidth() / 2 - goButton.getWidth() / 2, 950);
+            stage.addActor(goButtonImage);
 
-            }
 
-            int inc = 0;
-            int ctr = (game.ID + 1 + inc)%game.hands.size();
-            while(ctr != game.ID){
-                ArrayList<Card> hand = game.hands.get(ctr);
+            //add start and back button
 
-                for (Card c: hand){
-                    // draw their hand
 
-                }
 
-                i++;
-                ctr = (game.ID + 1 + inc)%game.hands.size();
-            }
+//            // lets add card pile here
+//            Texture t = new Texture("decks/large/deck_4_large.png");
+//
+//            for (Card c: game.cardPile){
+//                Image image = new Image(t);
+//
+//                // set their position here
+//
+//            }
+//
+//            int inc = 0;
+//            int ctr = (game.ID + 1 + inc)%game.hands.size();
+//            while(ctr != game.ID){
+//                ArrayList<Card> hand = game.hands.get(ctr);
+//
+//                for (Card c: hand){
+//                    // draw their hand
+//
+//                }
+//
+//                i++;
+//                ctr = (game.ID + 1 + inc)%game.hands.size();
+//            }
         }
 
         Gdx.app.log("BSGame", currRank);
@@ -171,10 +183,8 @@ public class PlayScreen implements Screen {
     public void drawCards(){
         batch.begin();
 
-        Gdx.input.setInputProcessor(stage);
         stage.draw();
-        batch.draw(backButton, 10, height - backButton.getHeight());
-        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 950);
+
         batch.end();
     }
 
@@ -182,6 +192,7 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.input.setInputProcessor(stage);
 
         drawInstruction();
 

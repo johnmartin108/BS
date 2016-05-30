@@ -132,45 +132,7 @@ public class PlayScreen implements Screen {
             stage.addActor(img);
 
 
-<<<<<<< Updated upstream
-            Image backButtonImage = new Image(backButton);
-            backButtonImage.setPosition(10, height - backButton.getHeight());
-            stage.addActor(backButtonImage);
 
-            Image goButtonImage = new Image(goButton);
-            goButtonImage.setPosition(Gdx.graphics.getWidth() / 2 - goButton.getWidth() / 2, 950);
-            stage.addActor(goButtonImage);
-
-
-            //add start and back button
-
-
-
-//            // lets add card pile here
-//            Texture t = new Texture("decks/large/deck_4_large.png");
-//
-=======
->>>>>>> Stashed changes
-//            for (Card c: game.cardPile){
-//                Image image = new Image(t);
-//
-//                // set their position here
-//
-//            }
-//
-//            int inc = 0;
-//            int ctr = (game.ID + 1 + inc)%game.hands.size();
-//            while(ctr != game.ID){
-//                ArrayList<Card> hand = game.hands.get(ctr);
-//
-//                for (Card c: hand){
-//                    // draw their hand
-//
-//                }
-//
-//                i++;
-//                ctr = (game.ID + 1 + inc)%game.hands.size();
-//            }
         }
 
         Gdx.app.log("BSGame", currRank);

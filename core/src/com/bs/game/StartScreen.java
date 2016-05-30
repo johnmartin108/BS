@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
@@ -59,7 +60,7 @@ public class StartScreen implements Screen {
             bitFont.draw(game.batch, devName, 450, 900-i*100);
         }
 
-        game.batch.draw(startButton, width / 2 - startButton.getWidth() / 2, 50);
+        if (game.peerlist.size() > 0) game.batch.draw(startButton, width / 2 - startButton.getWidth() / 2, 50);
         game.batch.end();
 
         if (Gdx.input.justTouched()) {
@@ -68,15 +69,19 @@ public class StartScreen implements Screen {
 
             // Start the game
             if (inStartButton(touchPos)) {
-                game.bridge.sendDataToController(Constants.M_START_GAME, true);
+                if (game.peerlist.size() > 0) {
+                    game.bridge.sendDataToController(Constants.M_START_GAME, true);
+                }
             }
         }
     }
 
     private boolean inStartButton(Vector3 touchPos) {
-        if (touchPos.x > (width/2 - startButton.getWidth()/2) && touchPos.x < (width/2 + startButton.getWidth()/2)
-                && touchPos.y > (height - (50 + startButton.getHeight())) && touchPos.y < (height - 50)) {
-            return true;
+        if (game.peerlist.size() > 0) {
+            if (touchPos.x > (width / 2 - startButton.getWidth() / 2) && touchPos.x < (width / 2 + startButton.getWidth() / 2)
+                    && touchPos.y > (height - (50 + startButton.getHeight())) && touchPos.y < (height - 50)) {
+                return true;
+            }
         }
         return false;
     }

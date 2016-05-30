@@ -20,8 +20,6 @@ public class MainMenu implements Screen {
     private Stage stage;
     private Texture mainImage;
     private Texture playButton;
-    private Texture settingsButton;
-//    private TextField name;
     int width;
     int height;
     private Preferences prefs;
@@ -41,12 +39,6 @@ public class MainMenu implements Screen {
         height = Gdx.graphics.getHeight();
         mainImage = new Texture("main.png");
         playButton = new Texture("play.png");
-        settingsButton = new Texture("settings.png");
-//        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-//        skin.addRegions(new TextureAtlas("back.png"));
-//        name = new TextField("Enter your name", skin);
-//        name.setPosition(200, 200);
-//        name.setSize(200, 100);
 
     }
 
@@ -57,8 +49,7 @@ public class MainMenu implements Screen {
 
         game.batch.begin();
         game.batch.draw(mainImage, width / 2 - mainImage.getWidth() / 2, (height - 100 - mainImage.getHeight()));
-        game.batch.draw(playButton, width / 2 - playButton.getWidth() / 2, 300);
-        game.batch.draw(settingsButton, width / 2 - settingsButton.getWidth() / 2, 75);
+        game.batch.draw(playButton, width / 2 - playButton.getWidth() / 2, 250);
         game.batch.end();
 
 
@@ -76,25 +67,13 @@ public class MainMenu implements Screen {
                     dispose();
                 }
             }
-            else if (inSettingsButton(touchPos)) {
-                game.setScreen(new SettingsScreen(game));
-                dispose();
-            }
         }
 
-    }
-
-    private boolean inSettingsButton(Vector3 touchPos) {
-        if (touchPos.x > (width/2 - settingsButton.getWidth()/2) && touchPos.x < (width/2 + settingsButton.getWidth()/2)
-                && touchPos.y > (height - (75 + settingsButton.getHeight())) && touchPos.y < (height - 75)) {
-            return true;
-        }
-        return false;
     }
 
     private boolean inPlayButton(Vector3 touchPos) {
         if (touchPos.x > (width/2 - playButton.getWidth()/2) && touchPos.x < (width/2 + playButton.getWidth()/2)
-                && touchPos.y > (height - (300 + playButton.getHeight())) && touchPos.y < (height - 300)) {
+                && touchPos.y > (height - (250 + playButton.getHeight())) && touchPos.y < (height - 250)) {
             return true;
         }
         return false;

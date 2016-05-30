@@ -74,18 +74,9 @@ public class PlayScreen implements Screen {
         goButton = game.goButton;
 
         cards = new HashMap();
-//        inputCards = new ArrayList();
-//        numberSelected = 0;
-//
-//
-//        inputCards.add(new Card("h", "a"));
-//        inputCards.add(new Card("c", "a"));
-//        inputCards.add(new Card("d", "a"));
-//        inputCards.add(new Card("s", "a"));
-//        inputCards.add(new Card("d", "j"));
-//        inputCards.add(new Card("s", "k"));
+        numberSelected = 0;
 
-//        inputCards = new Deck().getCards();
+        inputCards = new Deck().getCards();
         int width = Gdx.graphics.getWidth()/inputCards.size();
         offset = inputCards.size() >= 26 ? 200 : 0;
 
@@ -145,13 +136,16 @@ public class PlayScreen implements Screen {
         }
 
         // lets add card pile here
-        Texture t = new Texture("decks/large/deck_4_large.png");
+//        Texture t = new Texture("decks/large/deck_4_large.png");
 
+//        System.out.println("BSGame size " + game.cardPile.size());
 //        for (Card c: game.cardPile){
 //            Image image = new Image(t);
+//            System.out.println("HERE");
 //
 //            // set their position here
-//
+//            image.setPosition(30, 500);
+//            stage.addActor(image);
 //        }
 //
 //        int inc = 0;

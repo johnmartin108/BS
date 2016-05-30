@@ -53,6 +53,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     private int curr_player = 0;
     private int prev_player = 0;
     private int targetRank = 0;
+    private boolean gameOver = false;
 
 	private static final String TAG = "BSGAME";
 
@@ -149,6 +150,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                                     }
                                 }
                                 if (add) newHand.add(c);
+                            }
+
+                            if (newHand.isEmpty()) {
+                                gameOver = true;
                             }
 
                             hands.set(curr_player, newHand);
@@ -380,6 +385,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         if (add) newHand.add(c);
                     }
 
+                    if (newHand.isEmpty()) {
+                        gameOver = true;
+                    }
+
                     hands.set(curr_player, newHand);
                     cardPile.addAll(playedCards);
                     last_play = playedCards;
@@ -534,8 +543,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
 
         if (telling_truth) {
-            if (hands.get(prev_player).isEmpty()) {
+            if (gameOver) {
                 endGame();
+                Gdx.app.log("host", "game is over");
                 try {Thread.sleep(200);} catch (InterruptedException e) {}
             }
             hands.get(curr_player).addAll(cardPile);

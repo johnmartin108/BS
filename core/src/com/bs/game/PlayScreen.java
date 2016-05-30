@@ -132,6 +132,7 @@ public class PlayScreen implements Screen {
             stage.addActor(img);
 
 
+<<<<<<< Updated upstream
             Image backButtonImage = new Image(backButton);
             backButtonImage.setPosition(10, height - backButton.getHeight());
             stage.addActor(backButtonImage);
@@ -148,6 +149,8 @@ public class PlayScreen implements Screen {
 //            // lets add card pile here
 //            Texture t = new Texture("decks/large/deck_4_large.png");
 //
+=======
+>>>>>>> Stashed changes
 //            for (Card c: game.cardPile){
 //                Image image = new Image(t);
 //
@@ -272,7 +275,7 @@ public class PlayScreen implements Screen {
             }
             game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
 
-            if (cards.size() == selectedCard.size()) {
+            if (inputCards.size() == numberSelected) {
                 game.setScreen(new MandatoryBSWaitScreen(game));
             }
             else {

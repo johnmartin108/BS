@@ -33,13 +33,6 @@ public class MandatoryBSScreen implements Screen {
         this.numberPlayed = game.lastPlay.size();
     }
 
-    public MandatoryBSScreen(BSGame game, int ID, int numberPlayed, String suitPlayed) {
-        this.game = game;
-        this.ID = ID;
-        this.numberPlayed = numberPlayed;
-        this.suitPlayed = suitPlayed;
-    }
-
     @Override
     public void show() {
 

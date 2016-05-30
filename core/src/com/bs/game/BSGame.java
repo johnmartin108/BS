@@ -155,16 +155,9 @@ public class BSGame extends Game {
 						wrongBSCall = true;
 						break;
 					case Constants.M_PLAYER_TURN:
-						if (ID == curr_player) {
-							//do a turn
-						}
-						else {
-							//display waiting screen
-						}
+						prev_player = curr_player;
 						break;
 					case Constants.M_PLAYER_TURN_START:
-						//same as above, but there should be no option to call BS
-
 						break;
 
 					default:

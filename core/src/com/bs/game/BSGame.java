@@ -78,9 +78,9 @@ public class BSGame extends Game {
 
 		prefs = Gdx.app.getPreferences(Constants.P_PREF_NAME);
 
-//		setScreen(new MainMenu(this));
+		setScreen(new MainMenu(this));
 
-		setScreen(new PlayScreen(this));
+//		setScreen(new PlayScreen(this));
 		textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.font = font;
 

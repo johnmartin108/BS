@@ -57,8 +57,8 @@ public class MandatoryBSScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
-        count.draw(batch, "Their hand is now empty. You must call BS!", 250, 600);
+        count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed +
+                "\nTheir hand is now empty.\nYou must call BS!", 500, 1000);
         batch.end();
         batch.begin();
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);

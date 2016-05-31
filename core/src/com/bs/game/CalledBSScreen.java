@@ -35,11 +35,6 @@ public class CalledBSScreen implements Screen {
         this.ID2 = game.prev_player;
     }
 
-    public CalledBSScreen(BSGame game, int ID1, int ID2) {
-        this.game = game;
-        this.ID1 = ID1;
-        this.ID2 = ID2;
-    }
 
     @Override
     public void show() {

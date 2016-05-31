@@ -4,15 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -48,7 +53,21 @@ public class PlayScreen implements Screen {
     public PlayScreen(BSGame game) {
         this.game = game;
         this.hands = game.hands;
-        this.inputCards = new ArrayList<Card>();
+        this.inputCards = game.hands.get(game.ID);
+        Collections.sort(inputCards, new Comparator<Card>() {
+            @Override
+            public int compare(Card c1, Card c2) {
+                if (c2.valueOf() == c1.valueOf()) {
+                    return 0;
+                }
+                else if (c2.valueOf() < c1.valueOf()) {
+                    return -1;
+                }
+                else {
+                    return 1;
+                }
+            }
+        });
         this.currRank = convertToStringRank(game.targetRank);
     }
 
@@ -74,11 +93,6 @@ public class PlayScreen implements Screen {
 
         cards = new HashMap();
         numberSelected = 0;
-
-        inputCards.clear();
-        for (int i =0 ; i < 55; i ++){
-            inputCards.add(new Card("s", "3"));
-        }
 
         int width = Gdx.graphics.getWidth()/inputCards.size();
 
@@ -123,7 +137,7 @@ public class PlayScreen implements Screen {
             stage.addActor(backButtonImage);
 
             Image goButtonImage = new Image(goButton);
-            goButtonImage.setPosition(Gdx.graphics.getWidth() / 2 - goButton.getWidth() / 2, 950);
+            goButtonImage.setPosition(4*Gdx.graphics.getWidth() / 5 - goButton.getWidth() / 2, 950);
             stage.addActor(goButtonImage);
 
         }
@@ -131,16 +145,14 @@ public class PlayScreen implements Screen {
         // lets add card pile here
         Texture t = new Texture("decks/large/deck_4_large.png");
 
-        ArrayList<Card> cardPile = new ArrayList<Card>();
-        for (int i = 0; i < 45; i++){
-            cardPile.add(new Card("h", "10"));
-        }
 
         Gdx.app.log("BSGAME", "size:: "+game.cardPile.size());
         Image pileImage = new Image(t);
         pileImage.setScale(0.4f);
         pileImage.setPosition(Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2);
         stage.addActor(pileImage);
+        stage.addActor(new CountText(game.cardPile.size(),
+                Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2 + 200));
 //        for (Card c: game.cardPile){
 //            Image image = new Image(t);
 //
@@ -187,11 +199,9 @@ public class PlayScreen implements Screen {
 
             playerPile.setPosition(x, y);
             stage.addActor(playerPile);
+            stage.addActor(new CountText(game.hands.get(ctr).size(), x, y+200));
 
-//            for (Card c: hand){
-//                // draw their hand
-//
-//            }
+
 
             ++incr;
             ctr = incr%4;
@@ -203,7 +213,7 @@ public class PlayScreen implements Screen {
 
     public void drawInstruction(){
         batch.begin();
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 750, 1350);
+        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 1500, 1350);
         batch.end();
     }
 
@@ -366,6 +376,28 @@ public class PlayScreen implements Screen {
                 return "kings";
         }
         return "";
+    }
+
+    public class CountText extends Actor {
+
+        BitmapFont font = game.font;
+        int count;
+        float x;
+        float y;
+
+        public CountText(int count, float x, float y){
+            this.count = count;
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            font.draw(batch, "" + count, x, y);
+            //Also remember that an actor uses local coordinates for drawing within
+            //itself!
+        }
+
     }
 
 }

@@ -147,7 +147,6 @@ public class BSGame extends Game {
 						player_names = (ArrayList<String>) obj;
 						break;
 
-
 					//***** GAME FLOW MESSAGES *****
 					case Constants.M_GAME_START:
 						isGameStarted = true;

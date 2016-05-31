@@ -29,7 +29,7 @@ public class MandatoryBSScreen implements Screen {
     public MandatoryBSScreen(BSGame game) {
         this.game = game;
         this.ID = game.prev_player;
-        this.suitPlayed = game.targetRank + "";
+        this.suitPlayed = Card.convertToStringRank(game.targetRank);
         this.numberPlayed = game.lastPlay.size();
     }
 
@@ -57,11 +57,11 @@ public class MandatoryBSScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed +
+        count.draw(batch, game.player_names.get(ID) + " played " + numberPlayed + " " + suitPlayed +
                 "\nTheir hand is now empty.\nYou must call BS!", 500, 1000);
         batch.end();
         batch.begin();
-        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);
+        batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 225);
         batch.end();
 
         if(Gdx.input.justTouched()) {
@@ -77,7 +77,7 @@ public class MandatoryBSScreen implements Screen {
 
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
-                && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
+                && (height - touchPos.y) > 225 && (height - touchPos.y) < 225 + goButton.getHeight()) {
             game.bridge.sendDataToController(Constants.M_CALL_BS, null);
         }
     }
@@ -149,7 +149,9 @@ public class MandatoryBSScreen implements Screen {
         public void setChosen() {
             this.chosen = !this.chosen;
         }
+
     }
+
 
 }
 

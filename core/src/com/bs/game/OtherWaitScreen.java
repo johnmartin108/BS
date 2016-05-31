@@ -79,7 +79,7 @@ public class OtherWaitScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        count.draw(batch, "Waiting for player " + "to play...", 200, 1100);
+        count.draw(batch, "Waiting for " + game.player_names.get(game.curr_player) + " to play...", 200, 1100);
         batch.end();
 
         if(Gdx.input.justTouched()) {

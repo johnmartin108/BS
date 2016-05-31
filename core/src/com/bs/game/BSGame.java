@@ -43,6 +43,7 @@ public class BSGame extends Game {
 	ArrayList<ArrayList<Card>> hands;
 	ArrayList<Card> cardPile = new ArrayList<Card>();
 	ArrayList<Card> lastPlay = new ArrayList<Card>();
+	int num_players;
 	int curr_player;
 	int prev_player;
 	int ID;
@@ -137,6 +138,9 @@ public class BSGame extends Game {
 						break;
 					case Constants.M_LAST_PLAY:
 						lastPlay = (ArrayList<Card>) obj;
+						break;
+					case Constants.M_NUM_PLAYERS:
+						num_players = (Integer) obj;
 						break;
 
 					//***** GAME FLOW MESSAGES *****

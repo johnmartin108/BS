@@ -103,6 +103,18 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                                 num_players += network.registeredClients.size();
                             }
 
+                            Message nm = new Message();
+                            nm.numPlayers = num_players;
+                            network.sendToAllDevices(nm, new SalutCallback() {
+                                @Override
+                                public void call() {
+
+                                }
+                            });
+
+                            bridge.sendDataToView(Constants.M_NUM_PLAYERS, num_players);
+
+
                             startGame();
                         }
                         break;
@@ -338,6 +350,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                 case Constants.M_GAME_OVER:
                     bridge.sendDataToView(newMessage.eventType, newMessage.PlayerID);
                     break;
+                case Constants.M_NUM_PLAYERS:
+                    bridge.sendDataToView(newMessage.eventType, newMessage.numPlayers);
                 case Constants.M_GAME_START:
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.currentPlayerTurn);

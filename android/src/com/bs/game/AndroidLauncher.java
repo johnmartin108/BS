@@ -231,7 +231,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public void startNetwork(){
         //establish connection
         SalutDataReceiver dataReceiver = new SalutDataReceiver(this, this);
-        SalutServiceData serviceData = new SalutServiceData(Constants.N_SERVICE_NAME, 50488, playerName);
+        SalutServiceData serviceData = new SalutServiceData(Constants.N_SERVICE_NAME, 50487, playerName);
         network = new Salut(dataReceiver, serviceData, new SalutCallback() {
             @Override
             public void call() {
@@ -355,7 +355,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     bridge.sendDataToView(newMessage.eventType, newMessage.numPlayers);
                     break;
                 case Constants.M_GAME_START:
-                    bridge.sendDataToView(newMessage.eventType, newMessage.playerNames);
+                    bridge.sendDataToView(Constants.M_PLAYER_NAMES, newMessage.playerNames);
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.currentPlayerTurn);
                     bridge.sendDataToView(Constants.M_GAME_START, null);

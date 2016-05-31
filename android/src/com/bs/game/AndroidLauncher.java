@@ -45,7 +45,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     public static String hostStatus = "";
 
     private ArrayList<ArrayList<Card>> hands;
-    private Map<Integer, SalutDevice> player_devices;
+    private ArrayList<String> player_names = new ArrayList<String>();
 
     private ArrayList<Card> cardPile;
     private ArrayList<Card> last_play;
@@ -443,7 +443,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         Card c;
         cardPile = new ArrayList<Card>();
         targetRank = 1;
-        player_devices = new HashMap<Integer, SalutDevice>();
+        player_names = new ArrayList<String>();
 
         while ((c = d.nextCard()) != null) {
             if (hands.size() <= ID) {
@@ -461,12 +461,13 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
         Message m;
         ID = 0;
+        player_names.add(playerName);
         bridge.sendDataToView(Constants.M_PLAYER_ID, ID++);
 
         if (network != null) {
             for (SalutDevice device : network.registeredClients) {
                 m = new Message();
-                player_devices.put(ID, device);
+                player_names.add(device.readableName);
                 m.PlayerID = ID++;
                 m.eventType = Constants.M_PLAYER_ID;
                 network.sendToDevice(device, m, new SalutCallback() {

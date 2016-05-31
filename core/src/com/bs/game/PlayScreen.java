@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -154,7 +156,7 @@ public class PlayScreen implements Screen {
         pileImage.setScale(0.4f);
         pileImage.setPosition(Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2);
         stage.addActor(pileImage);
-        stage.addActor(new CountText(game.cardPile.size(),
+        stage.addActor(new TextImg(""+game.cardPile.size(),
                 Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2 + 200));
 //        for (Card c: game.cardPile){
 //            Image image = new Image(t);
@@ -196,7 +198,8 @@ public class PlayScreen implements Screen {
 
             playerPile.setPosition(x, y);
             stage.addActor(playerPile);
-            stage.addActor(new CountText(game.hands.get(ctr).size(), x, y+200));
+            stage.addActor(new TextImg(""+game.hands.get(ctr).size(), x, y+200));
+            stage.addActor(new TextImg(game.player_names.get(ctr), x+200, y+200));
 
 
 
@@ -375,22 +378,22 @@ public class PlayScreen implements Screen {
         return "";
     }
 
-    public class CountText extends Actor {
+    public class TextImg extends Actor {
 
         BitmapFont font = game.font;
-        int count;
+        String text;
         float x;
         float y;
 
-        public CountText(int count, float x, float y){
-            this.count = count;
+        public TextImg(String text, float x, float y){
+            this.text = text;
             this.x = x;
             this.y = y;
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            font.draw(batch, "" + count, x, y);
+            font.draw(batch, text, x, y);
             //Also remember that an actor uses local coordinates for drawing within
             //itself!
         }

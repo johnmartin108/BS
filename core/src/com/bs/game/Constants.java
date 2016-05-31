@@ -42,6 +42,7 @@ public class Constants {
     public static final int M_PLAYER_ID = 35;
     public static final int M_LAST_PLAY = 36;
     public static final int M_NUM_PLAYERS = 37;
+    public static final int M_PLAYER_NAMES = 38;
 
 
 

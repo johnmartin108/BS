@@ -5,6 +5,8 @@ CS 65/165 16S Project
 Thank you for using our app! Our goal is for you to have a fun game experience uninhibited by connection issues. To ensure this, we ask that you take note of the following:
 * Players must be on the same wifi access point in order to discover each other. If you are having trouble connecting to a host, try moving closer to them, disabling/re-enabling wifi, or moving to a less crowded area.
 * The app may require restarting a couple times (on all devices) to establish a connection
+* If the app becomes unresponsive (not necessarily frozen - it may be that every device is waiting for another person to play), your network has failed and all players have disconnected.
+* Our app currently can accommodate 2-4 players.
 
 ## The rules
 If you are familiar with the game BS, only the following are different:

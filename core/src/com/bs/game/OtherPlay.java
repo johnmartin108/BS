@@ -33,15 +33,8 @@ public class OtherPlay implements Screen {
     public OtherPlay(BSGame game) {
         this.game = game;
         this.ID = game.prev_player;
-        this.suitPlayed = game.targetRank + "";
+        this.suitPlayed = Card.convertToStringRank(game.targetRank);
         this.numberPlayed = game.lastPlay.size();
-    }
-
-    public OtherPlay(BSGame game, int ID, int numberPlayed, String suitPlayed) {
-        this.game = game;
-        this.ID = ID;
-        this.numberPlayed = numberPlayed;
-        this.suitPlayed = suitPlayed;
     }
 
     @Override
@@ -75,7 +68,7 @@ public class OtherPlay implements Screen {
 
 
         batch.begin();
-        count.draw(batch, "Player " + ID + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
+        count.draw(batch, game.player_names.get(game.curr_player) + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
         count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 600);
         batch.end();
         batch.begin();

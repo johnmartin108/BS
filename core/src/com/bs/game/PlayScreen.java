@@ -139,10 +139,36 @@ public class PlayScreen implements Screen {
             //add start and back button
             Image backButtonImage = new Image(backButton);
             backButtonImage.setPosition(10, height - backButton.getHeight());
+            backButtonImage.addListener(new ClickListener(){
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    game.setScreen(new MainMenu(game));
+                }
+            });
             stage.addActor(backButtonImage);
 
             Image goButtonImage = new Image(goButton);
             goButtonImage.setPosition(4*Gdx.graphics.getWidth() / 5 - goButton.getWidth() / 2, 950);
+            goButtonImage.addListener(new ClickListener(){
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    ArrayList<Card> play = new ArrayList<Card>(selectedCard);
+
+                    if (play.isEmpty()) {
+                        return;
+                    }
+                    game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
+
+                    if (inputCards.size() == selectedCard.size()) {
+                        game.setScreen(new MandatoryBSWaitScreen(game));
+                    }
+                    else {
+                        game.setScreen(new PlayWaitScreen(game, selectedCard.size(), currRank));
+                    }
+                }
+            });
             stage.addActor(goButtonImage);
 
         }
@@ -158,13 +184,6 @@ public class PlayScreen implements Screen {
         stage.addActor(pileImage);
         stage.addActor(new TextImg(""+game.cardPile.size(),
                 Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2 + 200));
-//        for (Card c: game.cardPile){
-//            Image image = new Image(t);
-//
-//            // set their position here
-//            image.setPosition(30, 500);
-//            stage.addActor(image);
-//        }
 
         int me = game.ID;
         int incr = game.ID + 1;
@@ -232,48 +251,8 @@ public class PlayScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         drawInstruction();
-
-
         drawCards();
-
-        if(Gdx.input.justTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-//            System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
-
-//            clickInCard(touchPos);
-            clickInBack(touchPos);
-            clickInGo(touchPos);
-        }
     }
-
-    private void clickInBack(Vector3 touchPos) {
-        if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
-                && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {
-            game.setScreen(new MainMenu(game));
-        }
-    }
-
-    private void clickInGo(Vector3 touchPos) {
-        if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
-                && (height - touchPos.y) > 950 && (height - touchPos.y) < 950 + goButton.getHeight()) {
-            ArrayList<Card> play = new ArrayList<Card>(selectedCard);
-
-            if (play.isEmpty()) {
-                return;
-            }
-            game.bridge.sendDataToController(Constants.M_PLAY_CARDS, play);
-
-            if (inputCards.size() == selectedCard.size()) {
-                game.setScreen(new MandatoryBSWaitScreen(game));
-            }
-            else {
-                game.setScreen(new PlayWaitScreen(game, selectedCard.size(), currRank));
-            }
-        }
-    }
-
-
 
     @Override
     public void resize(int width, int height) {

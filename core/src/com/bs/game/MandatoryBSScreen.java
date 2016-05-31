@@ -58,7 +58,7 @@ public class MandatoryBSScreen implements Screen {
 
         batch.begin();
         count.draw(batch, game.player_names.get(ID) + " played " + numberPlayed + " " + suitPlayed +
-                "\nTheir hand is now empty.\nYou must call BS!", 500, 1000);
+                "\nTheir hand is now empty.\nYou must call BS!", 400, 1000);
         batch.end();
         batch.begin();
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 225);

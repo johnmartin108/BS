@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 import org.w3c.dom.Text;
 
@@ -179,7 +180,7 @@ public class PlayScreen implements Screen {
 
         Gdx.app.log("BSGAME", "size:: "+game.cardPile.size());
         Image pileImage = new Image(t);
-        pileImage.setScale(0.4f);
+        pileImage.setScale(0.5f);
         pileImage.setPosition(Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2);
         stage.addActor(pileImage);
         stage.addActor(new TextImg(""+game.cardPile.size(),
@@ -238,7 +239,7 @@ public class PlayScreen implements Screen {
 
     public void drawInstruction(){
         batch.begin();
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 1500, 1350);
+        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 1500, 1350, 100, Align.right, false);
         batch.end();
     }
 

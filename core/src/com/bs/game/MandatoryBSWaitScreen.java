@@ -58,7 +58,8 @@ public class MandatoryBSWaitScreen implements Screen {
         batch.begin();
         if (game.prev_player == game.ID) {
             count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nYou are out of cards. " +
-                    "\nWaiting for " + game.player_names.get(game.curr_player) + " to call BS!", 250, 1100);
+                    "\nWaiting for " + game.player_names.get(game.curr_player) + "" +
+                    "\nto call BS!", 250, 1100);
         }
         else {
             count.draw(batch, game.player_names.get(game.prev_player) + " played " + numberPlayed + " " + suitPlayed

@@ -78,12 +78,12 @@ public class CalledBSScreen implements Screen {
 
         batch.begin();
         if (game.rightBSCall) {
-            count.draw(batch, game.player_names.get(ID1) + " called BS on " + game.player_names.get(ID2)
-                    + "\nThey were right!\n" + game.player_names.get(ID2) + " collected the pile.", 500, 1000);
+            count.draw(batch, game.player_names.get(ID1) + " called BS on\n" + game.player_names.get(ID2)
+                    + "\nThey were right!\n" + game.player_names.get(ID2) + " collected the pile.", 250, 1000);
         }
         else if (game.wrongBSCall) {
             count.draw(batch, game.player_names.get(ID1) + " called BS on " + game.player_names.get(ID2)
-                    + "\nThey were wrong!\n" + game.player_names.get(ID1) + " collected the pile.", 500, 1000);
+                    + "\nThey were wrong!\n" + game.player_names.get(ID1) + " collected the pile.", 250, 1000);
         }
         batch.end();
 

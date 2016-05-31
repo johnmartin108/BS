@@ -46,7 +46,7 @@ public class WaitScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        bitFont.draw(game.batch, "Waiting for Host to Start", 500, 1300);
+        bitFont.draw(game.batch, "Waiting for Host to Start", 400, 1300);
         game.batch.draw(backButton, 10, height - backButton.getHeight());
         game.batch.end();
 

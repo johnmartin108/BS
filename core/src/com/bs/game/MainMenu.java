@@ -83,9 +83,9 @@ public class MainMenu implements Screen {
 
         @Override
         public void input(String text) {
-            if (text.equals("")) {
+            if (text.equals("") || (text.length() > 12)) {
                 NameListener nameListener = new NameListener();
-                Gdx.input.getTextInput(nameListener, "Name can't be blank. Try again!", "", "");
+                Gdx.input.getTextInput(nameListener, "Name can't be blank or more than 12 characters. Try again!", "", "");
             }
             else {
                 game.bridge.sendDataToController(Constants.M_SET_NAME, text);

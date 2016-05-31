@@ -68,7 +68,7 @@ public class OtherPlay implements Screen {
 
 
         batch.begin();
-        count.draw(batch, game.player_names.get(game.curr_player) + " played " + numberPlayed + " " + suitPlayed, 500, 1000);
+        count.draw(batch, game.player_names.get(game.curr_player) + " played " + numberPlayed + " " + suitPlayed, 400, 1000);
         count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 600);
         batch.end();
         batch.begin();

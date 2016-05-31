@@ -52,7 +52,7 @@ public class StartScreen implements Screen {
 
         game.batch.begin();
 
-        bitFont.draw(game.batch, "List of Players in game", 350, 1350);
+        bitFont.draw(game.batch, "List of Players Joined", 350, 1350);
         bitFont.draw(game.batch, "Press Start when ready", 350, 1200);
         bitFont.draw(game.batch, "Host Status: "+game.hostStatus.toLowerCase(), 350, 1050);
         for (int i = 0; i < game.peerlist.size(); i ++){

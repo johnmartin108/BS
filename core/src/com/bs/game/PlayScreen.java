@@ -192,24 +192,30 @@ public class PlayScreen implements Screen {
             Image playerPile = new Image(t);
             playerPile.setScale(0.4f);
 
-            float x = 0, y = 0;
+            float x = 0, y = 0, textx = 0, texty = 0;
 
             switch (incr-me){
                 case 1:
                     //next player
                     y = Gdx.graphics.getHeight()/2-0.4f*playerPile.getHeight()/2;
+                    texty = y + 200;
+                    textx = x + 200;
                     break;
 
                 case 2:
                     //next next player
                     x = Gdx.graphics.getWidth()/2-0.4f*playerPile.getWidth()/2;
                     y = Gdx.graphics.getHeight() - 0.4f*playerPile.getHeight();
+                    textx = x - 200;
+                    texty = y - 200;
 
                     break;
                 case 3:
                     //next next nexy player
                     x = Gdx.graphics.getWidth() - 0.4f*playerPile.getWidth();
                     y = Gdx.graphics.getHeight()/2 - 0.4f*playerPile.getHeight()/2;
+                    texty = y + 200;
+                    textx = x - 1000;
                     break;
 
             }
@@ -218,7 +224,7 @@ public class PlayScreen implements Screen {
             playerPile.setPosition(x, y);
             stage.addActor(playerPile);
             stage.addActor(new TextImg(""+game.hands.get(ctr).size(), x, y+200));
-            stage.addActor(new TextImg(game.player_names.get(ctr), x+200, y+200));
+            stage.addActor(new TextImg(game.player_names.get(ctr), textx, texty));
 
 
 

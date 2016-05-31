@@ -34,6 +34,7 @@ public class PlayScreen implements Screen {
     ArrayList<Card> inputCards;
     ArrayList<ArrayList<Card>> hands;
     HashMap<Card, CardInfo> cards;
+    int num_players;
 
     
     private int numberSelected;
@@ -54,6 +55,8 @@ public class PlayScreen implements Screen {
         this.game = game;
         this.hands = game.hands;
         this.inputCards = game.hands.get(game.ID);
+        this.num_players = game.num_players;
+
         Collections.sort(inputCards, new Comparator<Card>() {
             @Override
             public int compare(Card c1, Card c2) {
@@ -163,14 +166,8 @@ public class PlayScreen implements Screen {
 
         int me = game.ID;
         int incr = game.ID + 1;
-        int ctr = incr%4;
-        while(ctr != game.ID){
-            ArrayList<Card> hand = new ArrayList<Card>();
-            for (int i = 0; i < 45; i++){
-                hand.add(new Card("h", "10"));
-            }
-
-
+        int ctr = incr%num_players;
+        while(ctr != game.ID) {
             Image playerPile = new Image(t);
             playerPile.setScale(0.4f);
 
@@ -204,7 +201,7 @@ public class PlayScreen implements Screen {
 
 
             ++incr;
-            ctr = incr%4;
+            ctr = incr%num_players;
         }
         
         Gdx.app.log("BSGame", currRank);

@@ -71,7 +71,8 @@ public class JHScreen implements Screen{
                 dispose();
             }
             else if(inHostButton(touchPos)){
-                game.setScreen(new HostScreen(game));
+                game.bridge.sendDataToController(Constants.M_BECOME_HOST, null);
+                game.setScreen(new StartScreen(game));
                 dispose();
             }
         }
@@ -124,7 +125,5 @@ public class JHScreen implements Screen{
 
     @Override
     public void dispose() {
-        joinBtn.dispose();
-        hostBtn.dispose();
     }
 }

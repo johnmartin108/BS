@@ -93,14 +93,13 @@ public class PlayScreen implements Screen {
 
             cardInfo.setXY(x, y - offset);
 
-            if (offset > 0){
-                cardInfo.setBack(true);
-            }
-
-            if (i+1 == 30) {
-                offset = 0;
-                i = 0;
-            }
+//            if (offset > 0){
+//                cardInfo.setBack(true);
+//            }
+//
+//            if (i+1 == 30) {
+//                offset = 0;
+//            }
 
             img.addListener(new ClickListener(){
                 @Override

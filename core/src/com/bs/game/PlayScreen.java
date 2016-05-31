@@ -40,7 +40,6 @@ public class PlayScreen implements Screen {
     private Texture goButton;
     private int width;
     private int height;
-    private int offset;
 
     private Set<Card> selectedCard;
 
@@ -49,7 +48,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(BSGame game) {
         this.game = game;
         this.hands = game.hands;
-        this.inputCards = game.hands.get(game.ID);
+        this.inputCards = new ArrayList<Card>();
         this.currRank = convertToStringRank(game.targetRank);
     }
 
@@ -76,30 +75,26 @@ public class PlayScreen implements Screen {
         cards = new HashMap();
         numberSelected = 0;
 
+        inputCards.clear();
+        for (int i =0 ; i < 55; i ++){
+            inputCards.add(new Card("s", "3"));
+        }
+
         int width = Gdx.graphics.getWidth()/inputCards.size();
-        offset = inputCards.size() >= 26 ? 200 : 0;
 
         for (int i = 0; i < inputCards.size(); i++) {
             final Card card = inputCards.get(i);
             card.loadTexture();
             Texture texture = card.getTexture();
             final Image img = new Image(texture);
-            img.setScale(0.5f);
+            img.setScale(0.4f);
 
             CardInfo cardInfo = new CardInfo(i*width, 0);
 
             float x = i * width;
-            float y = cardInfo.getY() + offset;
+            float y = 0;
 
-            cardInfo.setXY(x, y - offset);
-
-//            if (offset > 0){
-//                cardInfo.setBack(true);
-//            }
-//
-//            if (i+1 == 30) {
-//                offset = 0;
-//            }
+            cardInfo.setXY(x, y );
 
             img.addListener(new ClickListener(){
                 @Override
@@ -108,18 +103,18 @@ public class PlayScreen implements Screen {
                     if (selectedCard.contains(card)){
                         numberSelected--;
                         selectedCard.remove(card);
-                        img.setPosition(img.getX(), img.getY() - 200);
+                        img.setPosition(img.getX(), img.getY() - 100);
 
                     }else{
                         numberSelected++;
                         selectedCard.add(card);
-                        img.setPosition(img.getX(), img.getY() + 200);
+                        img.setPosition(img.getX(), img.getY() + 100);
                     }
                 }
             });
 //            cards.put(inputCards.get(i), new CardInfo(i*width, 0));
 
-            img.setPosition(x, y - offset);
+            img.setPosition(x, y);
             stage.addActor(img);
 
             //add start and back button
@@ -134,30 +129,73 @@ public class PlayScreen implements Screen {
         }
 
         // lets add card pile here
-//        Texture t = new Texture("decks/large/deck_4_large.png");
+        Texture t = new Texture("decks/large/deck_4_large.png");
 
-//        System.out.println("BSGame size " + game.cardPile.size());
+        ArrayList<Card> cardPile = new ArrayList<Card>();
+        for (int i = 0; i < 45; i++){
+            cardPile.add(new Card("h", "10"));
+        }
+
+        Gdx.app.log("BSGAME", "size:: "+game.cardPile.size());
+        Image pileImage = new Image(t);
+        pileImage.setScale(0.4f);
+        pileImage.setPosition(Gdx.graphics.getWidth()/2-0.4f*pileImage.getWidth()/2, Gdx.graphics.getHeight()/2-0.4f*pileImage.getHeight()/2);
+        stage.addActor(pileImage);
 //        for (Card c: game.cardPile){
 //            Image image = new Image(t);
-//            System.out.println("HERE");
 //
 //            // set their position here
 //            image.setPosition(30, 500);
 //            stage.addActor(image);
 //        }
-//
-//        int inc = 0;
-//        int ctr = (game.ID + 1 + inc)%game.hands.size();
-//        while(ctr != game.ID){
-//            ArrayList<Card> hand = game.hands.get(ctr);
-//
+
+        int me = game.ID;
+        int incr = game.ID + 1;
+        int ctr = incr%4;
+        while(ctr != game.ID){
+            ArrayList<Card> hand = new ArrayList<Card>();
+            for (int i = 0; i < 45; i++){
+                hand.add(new Card("h", "10"));
+            }
+
+
+            Image playerPile = new Image(t);
+            playerPile.setScale(0.4f);
+
+            float x = 0, y = 0;
+
+            switch (incr-me){
+                case 1:
+                    //next player
+                    y = Gdx.graphics.getHeight()/2-0.4f*playerPile.getHeight()/2;
+                    break;
+
+                case 2:
+                    //next next player
+                    x = Gdx.graphics.getWidth()/2-0.4f*playerPile.getWidth()/2;
+                    y = Gdx.graphics.getHeight() - 0.4f*playerPile.getHeight();
+
+                    break;
+                case 3:
+                    //next next nexy player
+                    x = Gdx.graphics.getWidth() - 0.4f*playerPile.getWidth();
+                    y = Gdx.graphics.getHeight()/2 - 0.4f*playerPile.getHeight()/2;
+                    break;
+
+            }
+            Gdx.app.log("BSGAME", incr-me+" :: "+x+" "+y+" "+playerPile.getHeight());
+
+            playerPile.setPosition(x, y);
+            stage.addActor(playerPile);
+
 //            for (Card c: hand){
 //                // draw their hand
 //
 //            }
-//
-//            ctr = (game.ID + 1 + inc)%game.hands.size();
-//        }
+
+            ++incr;
+            ctr = incr%4;
+        }
         
         Gdx.app.log("BSGame", currRank);
         Gdx.app.log("BSGame", inputCards.toString());

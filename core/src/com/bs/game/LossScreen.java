@@ -30,6 +30,7 @@ public class LossScreen implements Screen {
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
         bitFont = game.font;
+        Gdx.input.vibrate(86400000);
     }
 
     @Override

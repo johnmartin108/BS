@@ -208,7 +208,7 @@ public class PlayScreen implements Screen {
                     x = Gdx.graphics.getWidth()/2-0.4f*playerPile.getWidth()/2;
                     y = Gdx.graphics.getHeight() - 0.4f*playerPile.getHeight();
                     textx = x - 200;
-                    texty = y - 200;
+                    texty = y;
 
                     break;
                 case 3:
@@ -239,7 +239,7 @@ public class PlayScreen implements Screen {
 
     public void drawInstruction(){
         batch.begin();
-        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 1500, 1350, 100, Align.right, false);
+        count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 2000, 1350, 100, Align.right, false);
         batch.end();
     }
 

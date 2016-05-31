@@ -53,4 +53,7 @@ public class Message {
 
     @JsonField
     public ArrayList<ArrayList<String>> playedCards;
+
+    @JsonField
+    public ArrayList<String> playerNames;
 }

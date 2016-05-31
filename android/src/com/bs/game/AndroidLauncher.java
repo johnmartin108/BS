@@ -104,6 +104,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             }
 
                             Message nm = new Message();
+                            nm.eventType = Constants.M_NUM_PLAYERS;
                             nm.numPlayers = num_players;
                             network.sendToAllDevices(nm, new SalutCallback() {
                                 @Override
@@ -352,7 +353,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     break;
                 case Constants.M_NUM_PLAYERS:
                     bridge.sendDataToView(newMessage.eventType, newMessage.numPlayers);
+                    break;
                 case Constants.M_GAME_START:
+                    bridge.sendDataToView(newMessage.eventType, newMessage.playerNames);
                     bridge.sendDataToView(Constants.M_HANDS, Card.fromHandsDump(newMessage.cardsInHands));
                     bridge.sendDataToView(Constants.M_CURRENT_PLAYER, newMessage.currentPlayerTurn);
                     bridge.sendDataToView(Constants.M_GAME_START, null);
@@ -484,6 +487,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             m.eventType = Constants.M_GAME_START;
             m.cardsInHands = Card.toHandsDump(hands);
             m.currentPlayerTurn = curr_player;
+            m.playerNames = player_names;
             network.sendToAllDevices(m, new SalutCallback() {
                 @Override
                 public void call() {
@@ -492,6 +496,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
             });
         }
 
+        bridge.sendDataToView(Constants.M_PLAYER_NAMES, player_names);
         bridge.sendDataToView(Constants.M_HANDS, hands);
         bridge.sendDataToView(Constants.M_CURRENT_PLAYER, curr_player);
         bridge.sendDataToView(Constants.M_GAME_START, null);

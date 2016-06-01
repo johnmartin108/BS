@@ -6,12 +6,12 @@ import java.util.Collections;
 
 /**
  * Created by johnmartin on 5/19/16.
+ * Deck class to handle creation and ordering of cards.
  */
 public class Deck {
     private ArrayList<Card> cards;
 
-//    private final String[] suits = new String[]{"Spades", "Clubs", "Hearts", "Diamonds"};
-
+    //four suits, 13 ranks
     public Deck() {
         this.cards = new ArrayList<Card>();
         for (int i = 0; i < 4; i++) {
@@ -27,6 +27,7 @@ public class Deck {
         Collections.shuffle(this.cards);
     }
 
+    //remove the "top" card of the deck
     public Card nextCard() {
         if (cards.isEmpty()) {
             return null;

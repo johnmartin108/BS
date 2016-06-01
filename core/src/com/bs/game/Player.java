@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Created by johnmartin on 5/20/16.
+ * Unused class. Only here to impose structure on Bot class.
  */
 public class Player {
     private ArrayList<Card> hand;

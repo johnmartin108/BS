@@ -44,6 +44,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     List peerlist = new ArrayList<String>();
     public static String hostStatus = "";
 
+    //game state variables
     private ArrayList<ArrayList<Card>> hands;
     private ArrayList<String> player_names = new ArrayList<String>();
 
@@ -64,6 +65,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
+	//handling incoming messages
 		bridge = new CommunicationBridge();
         initialize(new BSGame(bridge), config);
 
@@ -71,10 +73,10 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 			@Override
 			public void onReceivedData(int name, Object obj) {
 				super.onReceivedData(name, obj);
-                Message m;
+                		Message m;
 				switch (name){
 
-
+		    //communications setup messages
                     case Constants.M_SET_NAME:
                         playerName = (String)obj;
                         break;
@@ -95,14 +97,16 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         startHost();
                         break;
 
-                    //only will receive these messages if isHost
+                    //Game flow
                     case (Constants.M_START_GAME):
+                    	//start the game if you're host
                         if (isHost) {
                             num_players = 1;
                             if (network != null) {
                                 num_players += network.registeredClients.size();
                             }
 
+		 	    //every device needs to know the number of players
                             Message nm = new Message();
                             nm.eventType = Constants.M_NUM_PLAYERS;
                             nm.numPlayers = num_players;
@@ -119,7 +123,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             startGame();
                         }
                         break;
+                        
+                    //handling BS calls
                     case (Constants.M_CALL_BS):
+                    	
+                    	//if you're not the host, just relay the information to the host
                         if (!isHost) {
                             m = new Message();
                             m.eventType = Constants.M_CALL_BS;
@@ -136,10 +144,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                             break;
                         }
 
-
+		    //handle requests to play cards
                     case Constants.M_PLAY_CARDS:
                         ArrayList<Card> playedCards = (ArrayList<Card>) obj;
-
+			
+			//if you're not the host, just request the move
                         if (!isHost) {
                             m = new Message();
                             m.eventType = Constants.M_PLAY_CARDS;
@@ -151,7 +160,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                                 }
                             });
                         }
+                        
+                        //on the host side, compute the new hands, and send a message
+                        //to other devices updating them accordingly
                         else {
+                            //compute remaining cards
                             ArrayList<Card> newHand = new ArrayList<Card>();
                             boolean add;
                             for (Card c: hands.get(curr_player)) {
@@ -164,9 +177,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                                 }
                                 if (add) newHand.add(c);
                             }
-
-                            Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
-                            Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
+                            
+			    //new game state is triggered by an empty hand
                             if (newHand.isEmpty()) {
                                 emptyHand = true;
                             }
@@ -184,7 +196,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 			}
 		};
     }
-
+    
+    //network setup
     public void startHost(){
         isHost = true;
         wifiManager.setWifiEnabled(false);
@@ -228,6 +241,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         return randomStringBuilder.toString();
     }
 
+    //more network setup - just uses Salut callbacks
     public void startNetwork(){
         //establish connection
         SalutDataReceiver dataReceiver = new SalutDataReceiver(this, this);
@@ -334,6 +348,9 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
     }
 
+	//handle incoming messages - non-host side
+	//this is when the device receives a message from another device
+	//the message handling above is for when the device receives a message from another process on the same device
 	@Override
 	public void onDataReceived(Object data) {
         Log.d(TAG, "Received network data.");
@@ -390,6 +407,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
                 //***** HOST OPERATIONS *****
                 case (Constants.M_PLAY_CARDS):
+                    
+                    //handling card plays is the same as it was above for the host case
                     ArrayList<Card> playedCards = Card.fromCardsDump(newMessage.playedCards);
                     ArrayList<Card> newHand = new ArrayList<Card>();
 
@@ -405,8 +424,6 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                         if (add) newHand.add(c);
                     }
 
-                    Gdx.app.log("newHand", newHand.toString() + " " + curr_player);
-                    Gdx.app.log("playedCards", playedCards.toString() + " " + curr_player);
                     if (newHand.isEmpty()) {
                         emptyHand = true;
                     }
@@ -427,18 +444,14 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
                     break;
 
             }
-//            Log.d(TAG, newMessage.message);  //See you on the other side!
-            //Do other stuff with data.
-
-//            CharSequence chars = newMessage.message;
-  //          Toast.makeText(this.getBaseContext(), chars, Toast.LENGTH_LONG).show();
         }
         catch (IOException ex)
         {
             Log.e(TAG, "Failed to parse network data.");
         }
-	}
+    }
 
+    //helper function to handle start-of-game operations
     public void startGame() {
         int ID = 0;
         hands = new ArrayList<ArrayList<Card>>();
@@ -448,25 +461,31 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         targetRank = 1;
         player_names = new ArrayList<String>();
 
+	//deal the cards
         while ((c = d.nextCard()) != null) {
             if (hands.size() <= ID) {
                 hands.add(new ArrayList<Card>());
             }
+            
+            //whoever gets the ace of spades takes the first turn
             if (c.valueOf() == 1 && c.suitOf().equals("s")) {
                 curr_player = ID;
             }
+            
+            //this is obvi unnecessarily complicated - just testing serialization
             hands.get(ID).add(new Card(c.toSerializable()));
             ID = (ID + 1) % num_players;
 
         }
 
-//        hands = Card.fromHandsDump(Card.toHandsDump(hands));
 
         Message m;
         ID = 0;
         player_names.add(playerName);
         bridge.sendDataToView(Constants.M_PLAYER_ID, ID++);
 
+	//send every player a unique ID - this is how the game knows whose turn it is
+	//and who played last
         if (network != null) {
             for (SalutDevice device : network.registeredClients) {
                 m = new Message();
@@ -483,6 +502,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
             try {Thread.sleep(500);} catch (InterruptedException e) {}
 
+	    //tell everyone the start state of the game - hands, who goes first, etc.
             m = new Message();
             m.eventType = Constants.M_GAME_START;
             m.cardsInHands = Card.toHandsDump(hands);
@@ -508,8 +528,11 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
 
     }
 
+    //move on to the next player (if BS wasn't called on the last play)
     public void nextTurn() {
         if (network != null) {
+        	
+            //update game state and communicate changes
             Message m = new Message();
             m.eventType = Constants.M_PLAYER_TURN;
             prev_player = curr_player;
@@ -536,6 +559,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         bridge.sendDataToView(Constants.M_PLAYER_TURN, null);
     }
 
+    //start a new turn (if BS was called last time)
     public void newTurn() {
         if (network != null) {
             Message m = new Message();
@@ -562,6 +586,8 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
     }
 
     public void handleBSCall() {
+    	
+    	//was the BS call correct?
         boolean telling_truth = true;
         for (Card c: last_play) {
             if (c.valueOf() != targetRank) {
@@ -570,10 +596,14 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
 
         if (telling_truth) {
+            //if a player truthfully played their last card, the game is over
             if (emptyHand) {
                 endGame();
+                //wait for UI to catch up
                 try {Thread.sleep(200);} catch (InterruptedException e) {}
             }
+            
+            //update the players on the result of the BS call
             hands.get(curr_player).addAll(cardPile);
             Message m = new Message();
             m.eventType = Constants.M_PLAYER_BS_INCORRECT;
@@ -594,6 +624,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
 
         else {
+            //same process for correct BS calls - the cards just go to the previous player and not the current one
             emptyHand = false;
             hands.get(prev_player).addAll(cardPile);
             Message m = new Message();
@@ -627,6 +658,7 @@ public class AndroidLauncher extends AndroidApplication implements SalutDataCall
         }
     }
 
+    //protocol for finishing the game
     public void endGame() {
         if (network != null) {
             Message m = new Message();

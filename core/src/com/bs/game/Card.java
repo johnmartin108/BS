@@ -20,7 +20,7 @@ public class Card {
         this.img = new Texture(path);
     }
 
-    //rank, suit
+    //deserialization constructor - see below
     public Card(ArrayList<String> vals) {
         this.rank = vals.get(0);
         this.suit = vals.get(1);
@@ -28,16 +28,18 @@ public class Card {
         this.img = new Texture(path);
     }
 
+    //get the image asset that should be associated with the card
     public void loadTexture() {
         String path = "cards/" + getPath(this.suit, this.rank) + ".png";
         this.img = new Texture(path);
     }
 
+    //helper for debugging
     public String toString() {
         return this.suit + " " + this.rank;
     }
 
-    //for comparing cards
+    //for checking card values
     public int valueOf() {
        String s = this.rank;
         if (s.equals("a")) {
@@ -98,6 +100,7 @@ public class Card {
         }
     }
 
+    //get the path to the image asset corresponding to the card
     public static String getPath(String suit, String rank) {
         String fullSuit = "";
         String fullRank = "" + rank;
@@ -133,7 +136,8 @@ public class Card {
     public Texture getTexture() {
         return this.img;
     }
-
+    
+    //serialize a card so it can be sent in JSON form
     public ArrayList<String> toSerializable() {
         ArrayList<String> result = new ArrayList<String>();
         result.add(this.rank);
@@ -141,6 +145,7 @@ public class Card {
         return result;
     }
 
+    //helpers for serializing/deserializing lists of cards or the hands variable (i.e. list of list of cards)
     public static ArrayList<ArrayList<ArrayList<String>>> toHandsDump(ArrayList<ArrayList<Card>> e) {
         ArrayList<ArrayList<ArrayList<String>>> result = new ArrayList<ArrayList<ArrayList<String>>>();
         for (int i = 0; i < e.size(); i++) {
@@ -184,6 +189,7 @@ public class Card {
         return (suit+rank).hashCode();
     }
 
+    //UI helper - word form of card value
     public static String convertToStringRank(int rank) {
         switch(rank) {
             case 1:

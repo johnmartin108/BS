@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class OtherPlay implements Screen {
 
+    //game state vars
     SpriteBatch batch;
     private int numberPlayed;
     private String suitPlayed;
@@ -30,6 +31,7 @@ public class OtherPlay implements Screen {
     private int ID;
     private float elapsed = 0;
 
+    //construct screen
     public OtherPlay(BSGame game) {
         this.game = game;
         this.ID = game.prev_player;
@@ -40,6 +42,7 @@ public class OtherPlay implements Screen {
     @Override
     public void show() {
 
+        //set game vars
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
@@ -53,20 +56,22 @@ public class OtherPlay implements Screen {
 
     @Override
     public void render(float delta) {
+        //set screen based on game state
         if (game.wrongBSCall || game.rightBSCall) {
             game.setScreen(new CalledBSScreen(game));
         }
 
+        //track elapsed time
         elapsed += delta;
         if (elapsed > 7.0) {
             game.setScreen(new PlayScreen(game));
         }
 
+        //set color and clear screen
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
+        //draw to screen
         batch.begin();
         count.draw(batch, game.player_names.get(game.prev_player) + " played " + numberPlayed + " " + suitPlayed, 400, 1000);
         count.draw(batch, "You have " + (int) (7 - elapsed) + " seconds to call BS!", 250, 600);
@@ -75,6 +80,7 @@ public class OtherPlay implements Screen {
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 625);
         batch.end();
 
+        //track user input touch
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -86,6 +92,7 @@ public class OtherPlay implements Screen {
     }
 
 
+    //check if click in go button and sends data
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
                 && (height - touchPos.y) > 625 && (height - touchPos.y) < 625 + goButton.getHeight()) {
@@ -93,6 +100,7 @@ public class OtherPlay implements Screen {
         }
     }
 
+    //check if click in back and sets screen
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {

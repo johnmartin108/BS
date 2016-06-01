@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class MandatoryBSScreen implements Screen {
 
+    //game state vars
     SpriteBatch batch;
     private int numberPlayed;
     private String suitPlayed;
@@ -26,6 +27,7 @@ public class MandatoryBSScreen implements Screen {
     private int ID;
     private float elapsed = 0;
 
+    //constructor for screen
     public MandatoryBSScreen(BSGame game) {
         this.game = game;
         this.ID = game.prev_player;
@@ -35,7 +37,7 @@ public class MandatoryBSScreen implements Screen {
 
     @Override
     public void show() {
-
+        //sets games state vars
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
@@ -49,13 +51,16 @@ public class MandatoryBSScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //set screen based on game input
         if (game.wrongBSCall || game.rightBSCall) {
             game.setScreen(new CalledBSScreen(game));
         }
 
+        //clear screen and set color
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //draw to screen
         batch.begin();
         count.draw(batch, game.player_names.get(ID) + " played " + numberPlayed + " " + suitPlayed +
                 "\nTheir hand is now empty.\nYou must call BS!", 400, 1000);
@@ -64,6 +69,7 @@ public class MandatoryBSScreen implements Screen {
         batch.draw(goButton, width / 2 - goButton.getWidth() / 2, 225);
         batch.end();
 
+        //track user touch input
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -74,7 +80,7 @@ public class MandatoryBSScreen implements Screen {
         }
     }
 
-
+    //tracks if touch in go and send to game
     private void clickInGo(Vector3 touchPos) {
         if (touchPos.x > width / 2 - goButton.getWidth() / 2 && touchPos.x < width / 2 + goButton.getWidth() / 2
                 && (height - touchPos.y) > 225 && (height - touchPos.y) < 225 + goButton.getHeight()) {
@@ -82,6 +88,7 @@ public class MandatoryBSScreen implements Screen {
         }
     }
 
+    //check if in back and set screen
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {

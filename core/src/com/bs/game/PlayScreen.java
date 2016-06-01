@@ -32,13 +32,13 @@ import java.util.Set;
  */
 public class PlayScreen implements Screen {
 
+    //game vars
     SpriteBatch batch;
 
     ArrayList<Card> inputCards;
     ArrayList<ArrayList<Card>> hands;
     HashMap<Card, CardInfo> cards;
     int num_players;
-
     
     private int numberSelected;
     private String name;
@@ -49,11 +49,10 @@ public class PlayScreen implements Screen {
     private Texture goButton;
     private int width;
     private int height;
-
     private Set<Card> selectedCard;
-
     private Stage stage;
 
+    //construct screen and get input cards
     public PlayScreen(BSGame game) {
         this.game = game;
         this.hands = game.hands;
@@ -83,7 +82,9 @@ public class PlayScreen implements Screen {
     }
 
     @Override
+    //show screen to user
     public void show() {
+        //set screen vars and add cards to deck
         stage = new Stage();
         selectedCard = new HashSet<Card>();
 
@@ -102,6 +103,7 @@ public class PlayScreen implements Screen {
 
         int width = Gdx.graphics.getWidth()/inputCards.size();
 
+        //go through cards and add details
         for (int i = 0; i < inputCards.size(); i++) {
             final Card card = inputCards.get(i);
             card.loadTexture();
@@ -116,6 +118,7 @@ public class PlayScreen implements Screen {
 
             cardInfo.setXY(x, y );
 
+            //add card listeners
             img.addListener(new ClickListener(){
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -149,6 +152,7 @@ public class PlayScreen implements Screen {
             });
             stage.addActor(backButtonImage);
 
+            //add go button and listener
             Image goButtonImage = new Image(goButton);
             goButtonImage.setPosition(4*Gdx.graphics.getWidth() / 5 - goButton.getWidth() / 2, 950);
             goButtonImage.addListener(new ClickListener(){
@@ -177,7 +181,7 @@ public class PlayScreen implements Screen {
         // lets add card pile here
         Texture t = new Texture("decks/large/deck_4_large.png");
 
-
+        //add piles
         Gdx.app.log("BSGAME", "size:: "+game.cardPile.size());
         Image pileImage = new Image(t);
         pileImage.setScale(0.5f);
@@ -189,6 +193,7 @@ public class PlayScreen implements Screen {
         int me = game.ID;
         int incr = game.ID + 1;
         int ctr = incr%num_players;
+        //add player decks
         while(ctr != game.ID) {
             Image playerPile = new Image(t);
             playerPile.setScale(0.4f);
@@ -222,12 +227,11 @@ public class PlayScreen implements Screen {
             }
             Gdx.app.log("BSGAME", incr-me+" :: "+x+" "+y+" "+playerPile.getHeight());
 
+            //add player piles
             playerPile.setPosition(x, y);
             stage.addActor(playerPile);
             stage.addActor(new TextImg(""+game.hands.get(ctr).size(), x, y+200));
             stage.addActor(new TextImg(game.player_names.get(ctr), textx, texty));
-
-
 
             ++incr;
             ctr = incr%num_players;
@@ -237,6 +241,7 @@ public class PlayScreen implements Screen {
         Gdx.app.log("BSGame", inputCards.toString());
     }
 
+    //draw instructions
     public void drawInstruction(){
         batch.begin();
         count.draw(batch, "Play " + numberSelected + " " + currRank + "?", 2000, 1350, 100, Align.right, false);
@@ -253,6 +258,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //clear and render
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.input.setInputProcessor(stage);
@@ -286,6 +292,7 @@ public class PlayScreen implements Screen {
 
     }
 
+    //class to hold info for each card
     public class CardInfo {
         private float x;
         private float y;
@@ -332,6 +339,7 @@ public class PlayScreen implements Screen {
         }
     }
 
+    //store text imag data
     public class TextImg extends Actor {
 
         BitmapFont font = game.font;

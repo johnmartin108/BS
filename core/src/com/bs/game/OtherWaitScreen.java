@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class OtherWaitScreen implements Screen {
 
+    //game screen vars
     SpriteBatch batch;
     private int numberPlayed;
     private String suitPlayed;
@@ -30,6 +31,7 @@ public class OtherWaitScreen implements Screen {
     private int ID;
     private ArrayList<Card> lastPlay;
 
+    //construct screen
     public OtherWaitScreen(BSGame game) {
         this.game = game;
         this.suitPlayed = game.targetRank + "";
@@ -37,6 +39,7 @@ public class OtherWaitScreen implements Screen {
         this.lastPlay = game.lastPlay;
     }
 
+    //other constructor
     public OtherWaitScreen(BSGame game, int numberPlayed, String suitPlayed) {
         this.game = game;
     }
@@ -44,6 +47,7 @@ public class OtherWaitScreen implements Screen {
     @Override
     public void show() {
 
+        //game var info
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
@@ -56,6 +60,7 @@ public class OtherWaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //set screen based on game state for user
         if (!game.lastPlay.equals(this.lastPlay)) {
             Gdx.app.log("BSGame", game.curr_player + " " + game.prev_player + " " + game.ID);
             if (game.curr_player == game.ID) {
@@ -75,13 +80,17 @@ public class OtherWaitScreen implements Screen {
                 }
             }
         }
+
+        //clear screen and set color
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //draw text
         batch.begin();
         count.draw(batch, "Waiting for " + game.player_names.get(game.curr_player) + " to play...", 200, 1100);
         batch.end();
 
+        //track user input
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -91,6 +100,7 @@ public class OtherWaitScreen implements Screen {
         }
     }
 
+    //check if in back button and set screen
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {

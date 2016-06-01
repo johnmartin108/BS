@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 public class StartScreen implements Screen {
 
+    //game state variables
     BSGame game;
     BitmapFont bitFont;
     private Texture backButton;
@@ -23,12 +24,15 @@ public class StartScreen implements Screen {
     int width;
     int height;
 
+    //constrcuts screen
     StartScreen(BSGame g){
         game = g;
     }
 
     @Override
+    //shows to user
     public void show() {
+        //gets game state variables
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         backButton = new Texture("back.png");
@@ -38,6 +42,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //sets screen base on action
         if (game.isGameStarted) {
             if (game.ID == game.curr_player) {
                 game.setScreen(new PlayScreen(game));
@@ -47,9 +52,11 @@ public class StartScreen implements Screen {
             }
         }
 
+        //sets screen
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //draws to screen
         game.batch.begin();
 
         bitFont.draw(game.batch, "List of Players Joined:", 350, 1050);
@@ -63,6 +70,7 @@ public class StartScreen implements Screen {
         if (game.peerlist.size() > 0) game.batch.draw(startButton, width / 2 - startButton.getWidth() / 2, 50);
         game.batch.end();
 
+        //tracks touch input
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -76,6 +84,7 @@ public class StartScreen implements Screen {
         }
     }
 
+    //if in touch button, start game
     private boolean inStartButton(Vector3 touchPos) {
         if (game.peerlist.size() > 0) {
             if (touchPos.x > (width / 2 - startButton.getWidth() / 2) && touchPos.x < (width / 2 + startButton.getWidth() / 2)

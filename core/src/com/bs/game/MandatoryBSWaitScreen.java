@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
  * Created by johnmartin on 5/30/16.
  */
 public class MandatoryBSWaitScreen implements Screen {
+    //game vars
     SpriteBatch batch;
     private int numberPlayed;
     private String suitPlayed;
@@ -24,6 +25,7 @@ public class MandatoryBSWaitScreen implements Screen {
     private int ID;
     private float elapsed = 0;
 
+    //screen constructor
     public MandatoryBSWaitScreen(BSGame game) {
         this.game = game;
         this.suitPlayed = Card.convertToStringRank(game.targetRank);
@@ -33,6 +35,7 @@ public class MandatoryBSWaitScreen implements Screen {
     @Override
     public void show() {
 
+        //set game vars
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
@@ -45,16 +48,16 @@ public class MandatoryBSWaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //set screen based on state
         if (game.wrongBSCall || game.rightBSCall) {
             game.setScreen(new CalledBSScreen(game));
         }
 
-
+        //clear screen and set color
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
+        //draw to screen
         batch.begin();
         if (game.prev_player == game.ID) {
             count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nYou are out of cards. " +
@@ -68,6 +71,7 @@ public class MandatoryBSWaitScreen implements Screen {
         
         batch.end();
 
+        //track user touch input
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -78,6 +82,7 @@ public class MandatoryBSWaitScreen implements Screen {
         }
     }
 
+    //if in back button set screen
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {

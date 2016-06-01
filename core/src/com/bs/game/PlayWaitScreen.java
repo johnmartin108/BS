@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class PlayWaitScreen implements Screen {
 
+    //game state vars
     SpriteBatch batch;
     private int numberPlayed;
     private String suitPlayed;
@@ -30,6 +31,7 @@ public class PlayWaitScreen implements Screen {
     private int ID;
     private float elapsed = 0;
 
+    //constructors for screen
     public PlayWaitScreen(BSGame game) {
         this.game = game;
         this.suitPlayed = Card.convertToStringRank(game.targetRank);
@@ -43,8 +45,10 @@ public class PlayWaitScreen implements Screen {
     }
 
     @Override
+    //show to user
     public void show() {
 
+        //set game vars
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
@@ -57,21 +61,23 @@ public class PlayWaitScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //set screen based on state
         if (game.wrongBSCall || game.rightBSCall) {
             game.setScreen(new CalledBSScreen(game));
         }
 
+        //update elapsed time
         elapsed += delta;
 
         if (elapsed > 7.0) {
             game.setScreen(new OtherWaitScreen(game));
         }
 
+        //set color and clear
         Gdx.gl.glClearColor(0.05f, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
+        //draw for user
         batch.begin();
         if (game.prev_player == game.ID) {
             count.draw(batch, "You played " + numberPlayed + " " + suitPlayed + "\nWaiting for " + game.player_names.get(game.curr_player) + "..." +
@@ -84,6 +90,7 @@ public class PlayWaitScreen implements Screen {
         }
         batch.end();
 
+        //track touch input
         if(Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -94,6 +101,7 @@ public class PlayWaitScreen implements Screen {
         }
     }
 
+    //check if click in back and move screen
     private void clickInBack(Vector3 touchPos) {
         if (touchPos.x > 10 && touchPos.x < backButton.getWidth()
                 && (height - touchPos.y) > (height - backButton.getHeight()) && (height - touchPos.y) < height) {

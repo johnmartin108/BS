@@ -40,9 +40,10 @@ public class BSGame extends Game {
 	boolean rightBSCall = false;
 	boolean wrongBSCall = false;
 
-	ArrayList<ArrayList<Card>> hands;
-	ArrayList<Card> cardPile = new ArrayList<Card>();
-	ArrayList<Card> lastPlay = new ArrayList<Card>();
+	//game state variables
+	ArrayList<ArrayList<Card>> hands; //cards in every player's hand
+	ArrayList<Card> cardPile = new ArrayList<Card>(); //cards played in the turn
+	ArrayList<Card> lastPlay = new ArrayList<Card>(); //what did the last player play?
 	ArrayList<String> player_names;
 	int num_players;
 	int curr_player;
@@ -63,6 +64,7 @@ public class BSGame extends Game {
 		batch = new SpriteBatch();
 		stage = new Stage();
 
+		//UI setup - generating fonts for text displays
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 150;
@@ -80,20 +82,22 @@ public class BSGame extends Game {
 
 		prefs = Gdx.app.getPreferences(Constants.P_PREF_NAME);
 
+		//go to main menu
 		setScreen(new MainMenu(this));
 
-//		setScreen(new PlayScreen(this));
 		textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.font = font;
 
 		final BSGame self = this;
 
 
+		//set up communication infrastructure - this is what gets received from theh ost
 		bridge.view = new CommunicationCallBack(){
 			@Override
 			public void onReceivedData(int name, Object obj) {
 				super.onReceivedData(name, obj);
 				switch (name){
+					//*****NETWORK STATUS*****
 					case Constants.M_PEER_LIST:
 						peerlist = (ArrayList)obj;
 
@@ -102,7 +106,7 @@ public class BSGame extends Game {
 						System.out.println(peerlist);
 						status = "devices are "+peerlist.toString();
 						break;
-
+					
 					case Constants.M_CONNECT_TO_HOST:
 						break;
 
@@ -118,7 +122,7 @@ public class BSGame extends Game {
 						isConnected = (Boolean)obj;
 						break;
 
-
+					//*****GAME STATE VARIABLES*****
 					case Constants.M_PLAYER_ID:
 						ID = (Integer) obj;
 						break;
@@ -147,7 +151,7 @@ public class BSGame extends Game {
 						player_names = (ArrayList<String>) obj;
 						break;
 
-					//***** GAME FLOW MESSAGES *****
+					//*****GAME FLOW MESSAGES*****
 					case Constants.M_GAME_START:
 						isGameStarted = true;
 						break;
@@ -187,6 +191,7 @@ public class BSGame extends Game {
 		}
 	}
 
+	//default join and host buttons - these don't get used under typical circumstances
 	public void loadScreenDefault(){
 		stage.clear();
 		TextButton hostBtn = new TextButton("Become Host", textButtonStyle);
